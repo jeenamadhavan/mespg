@@ -73,6 +73,7 @@
                             ?>
                                 <li><?php echo $this->Html->link(__('REGISTER'), "/pages/register", array('escape' => false)) ?></li>
                                 <?php } ?>
+								<li><?php echo $this->Html->link(__('UG ADMISSION'), "http://52.74.128.49/", array('escape' => false)) ?></li>
                                 <!--<li><?php //echo $this->Html->link(__('INSTRUCTIONS'), "/pages/maininstruction", array('escape' => false)) ?></li>-->
                                 <li><?php echo $this->Html->link(__('PROSPECTUS'), "/pages/downloadprospectus", array('escape' => false)) ?></li>
                                 <li><?php echo $this->Html->link(__('CONTACT'), "/pages/contact", array('escape' => false)) ?></li>
