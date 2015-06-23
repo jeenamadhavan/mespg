@@ -197,7 +197,7 @@ class PagesController extends AppController {
         }
 
         if (isset($result['User']['frkRandomString']) && $result['User']['frkRandomString'] != " ") {
-            $sql = "UPDATE `farookad_pgadmission`.`users` SET `frkUserStatus` = '1', `frkRandomString` = 'verified' WHERE `users`.`frkUserID` = " . $id . "; ";
+            $sql = "UPDATE `fkpg_db`.`users` SET `frkUserStatus` = '1', `frkRandomString` = 'verified' WHERE `users`.`frkUserID` = " . $id . "; ";
             $usercredentials = $this->User->query($sql);
             $this->Session->setFlash(__('Congratulation,Your Account is Activated!. Please Login'));
             $this->redirect(array('action' => 'login', 'controller' => 'pages'));
