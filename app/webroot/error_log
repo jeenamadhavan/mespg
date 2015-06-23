@@ -1,0 +1,21 @@
+[07-May-2015 11:03:05 America/New_York] PHP Parse error:  syntax error, unexpected '{' in /home/farookad/public_html/app/Controller/PagesController.php on line 283
+[07-May-2015 11:04:51 America/New_York] PHP Parse error:  syntax error, unexpected '{' in /home/farookad/public_html/app/Controller/PagesController.php on line 283
+[07-May-2015 23:42:48 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:42:48 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:01 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:01 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:01 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:01 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:05 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:05 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:09 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:09 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:14 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:14 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:18 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:18 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:33 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:33 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:40 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[07-May-2015 23:43:40 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/farookad/public_html/app/View/Layouts/default.ctp on line 80
+[20-Jun-2015 09:46:07 UTC] PHP Fatal error:  Call to a member function find() on a non-object in /home/mentorbpo123/public_html/demo/farookpg/app/Controller/PagesController.php on line 1414
