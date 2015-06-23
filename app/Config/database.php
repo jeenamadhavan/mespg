@@ -71,10 +71,10 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'mentormainsite',
-		'password' => 'mentor@123',
-		'database' => 'farookad_pgadmission',
+		'host' => 'farookpg.cbj29qizqyan.ap-southeast-1.rds.amazonaws.com',
+		'login' => 'mentor',
+		'password' => 'm3nt0r#DB',
+		'database' => 'fkpg_db',
 		'prefix' => '',
 		
 	);
