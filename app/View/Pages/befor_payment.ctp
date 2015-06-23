@@ -85,6 +85,7 @@ Please click below link to State Bank Collect
                             <div class="form-group">
                             
                                 <?php echo $this->Html->link(__('SBT ONLINE'), "https://www.sbtonline.in/prelogin/icollecthome.htm", array('target' => '_blank','escape' => false,'class'=>'btn btn-primary','id'=>'SubmitButton')) ?>
+                           <?php echo $this->Html->link(__('BACK TO BASIC INFO'), array('controller'=>'pages','action'=>'choice_select'), array('escape' => false,'class'=>'btn btn-success')) ?>
                             </div>
 </div>
                         </div>
