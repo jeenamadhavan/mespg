@@ -41,6 +41,7 @@
                               <div class="form-group">
                                   <div class="col-sm-offset-2 col-sm-10">
                                       <button  type="submit" class="btn btn-default">Submit</button>
+                                      <?php echo $this->Html->link(__('BACK TO BASIC INFO'), array('controller'=>'pages','action'=>'choice_select'), array('escape' => false,'class'=>'btn btn-success')) ?>
                                   </div>
                               </div>
                        <?php echo $this->Form->end(); ?>
