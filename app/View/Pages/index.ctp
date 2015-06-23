@@ -40,6 +40,8 @@ $randnum=rand ( 1 ,5 );
                             <li>On saving the form an Application Number will be generated. The Application Number must be noted down by the applicant as it shall be provided for all future needs. After saving the form, applicant will be able to view his profile and can edit all the details.</li>
                             <li>Candidate has to select appropriate courses for PG admission as per eligibility criteria given in prospectus. Application Fee of Rs. 250/- for General Category and Rs. 150/ for SC/ ST must be paid per course for admission process. The payment shall be made through State Bank Collect facility provided by SBT.</li>
                             <li>Candidate must keep a printed copy of the e-receipt for future verification.</li>
+                            <li>Only one payment transaction is permissible for an ID (i.e. Only one transaction ID per User permitted). Applicants are requested to go through prospectus for course selection and apply accordingly before payment through SBT.  Once application fee has paid from your ID, you cannot add your choices in course selection and pay for your new selection from that ID.</li>
+
                         </ul>
                     </li>
                     <li>
