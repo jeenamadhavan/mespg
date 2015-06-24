@@ -1,147 +1,229 @@
-<div class="col-md-12">
-                <div class="panel panel-default panel-fk">
+
+<div class="panel panel-default panel-fk">
                     <div class="panel-heading">
                         <h3 class="panel-title">Transaction Details</h3>
                     </div>
+</div>
+<div class="main-content">
+    <div class="container-fluid" style="margin:20px;">
+        <div class="row">
+            
+            <div class="col-md-12">
+                <div class="panel panel-default">
+
                     <div class="panel-body">
-                        <div class="col-md-12">
-                            
-                            <label for="QualifyingExam" class="control-label">Select Stream<sup class="madadatory">*</sup></label><br>
-<!--                            <select id="stream"  name="SecondaryRegister.stream" class='form-control' required='required' label="false" empty="Select Stream">
-                                
-                            </select> -->
-                           <?php
-                            echo $this->Form->input('SecondaryRegister.stream', array(
-                                'options' => ' ',
-                                'empty' => '-- select one --',
-                                'class' => 'form-control',
-                                'id' => 'stream',
-                                'required' => 'required',
-                                'label' => false
-                            ));
-                            ?>
-
-                            <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Please select appropriate one</span>
-                            <div id="otherQualifyingExam" style="display: none;">
-                                <label for="specify">Specify<sup class="madadatory">*</sup></label>
-                                <?php
-                                echo $this->Form->input('SecondaryRegister.otherqualifyingexam', array(
-                                    'label' => false,
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Specify Qualifying Exam',
-                                    'value' => 'null',
-                                    'maxlength' => '250',
-                                    'required' => 'required')
-                                );
-                                ?>
-
-                            </div>
-                        </div>
-                        <div class="col-md-12 beforetable">
-                            <table class="table table-bordered">
-                                <caption><strong>Details of 12th Standard Examination</strong></caption>
+                        <a href="#" class="btn btn-default changesuccess"><span class=""></span>Add to Success List</a>
+                        <a href="#" class="btn btn-default changereject"><span class=""></span>Add to Rejected List</a>
+                        <a href="#" class="btn btn-default changepending"><span class=""></span>Add to Pending List</a>
+                        <div  style="padding:20px;"></div>
+                        <table class="table table-bordered" id="datatable">
                                 <thead>
                                     <tr>
-                                        <th>Institution Attended<sup class="madadatory">*</sup></th>
-                                        <th>Year of Study<sup class="madadatory">*</sup></th>
-                                        <th>Register Number<sup class="madadatory">*</sup></th>
-                                        <th>Year of Pass<sup class="madadatory">*</sup></th>
-                                        <th>TC No& Date</th>
+                                        <th></th>
+                                        <th>Sl No</th>
+                                        <th>Application Number</th>
+                                        <th>Name</th>
+                                        <th>Transaction Id</th>
+                                        <th>Transaction Date</th>
+                                        <th>Transaction Status</th>
+                                        <th>Community</th>
+                                        <th>Total Fee</th>
+                                        <th>Date</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <?php echo($this->Form->create('Choice')); ?>
+                                    <?php $i=1; foreach ($Choices as $row){ ?>
+                                    <tr><?php if(isset($row['Payments']['id'])){?>
+                                        <th><input type="checkbox" class="chk" value="<?php echo $row['Payments']['id'];?>" /></th>
+                                        <?php }else{?>
+                                        <th></th>
+                                       <?php }?>
+                                        <td><?php echo $i; ?></td>
                                         <td>
-                                            <div class="form-group">
-
-                                                <?php
-                                                echo $this->Form->input('SecondaryRegister.institution', array(
-                                                    'label' => false,
-                                                    'class' => 'form-control',
-                                                    'placeholder' => '12th School Name',
-                                                    'maxlength' => '250',
-                                                    'id' => 'institution',
-                                                    'required' => 'required')
-                                                );
-                                                ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            echo $this->Form->input('SecondaryRegister.yearOfstudy', array(
-                                                'options' => array(
-                                                    '2014-2015' => '2014-2015',
-                                                    '2013-2014' => '2013-2014',
-                                                    '2012-2013' => '2012-2013',
-                                                    '2011-2012' => '2011-2012',
-                                                    '2010-2011' => '2010-2011',
-                                                ),
-                                                'empty' => '-- select one --',
-                                                'class' => 'form-control',
-                                                'id' => 'yearOfstudy',
-                                                'required' => 'required',
-                                                'label' => false
-                                            ));
+                                            <?php 
+                                            echo $this->Form->input('application_no', array('label' => false, 'class' => 'form-control',  'type' => 'hidden')); 
                                             ?>
+                                            <?php echo $row['Choices']['application_no'] ?>
                                         </td>
+                                        
                                         <td>
-                                            <div class="form-group">
-                                                <?php
-                                                echo $this->Form->input('SecondaryRegister.registerNumber', array(
-                                                    'label' => false,
-                                                    'class' => 'form-control',
-                                                    'placeholder' => 'Register Number',
-                                                    'maxlength' => '15',
-                                                    'id' => 'registerNumber',
-                                                    'required' => 'required')
-                                                );
-                                                ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            echo $this->Form->input('SecondaryRegister.yearOfPass', array(
-                                                'options' => array(
-                                                    '2015' => '2015',
-                                                    '2014' => '2014',
-                                                    '2013' => '2013',
-                                                    '2012' => '2012',
-                                                    '2011' => '2011',
-                                                ),
-                                                'empty' => '-- select one --',
-                                                'class' => 'form-control',
-                                                'id' => 'yearOfPass',
-                                                'required' => 'required',
-                                                'label' => false
-                                            ));
+                                            <?php 
+                                            echo $this->Form->input('name', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'name')); 
                                             ?>
+                                            <?php echo $row['User']['frkName']; ?>
+                                            
                                         </td>
                                         <td>
-                                            <div class="form-group">
-
-                                                <?php
-                                                echo $this->Form->input('SecondaryRegister.TcnoDate', array(
-                                                    'label' => false,
-                                                    'class' => 'form-control',
-                                                    'placeholder' => '56552,12/04/2014',
-                                                    'maxlength' => '250',
-                                                    'id' => 'TcnoDate',
-                                                        )
-                                                );
-                                                ?>
-                                            </div>
+                                            <?php 
+                                            echo $this->Form->input('transaction_id', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            ?>
+                                            <?php echo $row['Payments']['transaction_id']; ?>
+                                            
                                         </td>
+                                        <td>
+                                            <?php 
+                                            echo $this->Form->input('date', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            ?>
+                                            <?php echo $row['Payments']['date']; ?>
+                                            
+                                        </td>
+                                        <td>
+                                            <?php 
+                                            echo $this->Form->input('status', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            ?>
+                                            
+                                            <?php if($row['Payments']['status']=='P'){echo 'Pending';}else if($row['Payments']['status']=='R'){ echo 'Rejected';}else if($row['Payments']['status']=='C'){ echo 'Completed';}else if($row['Payments']['status']==''){ echo 'Transaction Id Not Submitted';}
+                                                 ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <?php 
+                                            echo $this->Form->input('community', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'community')); 
+                                            ?>
+                                            <?php echo $row['Communities']['name']; ?>
+                                            
+                                        </td>
+                                       <td>
+                                            <?php 
+                                            echo $this->Form->input('amount', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'amount')); 
+                                            ?>
+                                            <?php echo $row['Choices']['amount']; ?>
+                                            
+                                        </td>
+                                        <td>
+                                            <?php 
+                                            echo $this->Form->input('date', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            ?>
+                                            <?php echo $row['Choices']['date']; ?>
+                                            
+                                        </td>
+                                        
+                                        
                                     </tr>
-
-
+                                    <?php $i++; } ?>
+                                    <?php echo $this->Form->end(); ?>
                                 </tbody>
                             </table>
-
-                        </div>
-                        <div class="col-md-12" id="marktable"></div>
-
-
                     </div>
                 </div>
-                <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit" >Next</button>
             </div>
+        </div>
+    </div>
+    <script>
+        
+        $(document).ready(function() {
+            $('#datatable').DataTable();
+            
+            
+            
+             $('.changesuccess').click(function () {
+             
+            var chkArray = [];
+	
+            $(".chk:checked").each(function() {
+                
+                chkArray.push($(this).val());
+            });
+            
+            if(chkArray.length >= 1){
+		
+                $.ajax({
+                    url: '<?php echo Router::url('/', true) . "admins/changestatus"; ?>',
+                    type: 'post',
+                    data: {'action': chkArray,'status':'C'},
+                    success: function(data, status) {
+                        if(data == "ok") {
+        
+                            document.location.href = '<?php echo Router::url('/', true) . "admins/viewpaymentdetails"; ?>';
+                        }
+                    }
+                }); 
+                // end ajax call   
+                
+                
+           }else{
+                alert("Please select at least one of the checkbox");	
+            }
+            
+     
+
+        });
+         $('.changereject').click(function () {
+             
+            var chkArray = [];
+	
+            $(".chk:checked").each(function() {
+                chkArray.push($(this).val());
+            });
+            if(chkArray.length >= 1){
+		
+                $.ajax({
+                    url: '<?php echo Router::url('/', true) . "admins/changestatus"; ?>',
+                    type: 'post',
+                    data: {'action': chkArray,'status':'R'},
+                    success: function(data, status) {
+                        if(data == "ok") {
+        
+                            document.location.href = '<?php echo Router::url('/', true) . "admins/viewpaymentdetails"; ?>';
+                        }
+                    },
+                    error: function(xhr, desc, err) {
+                        console.log(xhr);
+                        console.log("Details: " + desc + "\nError:" + err);
+                    }
+                }); // end ajax call   
+                
+                
+            }else{
+                alert("Please select at least one of the checkbox");	
+            }
+            
+     
+
+        });
+        $('.changepending').click(function () {
+             
+            var chkArray = [];
+	
+            $(".chk:checked").each(function() {
+                chkArray.push($(this).val());
+            });
+            if(chkArray.length >= 1){
+		
+                $.ajax({
+                    url: '<?php echo Router::url('/', true) . "admins/changestatus"; ?>',
+                    type: 'post',
+                    data: {'action': chkArray,'status':'P'},
+                    success: function(data, status) {
+                        if(data == "ok") {
+        
+                            document.location.href = '<?php echo Router::url('/', true) . "admins/viewpaymentdetails"; ?>';
+                        }
+                    },
+                    error: function(xhr, desc, err) {
+                        console.log(xhr);
+                        console.log("Details: " + desc + "\nError:" + err);
+                    }
+                }); // end ajax call   
+                
+                
+            }else{
+                alert("Please select at least one of the checkbox");	
+            }
+            
+     
+
+        });
+            
+            
+        });
+         
+        
+
+    </script>
+    
+
+
+
