@@ -14,19 +14,27 @@ $randnum=rand ( 1 ,5 );
     </div>
 </div>
 <div class="container">
+    
+    
     <div class="col-md-6">
         <h3>ADDRESS INFORMATION</h3>
         <hr style="border-top:1px dashed #ccc;">
         <p>If you want to know more about Farook College please reach us on following address or visit our Website.</p>
         <br>
-        <p><strong>Farook College</strong></p>
+        <p><strong>For Admission Queries</strong></p>
+        <p>Farook College</p>
         <p>P.O Farook College, Kozhikode</p>
         <p>Kerala, India.</p>
-        <p>email: <a href="mailto:admission@farookcollege">admission@farookcollege.ac.in</a></p>
-        <p>Phone: +91 495 4050995, +91 9656291111, +91 9656223366</p> 
-        <p>for admission queries: <a href="mailto:admission@farookcollege">admission@farookcollege@farookcollege.ac.in</a></p>
+        <p>Phone: +91 495 2440660, +91 495 2440661</p> 
+        <p>fax: +91 495 2440464</p>
+        <p>email: <a href="mailto:mail@farookcollege.ac.in">mail@farookcollege.ac.in</a></p>
         <p>College Website: <a href="http://www.farookcollege.ac.in" target="_blank">www.farookcollege.ac.in</a></p>
+        <p><strong>For Technical queries:</strong></p>
+        <p>email: <a href="mailto:admission@farookcollege.ac.in">admission@farookcollege.ac.in</a></p>
+        <p>Phone: +91 495 2727411, +91 9656223366</p>
+    
     </div>
+    
     <div class="col-md-6">
         <h3>SEND A MESSAGE</h3>
         <hr style="border-top:1px dashed #ccc;">
