@@ -13,8 +13,9 @@
         </script>
         <?php
         echo $this->Html->meta('icon');
-        echo $this->Html->css(array('bootstrap.min','style','alert/alert.min','alert/theme.min'));
-        $all_scripts = array('jquery.min','bootstrap.min','alert.min','combodate','moment');
+        
+        echo $this->Html->css(array('bootstrap.min','style','alert/alert.min','alert/theme.min','jquery.dataTables'));
+        $all_scripts = array('jquery.min','bootstrap.min','alert.min','combodate','moment','jquery.dataTables.min');
 
         echo $this->Html->script($all_scripts);
         echo $this->fetch('script');
@@ -42,16 +43,17 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                             <?php
-                            
+                             
                             if($this->Session->read('User.admin')==1){
                                 
                             ?>
                                 <li><?php echo $this->Html->link(__('View Payment Details'), "/admins/viewpaymentdetails", array('escape' => false)) ?></li>
-                                <?php } ?>
+                                <li><?php echo $this->Html->link(__('Upload Excel'), "/admins/uploadexcel", array('escape' => false)) ?></li>
+                                    <?php } ?>
                                 
                             </ul>
                             <?php
-                            
+                           
                             if($this->Session->read('User.admin')!=1){
                                 
                             ?>
