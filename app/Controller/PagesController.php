@@ -78,25 +78,25 @@ class PagesController extends AppController {
         
     }
 
-     public function register() {
+    public function register() {
         if ($this->request->is('post')) {
             $validates = array();
             $msg = "";
-           // $name = $this->request->data['UserForm']['Name'];
+            // $name = $this->request->data['UserForm']['Name'];
             $dob = $this->request->data['frkUserDOB'];
             $mobile = $this->request->data['UserForm']['frkUserMobile'];
             $email = $this->request->data['UserForm']['frkUserEmail'];
             $password = $this->request->data['UserForm']['frkUserPassword'];
             $name = $this->request->data['UserForm']['frkUserName'];
             $repeatpassword = $this->request->data['UserForm']['frkRepeatUserPassword'];
-           if(!is_numeric($mobile)) {
+            if (!is_numeric($mobile)) {
                 $validates[8] = 'Mobile number should be numeric';
-           }
-           if(strlen($mobile)!=10) {
-                    $validates[7] = 'Mobile number should have only 10 digits';
-                }
-           if ($name == null) {
-               $validates[6] = 'Name Should Not Be Empty';
+            }
+            if (strlen($mobile) != 10) {
+                $validates[7] = 'Mobile number should have only 10 digits';
+            }
+            if ($name == null) {
+                $validates[6] = 'Name Should Not Be Empty';
             }
             if ($email == null) {
                 $validates[1] = 'Email Should Not Be Empty';
@@ -148,6 +148,7 @@ class PagesController extends AppController {
             }
         }
     }
+
     public function checkpasswords() {
 
         if (strcmp($this->request->data['User']['frkUserPassword'], $this->request->data['User']['frkRepeatUserPassword']) == 0) {
@@ -172,14 +173,14 @@ class PagesController extends AppController {
         $baseurl = Router::url('/', true);
         $link = $baseurl . "pages/confirmationlink/" . $randomstring . "/" . $id;
         //echo $this->Html->link('dfgdgdg');die();
-        
+
         $subject = 'Confirm Your Email-Farook College PG Admission';
-       // $message1 = "Hello User,<br> You signed up at this site,Your account is almost ready,but before you can login you need to confirm your email address by visiting the link below";
+        // $message1 = "Hello User,<br> You signed up at this site,Your account is almost ready,but before you can login you need to confirm your email address by visiting the link below";
         //$message2 = "Once you have visited the verification URL your account will be activated Thanks, Team.";
         $message1 = "Hello User, <br> You signed up at this site,Your account is almost ready,but before you can login you need to <br> confirm your email address by visiting the link below <br>";
         $message2 = "<br> Once you have visited the verification URL your account will be activated.<br> Thanks,<br> Team.";
-       $message = $message1 . '  ' . $link . '  ' . $message2;
-       // $message = $message1 . $link. $message2;
+        $message = $message1 . '  ' . $link . '  ' . $message2;
+        // $message = $message1 . $link. $message2;
         $headers = 'From: info@farookadmission.in' . "\r\n" .
                 'Reply-To: info@farookadmission.in' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
@@ -230,10 +231,10 @@ class PagesController extends AppController {
                         'Applicant.frkUserID' => $usersDetails['User']['frkUserID']
                     )
                         ));
-                /*if ($applicantdetails == null) {
-                    return $this->redirect(array('action' => 'maininstruction'));
-                } else {*/
-                    return $this->redirect(array('action' => 'choice_select'));
+                /* if ($applicantdetails == null) {
+                  return $this->redirect(array('action' => 'maininstruction'));
+                  } else { */
+                return $this->redirect(array('action' => 'choice_select'));
                 //}
             }
         }
@@ -1001,7 +1002,7 @@ class PagesController extends AppController {
 
         //$userid = $this->Session->read('User.userid');
 
-$userid=1;
+        $userid = 1;
         if (!isset($userid)) {
             $this->Session->setFlash(__('Please Login!.'));
             return $this->redirect(array('action' => 'login'));
@@ -1056,13 +1057,12 @@ $userid=1;
                     $j++;
                 }
 
-                 for ($k = 0; $k < count($mark); $k++) {
+                for ($k = 0; $k < count($mark); $k++) {
 
                     $sql = "INSERT INTO  markdetails (frkUserID,stream,boardID,part,subject,grade,mark)   VALUES('" . $mark[$k]['frkUserID'] . "','" . $mark[$k]['stream'] . "','" . $mark[$k]['boardID'] . "','" . $mark[$k]['part'] . "','" . $mark[$k]['subject'] . "','" . $mark[$k]['grade'] . "','" . $mark[$k]['mark'] . "') ";
 
                     $this->Markdetail->query($sql);
-
-                 }exit;
+                }exit;
                 /*                 * *****Academic Details********* */
                 $academicdetails = array(
                     'boardID' => $this->request->data['SecondaryRegister']['qualifyingexam'],
@@ -1172,8 +1172,6 @@ $userid=1;
                     return $this->redirect(array('action' => 'secondary_registration'));
                 } else {
                     $this->Coursedetail->save($coursedetails);
-                   
-               
                 }
                 if ($this->Academicdetail->save($academicdetails) && $this->Reservation->save($reservations)) {
                     if ($this->Guardian->save($guardiandetails) && $this->Otherdetail->save($otherdetails)) {
@@ -1264,16 +1262,16 @@ $userid=1;
                 $baseurl = Router::url('/', true);
                 $link = $baseurl . "pages/reset/" . $key . "/" . $id;
 
-            $subject = 'Reset password';
-            
-                $message1 = "Hello ".$to."";
+                $subject = 'Reset password';
+
+                $message1 = "Hello " . $to . "";
                 $message2 = "\n Someone has requested a link to change your password. You can do this through the link below.";
-                $message3 = "\n <a href='" .$link. "'></a>";
+                $message3 = "\n <a href='" . $link . "'></a>";
                 $message4 = "\n If you didn't request this, please ignore this email.";
                 $message5 = "\n Your password won't change until you access the link above and create a new one.";
-                 $message = $message1 . $message2 . $message3 . $message4 . $message5;
-       
-                 
+                $message = $message1 . $message2 . $message3 . $message4 . $message5;
+
+
                 $headers = 'From: info@farookadmission.in' . "\r\n" .
                         'Reply-To: info@farookadmission.in' . "\r\n" .
                         'X-Mailer: PHP/' . phpversion();
@@ -1372,9 +1370,11 @@ $userid=1;
         } echo json_encode($data);
         exit();
     }
-public function getTotal($stream_id,$board_id){
-    
-}
+
+    public function getTotal($stream_id, $board_id) {
+        
+    }
+
     public function getmaxmarks() {
         $id = $this->request->data["id"];
         //$stream_id = $this->request->data["stream_id"];
@@ -1411,413 +1411,400 @@ public function getTotal($stream_id,$board_id){
         echo $this->render('ajax_view', 'ajax');
         exit;
     }
-    
 
-	
-	
-	public function choice_select() {
+    public function choice_select() {
         $userid = $this->Session->read('User.userid');
-        $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
-        
-       
-        if(count($choice)!=0) {
-            $choice_result=$this->Choice->find('all',array(
-            'conditions'=>array('Choice.user_id'=>$userid),
-            'joins'=>array(array(
-                'table'=>'users',
-                'alias'=>'User',
-                'type'=>'INNER',
-                'conditions'=>array('User.frkUserID=Choice.user_id')
-                ),
-                array(
-                    'table'=>'communities',
-                    'alias'=>'Community',
-                    'type'=>'INNER',
-                    'conditions'=>array('Community.id=User.frkUserCommunity')
+        $choice = $this->Choice->find('all', array('conditions' => array('user_id' => $userid)));
+
+
+        if (count($choice) != 0) {
+            $choice_result = $this->Choice->find('all', array(
+                'conditions' => array('Choice.user_id' => $userid),
+                'joins' => array(array(
+                        'table' => 'users',
+                        'alias' => 'User',
+                        'type' => 'INNER',
+                        'conditions' => array('User.frkUserID=Choice.user_id')
                     ),
-               array(
-                    'table'=>'religions',
-                    'alias'=>'Religion',
-                    'type'=>'INNER',
-                    'conditions'=>array('Religion.id=User.frkUserReligion')
+                    array(
+                        'table' => 'communities',
+                        'alias' => 'Community',
+                        'type' => 'INNER',
+                        'conditions' => array('Community.id=User.frkUserCommunity')
+                    ),
+                    array(
+                        'table' => 'religions',
+                        'alias' => 'Religion',
+                        'type' => 'INNER',
+                        'conditions' => array('Religion.id=User.frkUserReligion')
                     )
-            ),
-            'fields'=>array('Choice.*','Community.name','Religion.name','User.frkUserName','User.frkUserGender')
-            ));
+                ),
+                'fields' => array('Choice.*', 'Community.name', 'Religion.name', 'User.frkUserName', 'User.frkUserGender')
+                    ));
             //pr($choice_result); exit;
-        
-        $choice_subjects=array();
-        $choice_str=$choice_result[0]['Choice']['choices'];
-        $choice_arr=explode(',',$choice_str);
-        $choice_count=count($choice_arr);
 
-        $choices_name=array();
-        for($i=0;$i<$choice_count;$i++) {
-            $result=$this->Course->find('first',array('conditions'=>array('frkCourseID'=>$choice_arr[$i])));
-            $choices_name[$i+1]=$result['Course']['frkCourseName'];
-        }
-        $this->set('choices_name',$choices_name);
-        
-            $this->set('choices',$choice_result);
+            $choice_subjects = array();
+            $choice_str = $choice_result[0]['Choice']['choices'];
+            $choice_arr = explode(',', $choice_str);
+            $choice_count = count($choice_arr);
+
+            $choices_name = array();
+            for ($i = 0; $i < $choice_count; $i++) {
+                $result = $this->Course->find('first', array('conditions' => array('frkCourseID' => $choice_arr[$i])));
+                $choices_name[$i + 1] = $result['Course']['frkCourseName'];
+            }
+
+            $payment = $this->Payment->find('first', array('conditions' => array('u_id' => $this->Session->read('User.userid'))));
+            if (count($payment) > 0) {
+                $this->set('cannot_edit', 1);
+            }
+            $this->set('choices_name', $choices_name);
+
+            $this->set('choices', $choice_result);
             $this->render('view_choice');
-            
         }
-        if($this->request->is('post')) {
-            $course_count=$this->Course->find('count');
-            $choices='';
+        if ($this->request->is('post')) {
+            $course_count = $this->Course->find('count');
+            $choices = '';
 
-            for($i=0;$i<$course_count;$i++) {
-                if(isset($this->request->data['course'][$i])&&$this->request->data['course'][$i]!=0) {
-                    $choices=$choices.','.$this->request->data['course'][$i];
+            for ($i = 0; $i < $course_count; $i++) {
+                if (isset($this->request->data['course'][$i]) && $this->request->data['course'][$i] != 0) {
+                    $choices = $choices . ',' . $this->request->data['course'][$i];
                 }
             }
 
-            $choices=ltrim($choices,',');
-            $choices=rtrim($choices,',');
-            $choices=preg_replace('/,+/', ',', $choices);
+            $choices = ltrim($choices, ',');
+            $choices = rtrim($choices, ',');
+            $choices = preg_replace('/,+/', ',', $choices);
             //echo $choices; exit;
-            if($choices==0) {
-                $validates[0]='Atleast one choice is required';
-
+            if ($choices == 0) {
+                $validates[0] = 'Atleast one choice is required';
             }
             if (isset($validates) && $validates != null) {
-                    //foreach ($validates as $messages) {
-                        $msg = $validates[0]."<br>";
-                   // }
-                    $this->Session->setFlash(__($msg));
-                    return $this->redirect(array('action' => 'choice_select'));
-                }
+                //foreach ($validates as $messages) {
+                $msg = $validates[0] . "<br>";
+                // }
+                $this->Session->setFlash(__($msg));
+                return $this->redirect(array('action' => 'choice_select'));
+            }
             //calculate the fees
-            $choice_arr=explode(',',$choices);
+            $choice_arr = explode(',', $choices);
             $count_choices = count($choice_arr);
 
-            $result=$this->Community->find('first',array(
-                'conditions'=>array('id'=>$this->request->data['choice']['community']),
-                'fields'=>array(
+            $result = $this->Community->find('first', array(
+                'conditions' => array('id' => $this->request->data['choice']['community']),
+                'fields' => array(
                     'Community.fees'
-                    )
-                ));
-            $amount=$count_choices*$result['Community']['fees'];
+                )
+                    ));
+            $amount = $count_choices * $result['Community']['fees'];
 
             $numbergen = $this->Generatenumber->find('first', array(
-                    'conditions' => array(
-                        'Generatenumber.typecode' => 1
-                    )
-                        ));
-                $tempAppNumber = $numbergen['Generatenumber']['currvalue'] + 1;
-                $remindigits = 6 - strlen($tempAppNumber);
-                if ($remindigits == 5) {
-                    $ApplicationNumber = 'FKPG00000' . $tempAppNumber;
-                } elseif ($remindigits == 4) {
-                    $ApplicationNumber = 'FKPG0000' . $tempAppNumber;
-                } elseif ($remindigits == 3) {
-                    $ApplicationNumber = 'FKPG000' . $tempAppNumber;
-                } elseif ($remindigits == 2) {
-                    $ApplicationNumber = 'FKPG00' . $tempAppNumber;
-                } elseif ($remindigits == 1) {
-                    $ApplicationNumber = 'FKPG0' . $tempAppNumber;
-                } else {
-                    $ApplicationNumber = 'FKPG' . $tempAppNumber;
-                }
-                $cnd3 = array(
-                    'Generatenumber.typecode' => 1,
-                );
-                $fld3 = array(
-                    'currvalue' => $tempAppNumber,
-                );
-                if (!$this->Generatenumber->updateAll($fld3, $cnd3)) {
-                    $this->Session->setFlash(__('Application Number Not Generated'));
-                    return $this->redirect(array('action' => 'choice_select'));
-                }
+                'conditions' => array(
+                    'Generatenumber.typecode' => 1
+                )
+                    ));
+            $tempAppNumber = $numbergen['Generatenumber']['currvalue'] + 1;
+            $remindigits = 6 - strlen($tempAppNumber);
+            if ($remindigits == 5) {
+                $ApplicationNumber = 'FKPG00000' . $tempAppNumber;
+            } elseif ($remindigits == 4) {
+                $ApplicationNumber = 'FKPG0000' . $tempAppNumber;
+            } elseif ($remindigits == 3) {
+                $ApplicationNumber = 'FKPG000' . $tempAppNumber;
+            } elseif ($remindigits == 2) {
+                $ApplicationNumber = 'FKPG00' . $tempAppNumber;
+            } elseif ($remindigits == 1) {
+                $ApplicationNumber = 'FKPG0' . $tempAppNumber;
+            } else {
+                $ApplicationNumber = 'FKPG' . $tempAppNumber;
+            }
+            $cnd3 = array(
+                'Generatenumber.typecode' => 1,
+            );
+            $fld3 = array(
+                'currvalue' => $tempAppNumber,
+            );
+            if (!$this->Generatenumber->updateAll($fld3, $cnd3)) {
+                $this->Session->setFlash(__('Application Number Not Generated'));
+                return $this->redirect(array('action' => 'choice_select'));
+            }
             //$userCond=array('frkUserID'=>$this->Session->read('User.userid'));
-            
-            $savedata=array(
-                'user_id'=>$this->Session->read('User.userid'),
-                'application_no'=>$ApplicationNumber,
-                'choices'=>$choices,
-                'amount'=>$amount,
-                'date'=>date('Y-m-d')
-                );
-             $user_cnd = array(
-                    'User.frkUserID' => $this->Session->read('User.userid'),
-                );
-                
-                $userUpdateData=array(
-                    'frkUserName'=>"'".$this->request->data['choice']['name']."'",
-                    'frkUserGender'=>"'".$this->request->data['choice']['gender']."'",
-                    'frkUserReligion'=>$this->request->data['choice']['religion'],
-                    'frkUserCommunity'=>$this->request->data['choice']['community']
-                    );
-                $this->User->updateAll($userUpdateData,$user_cnd);
-            
+
+            $savedata = array(
+                'user_id' => $this->Session->read('User.userid'),
+                'application_no' => $ApplicationNumber,
+                'choices' => $choices,
+                'amount' => $amount,
+                'date' => date('Y-m-d')
+            );
+            $user_cnd = array(
+                'User.frkUserID' => $this->Session->read('User.userid'),
+            );
+
+            $userUpdateData = array(
+                'frkUserName' => "'" . $this->request->data['choice']['name'] . "'",
+                'frkUserGender' => "'" . $this->request->data['choice']['gender'] . "'",
+                'frkUserReligion' => $this->request->data['choice']['religion'],
+                'frkUserCommunity' => $this->request->data['choice']['community']
+            );
+            $this->User->updateAll($userUpdateData, $user_cnd);
+
             $this->Choice->set($savedata);
-            if($this->Choice->validates()) {
+            if ($this->Choice->validates()) {
 
                 $this->Choice->create();
-                    if(!$this->Choice->save($savedata)) {
-                        $this->Session->setFlash('An error occured, please try again');
-                    }
-                    else {
-                        return $this->redirect(array('controller'=>'pages','action'=>'choice_select'));
-                    }
-                    
-
-            }
-
-            
-            
-        }
-        $user=$this->User->find('first',array(
-            'conditions'=>array('frkUserID'=>$this->Session->read('User.userid')),
-            'fields'=>array(
-                'User.frkUserName'
-                )
-            ));
-        
-        $communities=$this->Community->find('list',array('fields'=>array('id','name')));
-        $religions=$this->Religion->find('list',array('fields'=>array('id','name')));
-        $courses=$this->Course->find('list',array('fields'=>array('frkCourseID','frkCourseName')));
-        $courses[0]='-- select the choice --';
-        ksort($courses);
-        $this->set('communities',$communities);
-        $this->set('religions',$religions);
-        $this->set('courses',$courses);
-        $this->set('user',$user);
-    }
-
-	
-	 public function choice_edit() {
-        if($this->request->is('post')) {
-            $course_count=$this->Course->find('count');
-            $choices='';
-            //echo $course_count; exit;
-            for($i=0;$i<$course_count;$i++) {
-               if(isset($this->request->data['course'][$i])&&$this->request->data['course'][$i]!=0) {
-                    $choices=$choices.','.$this->request->data['course'][$i];
+                if (!$this->Choice->save($savedata)) {
+                    $this->Session->setFlash('An error occured, please try again');
+                } else {
+                    return $this->redirect(array('controller' => 'pages', 'action' => 'choice_select'));
                 }
             }
-            $choices=ltrim($choices,',');
-            $choices=rtrim($choices,',');
-            $choices=preg_replace('/,+/', ',', $choices);
+        }
+        $user = $this->User->find('first', array(
+            'conditions' => array('frkUserID' => $this->Session->read('User.userid')),
+            'fields' => array(
+                'User.frkUserName'
+            )
+                ));
+
+        $communities = $this->Community->find('list', array('fields' => array('id', 'name')));
+        $religions = $this->Religion->find('list', array('fields' => array('id', 'name')));
+        $courses = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
+        $courses[0] = '-- select the choice --';
+        ksort($courses);
+        $this->set('communities', $communities);
+        $this->set('religions', $religions);
+        $this->set('courses', $courses);
+        $this->set('user', $user);
+    }
+
+    public function choice_edit() {
+        if ($this->request->is('post')) {
+            $course_count = $this->Course->find('count');
+            $choices = '';
+            //echo $course_count; exit;
+            for ($i = 0; $i < $course_count; $i++) {
+                if (isset($this->request->data['course'][$i]) && $this->request->data['course'][$i] != 0) {
+                    $choices = $choices . ',' . $this->request->data['course'][$i];
+                }
+            }
+
+
+
+
+            $choices = ltrim($choices, ',');
+            $choices = rtrim($choices, ',');
+            $choices = preg_replace('/,+/', ',', $choices);
 
             //calculate the amount
-            $choice_arr=explode(',',$choices);
+            $choice_arr = explode(',', $choices);
             $count_choices = count($choice_arr);
-            
-            if($choices==0) {
-                $validates[0]='Atleast one choice is required';
 
+            if ($choices == 0) {
+                $validates[0] = 'Atleast one choice is required';
             }
             if (isset($validates) && $validates != null) {
-                    //foreach ($validates as $messages) {
-                        $msg = $validates[0]."<br>";
-                   // }
-                    $this->Session->setFlash(__($msg));
-                    return $this->redirect(array('action' => 'choice_edit'));
-                }
-                else {
-                    $result=$this->Community->find('first',array(
-                        'conditions'=>array('id'=>$this->request->data['choice']['community']),
-                        'fields'=>array(
-                            'Community.fees'
-                            )
+                //foreach ($validates as $messages) {
+                $msg = $validates[0] . "<br>";
+                // }
+                $this->Session->setFlash(__($msg));
+                return $this->redirect(array('action' => 'choice_edit'));
+            } else {
+                $result = $this->Community->find('first', array(
+                    'conditions' => array('id' => $this->request->data['choice']['community']),
+                    'fields' => array(
+                        'Community.fees'
+                    )
                         ));
-                    $amount=$count_choices*$result['Community']['fees'];
+                $amount = $count_choices * $result['Community']['fees'];
 
-                    $cond=array(
-                        'user_id'=>$this->Session->read('User.userid')
-                        );
-                    $condUser=array(
-                        'frkUserID'=>$this->Session->read('User.userid')
-                        );
-                    $updateChoicedata=array(
-                        'choices'=>"'".$choices."'",
-                        'amount'=>$amount
-                        );
-                    $updateUserData=array(
-                        'frkUserName'=>"'".$this->request->data['choice']['name']."'",
-                        'frkUserGender'=>"'".$this->request->data['choice']['gender']."'",
-                        'frkUserCommunity'=>$this->request->data['choice']['community'],
-                        'frkUserReligion'=>$this->request->data['choice']['religion'],
-                        );
-                    $this->User->updateAll($updateUserData,$condUser);
-                    
-                    $this->Choice->set($updateChoicedata);
-                    if($this->Choice->validates()) {
-                        //$this->Choice->create();
-                            if(!$this->Choice->updateAll($updateChoicedata,$cond)) {
-                                $this->Session->setFlash('An error occured, please try again');
-                            }
-                            else {
-                                $this->Session->setFlash('The details have been updated');
-                                return $this->redirect(array('controller'=>'pages','action'=>'choice_select'));
-                            }
+                $cond = array(
+                    'user_id' => $this->Session->read('User.userid')
+                );
+                $condUser = array(
+                    'frkUserID' => $this->Session->read('User.userid')
+                );
+                $updateChoicedata = array(
+                    'choices' => "'" . $choices . "'",
+                    'amount' => $amount
+                );
+                $updateUserData = array(
+                    'frkUserName' => "'" . $this->request->data['choice']['name'] . "'",
+                    'frkUserGender' => "'" . $this->request->data['choice']['gender'] . "'",
+                    'frkUserCommunity' => $this->request->data['choice']['community'],
+                    'frkUserReligion' => $this->request->data['choice']['religion'],
+                );
+                $this->User->updateAll($updateUserData, $condUser);
+
+                $this->Choice->set($updateChoicedata);
+                if ($this->Choice->validates()) {
+                    //$this->Choice->create();
+                    if (!$this->Choice->updateAll($updateChoicedata, $cond)) {
+                        $this->Session->setFlash('An error occured, please try again');
+                    } else {
+                        $this->Session->setFlash('The details have been updated');
+                        return $this->redirect(array('controller' => 'pages', 'action' => 'choice_select'));
+                    }
                 }
-
-            
             }
         }
-        
-        $userid=$this->Session->read('User.userid');
-        $choices=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid),
-            'joins'=>array(array(
-                'table'=>'users',
-                'alias'=>'User',
-                'type'=>'INNER',
-                'conditions'=>array('User.frkUserID=Choice.user_id')
+
+        $userid = $this->Session->read('User.userid');
+        $choices = $this->Choice->find('all', array('conditions' => array('user_id' => $userid),
+            'joins' => array(array(
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'type' => 'INNER',
+                    'conditions' => array('User.frkUserID=Choice.user_id')
                 ),
                 array(
-                    'table'=>'communities',
-                    'alias'=>'Community',
-                    'type'=>'INNER',
-                    'conditions'=>array('Community.id=User.frkUserCommunity')
-                    ),
-               array(
-                    'table'=>'religions',
-                    'alias'=>'Religion',
-                    'type'=>'INNER',
-                    'conditions'=>array('Religion.id=User.frkUserReligion')
-                    )
+                    'table' => 'communities',
+                    'alias' => 'Community',
+                    'type' => 'INNER',
+                    'conditions' => array('Community.id=User.frkUserCommunity')
+                ),
+                array(
+                    'table' => 'religions',
+                    'alias' => 'Religion',
+                    'type' => 'INNER',
+                    'conditions' => array('Religion.id=User.frkUserReligion')
+                )
             ),
-            'fields'=>array('Choice.*','User.frkUserCommunity','User.frkUserReligion','User.frkUserName','User.frkUserGender')
-            ));
+            'fields' => array('Choice.*', 'User.frkUserCommunity', 'User.frkUserReligion', 'User.frkUserName', 'User.frkUserGender')
+                ));
         //pr($choices); exit;
-        $communities=$this->Community->find('list',array('fields'=>array('id','name')));
-        $religions=$this->Religion->find('list',array('fields'=>array('id','name')));
-        $courses=$this->Course->find('list',array('fields'=>array('frkCourseID','frkCourseName')));
-        $courses[0]='-- select the choice --';
+        $communities = $this->Community->find('list', array('fields' => array('id', 'name')));
+        $religions = $this->Religion->find('list', array('fields' => array('id', 'name')));
+        $courses = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
+        $courses[0] = '-- select the choice --';
         ksort($courses);
         //test
-        $this->set('communities',$communities);
-        $this->set('religions',$religions);
-        $this->set('courses',$courses);
-        $this->set('choices',$choices);
+        $this->set('communities', $communities);
+        $this->set('religions', $religions);
+        $this->set('courses', $courses);
+        $this->set('choices', $choices);
     }
+
     public function update_list() {
-        $course_id=$this->data['course_id'];
-        $courses=$this->Course->find('list',array('fields'=>array('frkCourseID','frkCourseName')));
+        $course_id = $this->data['course_id'];
+        $courses = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
         unset($courses[$course_id]);
-        pr($courses); exit;
+        pr($courses);
+        exit;
     }
-    
-        public function befor_payment(){
-         $userid = $this->Session->read('User.userid');
+
+    public function befor_payment() {
+        $userid = $this->Session->read('User.userid');
 
         if (!isset($userid)) {
             $this->Session->setFlash(__('Please Login!.'));
             return $this->redirect(array('action' => 'login'));
         } else {
-              
-               $userdata = $this->User->find('first',array(
-                'joins' => array(
-                array('table' => 'choices',
-                    'alias' => 'Choices',
-                    'type' => 'INNER',
-                    'foreignKey' => false,
-                    'conditions' => array('User.frkUserID = Choices.user_id')
-                )
-                ),
-            'fields' => array(
-                'Choices.application_no',
-                'Choices.amount',
-                'User.frkUserEmail',
-'User.frkUserName',
-                'User.frkUserDOB',
-                'User.frkUserMobile',
-    
 
+            $userdata = $this->User->find('first', array(
+                'joins' => array(
+                    array('table' => 'choices',
+                        'alias' => 'Choices',
+                        'type' => 'INNER',
+                        'foreignKey' => false,
+                        'conditions' => array('User.frkUserID = Choices.user_id')
+                    )
                 ),
-               'conditions' => array('User.frkUserID' => $userid)
-              // 'conditions' => array('User.frkUserID = Choices.user_id')
-   
-                   ));
-               
-              //  pr($userdata);
-       // exit;
-               
-             // $tags = explode(',' ,$userdata['Choices']['choices'] );
-             // $count = count($tags);
-              //$amount =  $userdata['Communities']['fees'];
-              $total = $userdata['Choices']['amount'];
-           //   $total = $amount * $count;              
-              if($total==0){
-                  $userdata['amount']="0.00";
-              }
-              $userdata['amount'] = $total;
-             
-             $this->set('Userdata', $userdata);
-        
+                'fields' => array(
+                    'Choices.application_no',
+                    'Choices.amount',
+                    'User.frkUserEmail',
+                    'User.frkUserName',
+                    'User.frkUserDOB',
+                    'User.frkUserMobile',
+                ),
+                'conditions' => array('User.frkUserID' => $userid)
+                    // 'conditions' => array('User.frkUserID = Choices.user_id')
+                    ));
+
+            //  pr($userdata);
+            // exit;
+            // $tags = explode(',' ,$userdata['Choices']['choices'] );
+            // $count = count($tags);
+            //$amount =  $userdata['Communities']['fees'];
+            $total = $userdata['Choices']['amount'];
+            //   $total = $amount * $count;              
+            if ($total == 0) {
+                $userdata['amount'] = "0.00";
+            }
+            $userdata['amount'] = $total;
+
+            $this->set('Userdata', $userdata);
         }
-        
-        
-        
     }
-    public function after_payment(){
-        
+
+    public function after_payment() {
+
         $userid = $this->Session->read('User.userid');
-       // pr($userid);
-      //  exit;
+        // pr($userid);
+        //  exit;
         if (!isset($userid)) {
             $this->Session->setFlash(__('Please Login!.'));
             return $this->redirect(array('action' => 'login'));
-        } else{
-            
-              $userdata = $this->User->find('first',array(
+        } else {
+
+            $userdata = $this->User->find('first', array(
                 'joins' => array(
-                array('table' => 'choices',
-                    'alias' => 'Choices',
-                    'type' => 'LEFT',
-                    'foreignKey' => false,
-                    'conditions' => array('User.frkUserID = Choices.user_id')
-                )
+                    array('table' => 'choices',
+                        'alias' => 'Choices',
+                        'type' => 'LEFT',
+                        'foreignKey' => false,
+                        'conditions' => array('User.frkUserID = Choices.user_id')
+                    )
                 ),
-            'fields' => array(
-                'Choices.application_no',
-                'User.frkUserName',
+                'fields' => array(
+                    'Choices.application_no',
+                    'User.frkUserName',
                 ),
-           'conditions' => array('User.frkUserID' => $userid)
-                   ));
-              
-      $this->set('Userdata', $userdata);
+                'conditions' => array('User.frkUserID' => $userid)
+                    ));
 
+            $this->set('Userdata', $userdata);
         }
-        
     }
-      public function after_payment_verify(){
-            $userid = $this->Session->read('User.userid');
-          $this->autoRender = false ;
-             if ($this->request->is('post')) {
-                  $ApplicationNumber = $this->request->data['ApplicationNumber'];
-                  $transaction_id = $this->request->data['transaction_id'];
-                  $transactionDate = date('Y/m/d', strtotime($this->request->data['transactionDate']));
-                  
-                  $transaction_check = $this->Payment->find('first', array(
-                     'conditions' => array(
+
+    public function after_payment_verify() {
+        $userid = $this->Session->read('User.userid');
+        $this->autoRender = false;
+        if ($this->request->is('post')) {
+            $ApplicationNumber = $this->request->data['ApplicationNumber'];
+            $transaction_id = $this->request->data['transaction_id'];
+            $transactionDate = date('Y/m/d', strtotime($this->request->data['transactionDate']));
+
+            $transaction_check = $this->Payment->find('first', array(
+                'conditions' => array(
                     'transaction_id' => $transaction_id
-                )));
-                  
-                  if ($transaction_check) {
-            $this->Session->setFlash(__('The Transaction ID You Used Already Exists,Please Try Again'));    
-            return $this->redirect(array('action' => 'after_payment'));
-        }else{
+                    )));
 
-                   $savedata = array(
-                            'u_id' =>$userid ,
-                            'application_no' => $ApplicationNumber,
-                            'transaction_id' => $transaction_id,
-                            'date' => $transactionDate
-                        );
+            if ($transaction_check) {
+                $this->Session->setFlash(__('The Transaction ID You Used Already Exists,Please Try Again'));
+                return $this->redirect(array('action' => 'after_payment'));
+            } else {
 
-                        $this->Payment->create();
-                    
-                  if ($this->Payment->save($savedata)) {                  
+                $savedata = array(
+                    'u_id' => $userid,
+                    'application_no' => $ApplicationNumber,
+                    'transaction_id' => $transaction_id,
+                    'date' => $transactionDate
+                );
+
+                $this->Payment->create();
+
+                if ($this->Payment->save($savedata)) {
                     $this->Session->setFlash(__('Your Payment will be confirmed by the system within 48 hrs.You we will be receiving a confirmation mail .You may proceed with your Application process only after recieving confirmation mail'));
-                     return $this->redirect(array('action' => 'choice_select'));
+                    return $this->redirect(array('action' => 'choice_select'));
                 } else {
                     $this->Session->setFlash(__(' not saved. Please, try again.'));
-                     return $this->redirect(array('action' => 'after_payment'));
+                    return $this->redirect(array('action' => 'after_payment'));
                 }
-             }
-             }
-      }   
+            }
+        }
+    }
+
 }

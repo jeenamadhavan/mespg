@@ -36,9 +36,15 @@
 				<td><?php echo $choices[0]['Choice']['amount']; ?></td>
 			</tr>
 		</table>
-		<?php echo $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right')); ?>
-		<?php echo $this->Html->link('Proceed to Payment',array('controller'=>'pages','action'=>'befor_payment'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
-		<?php echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
+		<?php if(isset($cannot_edit)&&$cannot_edit==1) {echo $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right','disabled'=>'disabled')); ?>
+		<?php echo $this->Html->link('Proceed to Payment',array('controller'=>'pages','action'=>'befor_payment'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>'disabled')); ?>
+		<?php 
+echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>'disabled')); 
+} else {
+    $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right'));
+    $this->Html->link('Proceed to Payment',array('controller'=>'pages','action'=>'befor_payment'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;'));
+echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); 
+} ?>
 
 	</div>
 </div>
