@@ -1467,7 +1467,7 @@ public function getTotal($stream_id,$board_id){
             $choices='';
 
             for($i=0;$i<$course_count;$i++) {
-                if(isset($this->request->data['course'][$i])) {
+                if(isset($this->request->data['course'][$i])&&$this->request->data['course'][$i]!=0) {
                     $choices=$choices.','.$this->request->data['course'][$i];
                 }
             }
@@ -1592,7 +1592,7 @@ public function getTotal($stream_id,$board_id){
             $choices='';
             //echo $course_count; exit;
             for($i=0;$i<$course_count;$i++) {
-                if(isset($this->request->data['course'][$i])) {
+               if(isset($this->request->data['course'][$i])&&$this->request->data['course'][$i]!=0) {
                     $choices=$choices.','.$this->request->data['course'][$i];
                 }
             }
