@@ -84,7 +84,7 @@
                                 
                             ?>
                             <ul class="nav navbar-nav navbar-right">
-                               <li><?php echo $this->Html->link(__('UG ADMISSION'), "http://52.74.128.49/", array('escape' => false)) ?></li>
+                               <li><?php echo $this->Html->link(__('Click Here For UG Admission'), "http://52.74.128.49/", array('escape' => false)) ?></li>
                             </ul>
                             <?php } else { ?>
                             <ul class="nav navbar-nav navbar-right">
