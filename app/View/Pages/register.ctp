@@ -4,6 +4,7 @@ $randnum=rand ( 1 ,5 );
 <div class="container banner">
     <div class="jumbotron fk-jumbotron banner-<?php echo $randnum; ?>">
         <h1>Register!</h1>
+         <h2 style="color:white;">PG Admission Portal 2015!</h2>
 <!--        <ul style="color: #fff; font-size: 16px; margin: 0px;">
             <li>The Biggest residential Post Graduate Institution Under Calicut university.</li>
             <li>18 UG Courses, 14 PG Courses and 8 Research Centers.</li>
