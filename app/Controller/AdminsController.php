@@ -84,7 +84,7 @@ class AdminsController extends AppController {
     public function index() {
         
     }
-
+   
     public function checkpasswords() {
 
         if (strcmp($this->request->data['User']['frkUserPassword'], $this->request->data['User']['frkRepeatUserPassword']) == 0) {
@@ -149,19 +149,19 @@ class AdminsController extends AppController {
         }
     }
 
-    public function uploadexcel() {
+     public function uploadexcel() {
         $this->render('uploadexcel', 'admin');
 
         if ($this->request->is('post')) {
-            $fname = $this->data['Excel']['excel']['name'];
+            $fname = $_FILES['file']['name'];
             $ar1 = explode('.', $fname);
 
             $newfile1 = $ar1[0] . "_" . date('Y-m-d');
             $newfile2 = $newfile1 . "." . $ar1[1];
 
             $filename = WWW_ROOT . DS . 'documents' . DS . $newfile2;
-            if (move_uploaded_file($this->data['Excel']['excel']['tmp_name'], $filename)) {
-                return $this->redirect(array('action' => 'uploadescel', 'controller' => 'admins'));
+            if (move_uploaded_file($_FILES['file']['tmp_name'], $filename)) {
+                return $this->redirect(array('action' => 'uploadexcel', 'controller' => 'admins'));
             } else {
                 return $this->redirect(array('action' => 'dashboard', 'controller' => 'admins'));
             }
