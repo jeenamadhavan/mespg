@@ -31,7 +31,7 @@ $randnum=rand ( 1 ,5 );
 
 <ul>
     <li>Application Fee: Rs. 250/- for General Category and Rs. 150/ for SC/ ST (per course). Please do the payment through State Bank Collect facility provided by SBT.</li>
-<li>On successful payment, the candidate will get an e-receipt with a Transaction ID. Candidate must enter Transaction ID in appropriate format (in Basic Info Page, "Verify Payment" button) in order to process further towards submission of application.</li>
+<li>On successful payment, the candidate will get an e-receipt with a Transaction ID(SBT Collect Reference Number). Candidate must enter Transaction ID in appropriate format (in Basic Info Page, "Verify Payment" button) in order to process further towards submission of application.</li>
 <li>Candidate’s payment will be confirmed by the system within 48 hrs and a confirmation mail will be sent to your registered e-mail ID. After receiving Payment Confirmation mail, candidate may proceed further for filling application in detail, and then submission of final application for admission process.</li>
 <li>Candidate must keep a printed copy of the e-receipt for future verification.</li>
 <li><strong>If confirmation has not received by the system within 48 hours, please contact </strong>admission@farookcollege.ac.in with a soft copy of e-receipt</li>
