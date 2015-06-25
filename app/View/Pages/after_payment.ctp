@@ -1,3 +1,15 @@
+
+<style type="text/css">
+    .container {
+        display: none;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.container').show();
+    });
+</script>
 <div class="container" style="margin-top:10px;">
 
 
@@ -53,6 +65,12 @@
             </div>
         </div>
 </div>
+<noscript>
+ <p><h2>We have detected that Javascript is disabled in your browser.This application requires javascript to be enabled.Here are some <a href="http://www.enable-javascript.com/">instructions on how to enable Javascript </a>in your browser.</h2></p>
+   
+</noscript>
+
+
 <script>
 $(document).ready(function(){
 $('.datepicker').datepicker();
@@ -103,4 +121,20 @@ if(result){
     document.getElementById('transaction_id').focus();
 }
 }
+</script>
+<script>
+$(document).ready(function(){
+    
+$("#transaction_id").blur(function(){
+    var data = $('#transaction_id').val() ;
+    re=/^[A-Z]{2}[0-9]{8}$/;
+     var result = re.test(data);
+     if(result){
+    return true;
+}else{
+    $('#transaction_id').focus();
+}
+   
+});    
+}); 
 </script>
