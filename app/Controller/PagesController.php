@@ -80,7 +80,7 @@ class PagesController extends AppController {
     }
 
     public function register() {
-        
+         $this->render('register', 'register');
         if ($this->request->is('post')) {
             $validates = array();
             $msg = "";
