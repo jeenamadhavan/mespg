@@ -149,7 +149,7 @@ class AdminsController extends AppController {
         }
     }
 
-    public function upload() {
+    public function uploadexcel() {
         $this->render('uploadexcel', 'admin');
 
         if ($this->request->is('post')) {
@@ -161,9 +161,9 @@ class AdminsController extends AppController {
 
             $filename = WWW_ROOT . DS . 'documents' . DS . $newfile2;
             if (move_uploaded_file($this->data['Excel']['excel']['tmp_name'], $filename)) {
-                echo 'ok';
+                return $this->redirect(array('action' => 'uploadescel', 'controller' => 'admins'));
             } else {
-                echo 'notok';
+                return $this->redirect(array('action' => 'dashboard', 'controller' => 'admins'));
             }
             
             
@@ -194,7 +194,7 @@ class AdminsController extends AppController {
         echo "ok";
         exit();
     }
-public function uploadexcel(){ 
+public function upload(){ 
     $message = null;
 
 $allowed_extensions = array('csv','xlsx','xls');
