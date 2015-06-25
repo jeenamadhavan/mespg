@@ -208,6 +208,7 @@ class PagesController extends AppController {
     }
 
     public function login() {
+        $this->render('login', 'login');
         if ($this->request->is('post')) {
 
             $encryptpassword = base64_encode($this->request->data['UserLogin']['password']);
