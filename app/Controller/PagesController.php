@@ -19,6 +19,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 
 /**
  * Static content controller
@@ -79,6 +80,7 @@ class PagesController extends AppController {
     }
 
     public function register() {
+        
         if ($this->request->is('post')) {
             $validates = array();
             $msg = "";
@@ -177,14 +179,28 @@ class PagesController extends AppController {
         $subject = 'Confirm Your Email-Farook College PG Admission';
         // $message1 = "Hello User,<br> You signed up at this site,Your account is almost ready,but before you can login you need to confirm your email address by visiting the link below";
         //$message2 = "Once you have visited the verification URL your account will be activated Thanks, Team.";
-        $message1 = "Hello User, <br> You signed up at this site,Your account is almost ready,but before you can login you need to <br> confirm your email address by visiting the link below <br>";
-        $message2 = "<br> Once you have visited the verification URL your account will be activated.<br> Thanks,<br> Team.";
+        $message1 = "Hello User,  You signed up at this site,Your account is almost ready,but before you can login you need to <br> confirm your email address by visiting the link below ";
+        $message2 = " Once you have visited the verification URL your account will be activated. Thanks, Team.";
         $message = $message1 . '  ' . $link . '  ' . $message2;
         // $message = $message1 . $link. $message2;
         $headers = 'From: info@farookadmission.in' . "\r\n" .
                 'Reply-To: info@farookadmission.in' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
-        mail($to, $subject, $message, $headers);
+        //mail($to, $subject, $message, $headers);
+        CakeEmail::deliver($to, $subject, $message, array(
+            'transport' => 'Smtp',
+            'from' => array('admission@farookcollege.ac.in' => 'Farook College PG Admission'),
+            'host' => 'email-smtp.us-west-2.amazonaws.com',
+            'tls' => true,
+            'port' => 587,
+            'timeout' => 30,
+            'username' => 'AKIAJJ62UMBPAOB3AAQA',
+            'password' => 'Ar12GanG4JddabSgQOQrQk0KFetnHANF5dwFx2vs/GmX',
+            'client' => null,
+            'log' => false,
+                //'charset' => 'utf-8',
+                //'headerCharset' => 'utf-8',
+        ));
     }
 
     public function confirmationlink($randomstring = NULL, $id = NULL) {
