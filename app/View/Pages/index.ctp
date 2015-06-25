@@ -48,7 +48,7 @@ $randnum=rand ( 1 ,5 );
                     <li>
                         <strong>STEP 3 ( Payment Confirmation):-</strong>
                         <ul>
-                            <li>On successful payment, the candidate will get an e-receipt with a Transaction ID. Candidate must enter Transaction ID in appropriate format and other required information in order to process further towards submission of application.</li>
+                            <li>On successful payment, the candidate will get an e-receipt with a Transaction ID(SBT Collect Reference Number). Candidate must enter Transaction ID in appropriate format and other required information in order to process further towards submission of application.</li>
                             <li>Candidate’s payment will be confirmed by the system within 48 hrs and a confirmation mail will be sent to your registered e-mail ID. After receiving Payment Confirmation mail, candidate may proceed further for filling application in detail, and then submission of final application for admission process.</li>                           
                         </ul>
                     </li>
