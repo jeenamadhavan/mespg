@@ -85,7 +85,7 @@ class PagesController extends AppController {
             $validates = array();
             $msg = "";
             // $name = $this->request->data['UserForm']['Name'];
-            $dob = $this->request->data['frkUserDOB'];
+            $dob = date('Y/m/d', strtotime($this->request->data['frkUserDOB']));
             $mobile = $this->request->data['UserForm']['frkUserMobile'];
             $email = $this->request->data['UserForm']['frkUserEmail'];
             $password = $this->request->data['UserForm']['frkUserPassword'];
