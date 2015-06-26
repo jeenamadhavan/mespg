@@ -1,3 +1,9 @@
+<script>
+$(document).ready(function(){
+$('.datepicker').datepicker();
+}); 
+</script>
+
 <?php 
 $randnum=rand ( 1 ,5 );
 ?>
@@ -30,9 +36,9 @@ $randnum=rand ( 1 ,5 );
                     <?php echo $this->Form->input('UserForm.frkUserName', array('placeholder' => 'Name','id'=>"Name", 'class' => 'form-control', 'label' => false,'title'=>"Please enter your name",'required'=>'required','maxlength' => '250',)); ?>     
                     <span class="help-block"></span>
                 </div>
-                <div class="form-group">
+               <div class="form-group ">
                     <label>Date of Birth<sup class="madadatory">*</sup></label>
-                    <input type="date" class="form-control" name="frkUserDOB" required>
+                    <input type="text" class="form-control datepicker" name="frkUserDOB" required>
                 </div>
                 <div class="form-group">
                     <label for="phone" class="control-label">Mobile Number (10 digits)<sup class="madadatory">*</sup></label>
