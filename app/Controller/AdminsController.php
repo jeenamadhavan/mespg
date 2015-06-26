@@ -114,7 +114,7 @@ class AdminsController extends AppController {
         if ($this->Session->read('User.admin') == 1) {
 
             $Choices = $this->User->find('all', array(
-                'limit' => 10,
+                //'limit' => 10,
                 'fields' => array('Choices.*, User.frkName,Communities.name,Religions.name,Payments.id ,Payments.transaction_id,Payments.date,Payments.status'),
                 'joins' => array(
                     array(
