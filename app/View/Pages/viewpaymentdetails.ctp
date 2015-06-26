@@ -20,7 +20,7 @@
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Sl No</th>
+                                        
                                         <th>Application Number</th>
                                         <th>Name</th>
                                         <th>Transaction Id</th>
@@ -34,13 +34,13 @@
                                 </thead>
                                 <tbody>
                                     <?php echo($this->Form->create('Choice')); ?>
-                                    <?php $i=1; foreach ($Choices as $row){ ?>
+                                    <?php  $num=1;foreach ($Choices as $row){  ?>
                                     <tr><?php if(isset($row['Payments']['id'])){?>
                                         <th><input type="checkbox" class="chk" value="<?php echo $row['Payments']['id'];?>" /></th>
                                         <?php }else{?>
                                         <th></th>
                                        <?php }?>
-                                        <td><?php echo $i; ?></td>
+                                       
                                         <td>
                                             <?php 
                                             echo $this->Form->input('application_no', array('label' => false, 'class' => 'form-control',  'type' => 'hidden')); 
@@ -102,7 +102,7 @@
                                         
                                         
                                     </tr>
-                                    <?php $i++; } ?>
+                                    <?php  $num++;} ?>
                                     <?php echo $this->Form->end(); ?>
                                 </tbody>
                             </table>
