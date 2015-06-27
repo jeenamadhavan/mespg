@@ -1470,7 +1470,7 @@ class PagesController extends AppController {
                         'conditions' => array('Religion.id=User.frkUserReligion')
                     )
                 ),
-                'fields' => array('Choice.*', 'Community.name', 'Religion.name', 'User.frkUserName', 'User.frkUserGender')
+                'fields' => array('Choice.*', 'Community.name', 'Religion.name', 'User.frkUserName', 'User.frkUserGender','User.frkUserDOB')
                     ));
             //pr($choice_result); exit;
 
@@ -1704,7 +1704,7 @@ class PagesController extends AppController {
                     'conditions' => array('Religion.id=User.frkUserReligion')
                 )
             ),
-            'fields' => array('Choice.*', 'User.frkUserCommunity', 'User.frkUserReligion', 'User.frkUserName', 'User.frkUserGender')
+            'fields' => array('Choice.*', 'User.frkUserCommunity', 'User.frkUserReligion', 'User.frkUserName', 'User.frkUserGender','User.frkUserDOB')
                 ));
         //pr($choices); exit;
         $communities = $this->Community->find('list', array('fields' => array('id', 'name')));
