@@ -1292,22 +1292,36 @@ class PagesController extends AppController {
                 $headers = 'From: info@farookadmission.in' . "\r\n" .
                         'Reply-To: info@farookadmission.in' . "\r\n" .
                         'X-Mailer: PHP/' . phpversion();
+                CakeEmail::deliver($to, $subject, $message, array(
+            'transport' => 'Smtp',
+            'from' => array('admission@farookcollege.ac.in' => 'Farook College PG Admission'),
+            'host' => 'email-smtp.us-west-2.amazonaws.com',
+            'tls' => true,
+            'port' => 587,
+            'timeout' => 30,
+            'username' => 'AKIAJJ62UMBPAOB3AAQA',
+            'password' => 'Ar12GanG4JddabSgQOQrQk0KFetnHANF5dwFx2vs/GmX',
+            'client' => null,
+            'log' => false,
+                //'charset' => 'utf-8',
+                //'headerCharset' => 'utf-8',
+        ));
 
-                $action = mail($to, $subject, $message, $headers);
+                //$action = mail($to, $subject, $message, $headers);
 
 
                 /*                 * ************* */
 
-
-                if ($action) {
-
                     $msg = 'Please check your email for reset instructions';
                     $this->Session->setFlash(__($msg));
+                /*if ($action) {
+
+                    
                 } else {
                     $msg = 'Something went wrong with activation mail. Please try later';
 
                     $this->Session->setFlash(__($msg));
-                }
+                }*/
             }
             $this->redirect('/');
         }
