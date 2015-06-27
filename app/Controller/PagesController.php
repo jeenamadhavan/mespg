@@ -1792,7 +1792,7 @@ class PagesController extends AppController {
         if ($this->request->is('post')) {
             $ApplicationNumber = $this->request->data['ApplicationNumber'];
             $transaction_id = $this->request->data['transaction_id'];
-            $transactionDate = date('Y/m/d', strtotime($this->request->data['transactionDate']));
+            $transactionDate = date('Y-m-d', strtotime($this->request->data['transactionDate']));
 
             $transaction_check = $this->Payment->find('first', array(
                 'conditions' => array(
