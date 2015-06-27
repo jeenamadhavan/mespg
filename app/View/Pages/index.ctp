@@ -18,7 +18,7 @@ $randnum=rand ( 1 ,5 );
 <div class="container">
     <div class="row">
         
-        <div class="col-xs-12">
+        <div class="col-xs-12"><b><h4 style="color:red;">The second phase entry form for PG admission will be open today by 3 PM for payment confirmed candidates.</h4></b>
         <div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
