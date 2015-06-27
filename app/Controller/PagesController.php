@@ -1572,7 +1572,7 @@ class PagesController extends AppController {
             $user_cnd = array(
                 'User.frkUserID' => $this->Session->read('User.userid'),
             );
-$dob = date('Y-m-d', strtotime($this->request->data['choice']['dob']));
+            $dob = date('Y-m-d', strtotime($this->request->data['choice']['dob']));
             $userUpdateData = array(
                 'frkUserDOB' => "'" . $dob . "'",
                 'frkUserName' => "'" . $this->request->data['choice']['name'] . "'",
