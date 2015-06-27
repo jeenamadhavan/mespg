@@ -20,6 +20,10 @@
 			<label>Gender:<sup class="mandatory">*</sup></label>
 			<?php echo $this->form->input('choice.gender',array('options'=>$gender,'empty'=>'-- select gender --','class'=>'form-control','label'=>false,'value'=>$choices[0]['User']['frkUserGender'],'required'=>'required')); ?>
 		</div>
+                <div class="form-group">
+			<label>Date of Birth:(MM-DD-YYYY)<sup class="mandatory">*</sup></label>
+			<?php echo $this->Form->input('dob',array('id'=>'datepicker','class'=>'form-control','placeholder'=>'MM-DD-YYYY','label'=>false,'value'=>$choices[0]['User']['frkUserDOB'],'required'=>'required')); ?>
+		</div>
 		<div class="form-group">
 			<label>Community Category:<sup class="mandatory">*</sup></label>
 			<?php echo $this->form->input('choice.community',array('options'=>$communities,'empty'=>'-- select community --','class'=>'form-control','label'=>false,'value'=>$choices[0]['User']['frkUserCommunity'],'required'=>'required')); ?>
@@ -96,3 +100,8 @@
 	
 
 </script>
+ <script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>

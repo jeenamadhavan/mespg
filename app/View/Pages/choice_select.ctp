@@ -19,6 +19,10 @@
 			<label>Gender:<sup class="mandatory">*</sup></label>
 			<?php echo $this->form->input('choice.gender',array('options'=>$gender,'empty'=>'-- select gender --','class'=>'form-control','label'=>false,'required'=>'required')); ?>
 		</div>
+                <div class="form-group">
+			<label>Date of Birth:<sup class="mandatory">*</sup></label>
+			<?php echo $this->Form->input('dob',array('class'=>'form-control','label'=>false,'placeholder'=>'enter your Date of Birth as in SSLC','required'=>'required','value'=>$user['User']['frkUserDOB'])); ?>
+		</div>
 		<div class="form-group">
 			<label>Religion:<sup class="mandatory">*</sup></label>
 			<?php echo $this->form->input('choice.religion',array('options'=>$religions,'empty'=>'-- select religion --','class'=>'form-control','label'=>false,'required'=>'required')); ?>

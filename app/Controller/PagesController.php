@@ -1660,8 +1660,10 @@ class PagesController extends AppController {
                     'choices' => "'" . $choices . "'",
                     'amount' => $amount
                 );
+                $dob = date('Y-m-d', strtotime($this->request->data['choice']['dob']));
                 $updateUserData = array(
                     'frkUserName' => "'" . $this->request->data['choice']['name'] . "'",
+                    'frkUserDOB' => "'" . $dob . "'",
                     'frkUserGender' => "'" . $this->request->data['choice']['gender'] . "'",
                     'frkUserCommunity' => $this->request->data['choice']['community'],
                     'frkUserReligion' => $this->request->data['choice']['religion'],

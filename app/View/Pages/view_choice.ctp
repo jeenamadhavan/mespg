@@ -14,6 +14,10 @@
 				<th>Gender :</th>
 				<td><?php echo $choices[0]['User']['frkUserGender']; ?></td>
 			</tr>
+                        <tr>
+				<th>Date of Birth:</th>
+				<td><?php echo $choices[0]['User']['frkUserDOB']; ?></td>
+			</tr>
 			<tr>
 				<th>Community :</th>
 				<td><?php echo $choices[0]['Community']['name']; ?></td>
