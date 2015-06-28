@@ -18,7 +18,7 @@ $randnum=rand ( 1 ,5 );
 <div class="container">
     <div class="row">
         
-        <div class="col-xs-12"><b><h4 style="color:red;">The second phase entry form for PG admission will be open today by 4 PM for payment confirmed candidates.</h4></b>
+        <div class="col-xs-12"><b><h4 style="color:red;">The second phase entry form for PG admission will be open 29/06/2015 by 4 PM for payment confirmed candidates.</h4></b>
         <div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
@@ -52,6 +52,7 @@ $randnum=rand ( 1 ,5 );
                             <li>Candidate’s payment will be confirmed by the system within 48 hrs and a confirmation mail will be sent to your registered e-mail ID. After receiving Payment Confirmation mail, candidate may proceed further for filling application in detail, and then submission of final application for admission process.</li>                           
                         </ul>
                     </li>
+                    
                     
                 </ul>
 
