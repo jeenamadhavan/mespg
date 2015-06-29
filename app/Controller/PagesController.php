@@ -236,7 +236,7 @@ class PagesController extends AppController {
                 )
                     ));
             if (count($usersDetails) == 0) {
-                $this->Session->setFlash(__('The User Not Found or User Not Verfied.'));
+                $this->Session->setFlash(__('The User Not Found or User Not Verfied or Incorrect Password.'));
                 return $this->redirect(array('action' => 'login'));
             } else {
                 //create new session varialble
