@@ -18,9 +18,13 @@ $randnum=rand ( 1 ,5 );
 <div class="container">
     <div class="row">
         
-        <div class="col-xs-12"><b><h4 style="color:red;">The last date of registration for PG Admission 2015 has been extended to 06/07/2015.</h4></b>
-        <b><h4 style="color:red;">The other dates will be shortly announced.</h4></b>
-            <div class="panel panel-default panel-fk">
+        <div class="col-xs-12"><b><h4 style="color:red;">* The last date of registration for PG Admission 2015 has been extended to 06/07/2015.</h4></b>
+        <b><h4 style="color:red;">* The other dates will be shortly announced.</h4></b>
+        <b><h4 style="color:red;">* The second phase will be open by 2nd July 2015 for payment confirmed candidates.</h4></b>
+           <b><h4 style="color:red;">* Please download  the consolidated grade sheet from the university website before login for 2nd phase.</h4></b>
+        <b><h4 style="color:red;">* Candidates whose payments are not confirmed, please make sure that they have entered the  transaction id (SB Collect Reference No.) in the portal through "Confirm Payment " button.</h4></b>
+          <b><h4 style="color:red;">* Candidates who have confirmed their payment at the admission portal and have no payment confirmation within 48 hours of successful payment, please contact us with the details  (admission@farookcollege.ac.in)</h4></b>
+        <div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
                 </div>
