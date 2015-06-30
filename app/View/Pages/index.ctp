@@ -18,8 +18,9 @@ $randnum=rand ( 1 ,5 );
 <div class="container">
     <div class="row">
         
-        <div class="col-xs-12"><b><h4 style="color:red;">The second phase entry form for PG admission will be open 30/06/2015 by 11 AM for payment confirmed candidates.</h4></b>
-        <div class="panel panel-default panel-fk">
+        <div class="col-xs-12"><b><h4 style="color:red;">The last date of registration for PG Admission 2015 has been extended to 06/07/2015.</h4></b>
+        <b><h4 style="color:red;">The other dates will be shortly announced.</h4></b>
+            <div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
                 </div>
