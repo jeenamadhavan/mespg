@@ -300,7 +300,7 @@ $randnum=rand ( 1 ,5 );
                                                     'class' => 'form-control',
                                                     'id' => 'Caste2',
                                                     'label' => false,
-                                                    'required' =>'required'
+                                                    //'required' =>'required'
                                                 ));
                                                 ?></div>
                                                 <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Please select appropriate one</span>

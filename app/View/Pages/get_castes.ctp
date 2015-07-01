@@ -7,7 +7,7 @@
         'value'=>$caste,
         'label' => false,
         'selected'=>'selected',
-        'required' =>'required'
+        //'required' =>'required'
     )); 
 } else {
     echo $this->Form->input('PrimaryRegister.caste', array(
@@ -17,7 +17,7 @@
         'id' => 'Caste',
         'label' => false,
         'selected'=>'selected',
-        'required' =>'required'
+        //'required' =>'required'
     ));
 }
     

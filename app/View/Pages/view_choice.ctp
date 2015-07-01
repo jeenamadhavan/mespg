@@ -18,14 +18,14 @@
 				<th>Date of Birth:</th>
 				<td><?php echo $choices[0]['User']['frkUserDOB']; ?></td>
 			</tr>
-			<tr>
+			<!--<tr>
 				<th>Community :</th>
 				<td><?php echo $choices[0]['Community']['name']; ?></td>
 			</tr>
 			<tr>
 				<th>Religion :</th>
 				<td><?php echo $choices[0]['Religion']['name']; ?></td>
-			</tr>
+			</tr>-->
 			<tr>
 				<th>Choices :</th>
 				<td>
