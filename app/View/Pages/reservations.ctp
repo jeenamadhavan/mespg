@@ -84,12 +84,12 @@
                             <div class="form-group">
                                 <label for="GraceMark" class="control-label">Are you eligible for grace marks for admission?<sup class="madadatory">*</sup></label><br>
 
-                                <?php echo $this->Form->input('SecondaryRegister.NCC/NSS', array('type' => 'checkbox')); ?>
-                                <?php echo $this->Form->input('SecondaryRegister.Ex-ServiceMan', array('type' => 'checkbox')); ?>
-                                <?php echo $this->Form->input('SecondaryRegister.NCC_Certificate_A', array('type' => 'checkbox')); ?>
-                                <?php echo $this->Form->input('SecondaryRegister.NCC_Certificate_B', array('type' => 'checkbox')); ?> 
-                                <?php echo $this->Form->input('SecondaryRegister.NCC_Certificate_C', array('type' => 'checkbox')); ?>
-                                <?php echo $this->Form->input('SecondaryRegister.None', array('type' => 'checkbox')); ?>
+                                <?php echo $this->Form->input('SecondaryRegister.NCC/NSS', array('type' => 'checkbox','id'=>'ncc_nss')); ?>
+                                <?php echo $this->Form->input('SecondaryRegister.Ex-ServiceMan', array('type' => 'checkbox','id'=>'ex_service')); ?>
+                                <?php echo $this->Form->input('SecondaryRegister.NCC_Certificate_A', array('type' => 'checkbox','id'=>'ncc_a')); ?>
+                                <?php echo $this->Form->input('SecondaryRegister.NCC_Certificate_B', array('type' => 'checkbox','id'=>'ncc_b')); ?> 
+                                <?php echo $this->Form->input('SecondaryRegister.NCC_Certificate_C', array('type' => 'checkbox','id'=>'ncc_c')); ?>
+                                <?php echo $this->Form->input('SecondaryRegister.None', array('type' => 'checkbox','id'=>'none')); ?>
 
                                 <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Please Select appropriate one [ you must attach the copies of certificate ]  </span>
                             </div>
@@ -417,4 +417,16 @@
     
     });
 
+</script>
+<script type="text/javascript">
+    $('#none').change(function(){
+        if($(this).is(':checked')) {
+            $('#ncc_nss').attr('checked',false);
+            $('#ex_service').attr('checked',false);
+            $('#ncc_a').attr('checked',false);
+            $('#ncc_b').attr('checked',false);
+            $('#ncc_c').attr('checked',false);
+        }
+        
+    });
 </script>
