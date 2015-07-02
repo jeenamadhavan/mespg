@@ -300,7 +300,7 @@ $randnum=rand ( 1 ,5 );
                                                     'class' => 'form-control',
                                                     'id' => 'Caste2',
                                                     'label' => false,
-                                                    //'required' =>'required'
+                                                    'required' =>'required'
                                                 ));
                                                 ?></div>
                                                 <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Please select appropriate one</span>
@@ -1703,12 +1703,12 @@ $randnum=rand ( 1 ,5 );
 
 <script type="text/javascript">
     $('#mark_edit_btn').click(function(){
-        var BASEURL='<?php echo $this->webroot; ?>';
+        var BASEURL='<?php echo Router::url('/', true); ?>';
         $.ajax({
             type: 'POST',
             dataType: 'html',
             async: false,
-            url:BASEURL+"/pages/edit_marks",
+            url:BASEURL+"pages/edit_marks",
             success: function(data) {
                 $('#edit_modal').html(data);
             }
@@ -1829,10 +1829,10 @@ $(document).ready(function () {
 <script type="text/javascript">
     $(document).ready(function(){
         $('#Community').change(function(){
-            var BASEURL='<?php echo $this->webroot; ?>';
+            var BASEURL='<?php echo Router::url('/', true); ?>';
             var cummunity_id = $(this).val();
             $.ajax({
-            url:BASEURL+"/pages/get_castes",
+            url:BASEURL+"pages/get_castes",
             type:'POST',
             data:'cummunity_id='+cummunity_id ,
             dataType: "html",
@@ -1845,11 +1845,11 @@ $(document).ready(function () {
     });
 
     $(document).ready(function(){
-        var BASEURL='<?php echo $this->webroot; ?>';
+       var BASEURL='<?php echo Router::url('/', true); ?>';
         if($('#Caste2').val()=='') {
             var cummunity_id = $('#Community').val();
             $.ajax({
-            url:BASEURL+"/pages/get_castes",
+            url:BASEURL+"pages/get_castes",
             type:'POST',
             data:'cummunity_id='+cummunity_id ,
             dataType: "html",
@@ -2330,13 +2330,13 @@ $(document).ready(function(){
 <script type="text/javascript">
     $('#degree').change(function(){
         var degree_id=$(this).val();
-        var base_url='<?php echo $this->webroot; ?>';
+        var base_url='<?php echo Router::url('/', true); ?>';
         if(degree_id!=2 && degree_id!=4) {
             $.ajax({
                 type:'post',
                 data:'degree_id='+degree_id,
                 dataType:'html',
-                url:base_url+'/pages/get_subjects',
+                url:base_url+'pages/get_subjects',
                 async:false,
                 success: function(data){
                     $('.singleMainSubject1').html(data);
