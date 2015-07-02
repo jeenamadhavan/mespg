@@ -2922,7 +2922,7 @@ public function choice_edit() {
                     'conditions'=>array('Religion.id=User.frkUserReligion')
                     )
             ),
-            'fields'=>array('Choice.*','User.frkUserCommunity','User.frkUserReligion','User.frkUserName','User.frkUserGender')
+            'fields'=>array('Choice.*','User.frkUserCommunity','User.frkUserReligion','User.frkUserName','User.frkUserGender','User.frkUserDOB')
             ));
         //pr($choices); exit;
         $communities=$this->Final_community->find('list',array('fields'=>array('id','name')));

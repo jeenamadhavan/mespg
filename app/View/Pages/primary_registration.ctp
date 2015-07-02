@@ -2361,7 +2361,7 @@ $(document).ready(function(){
 
 <script>
 $('.next_tenth_btn').click(function(){
-alert('Instructions for the next step\n\n• If course / subjects in core or complementary are not listed, please send mail to admission@farookcollege.ac.in with a copy of marks / grade sheet attached.\n• Credit: Sum total of all credits of the concerned subject in various semesters. For example, if the core subject has 4 credits in Sem1, 4 credits in Sem2, 8 credits in Sem3 , 8 credits in Sem4, 16 credits in Sem5, 18 credit Sem6 and project of 4 credits, credit for the core=4+4+8+8+16+18+4=62.\n• Overall credit is the sum total of all credits of the course');
+alert('Instructions for the next step\n\n• If course / subjects in core or complementary are not listed, please mail us at admission@farookcollege.ac.in with a copy of marks / grade sheet attached.\n• Credit: Sum total of all credits of the concerned subject in various semesters. For example, if the core subject has 4 credits in Sem1, 4 credits in Sem2, 8 credits in Sem3 , 8 credits in Sem4, 16 credits in Sem5, 18 credit Sem6 and project of 4 credits, credit for the core=4+4+8+8+16+18+4=62.\n• Overall credit is the sum total of all credits of the course');
 });
 </script>
 
