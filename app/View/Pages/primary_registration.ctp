@@ -2350,6 +2350,10 @@ $(document).ready(function(){
                     $('.tripleMainSubject3').html(data);
                 }
             })
+        }else if(degree_id==2) {
+            $('#single_main_form').hide();
+            $('#double_main_form').hide();
+            $('#triple_main_form').hide();
         }
         
     });
