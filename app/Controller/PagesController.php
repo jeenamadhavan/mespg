@@ -767,7 +767,7 @@ public function primary_registration() {
 
                                 );
                             
-                        } else if($this->request->data['degree']==2) { // B com
+                        } else if($this->request->data['PrimaryRegister']['degree']==2) { // B com
                             $markSaveData=array(
                                 'user_id'=>$this->Session->read('User.userid'),
                                 'university_id'=>$this->request->data['PrimaryRegister']['University'],
