@@ -189,26 +189,26 @@ class PagesController extends AppController {
         $link = $baseurl . "pages/confirmationlink/" . $randomstring . "/" . $id;
         //echo $this->Html->link('dfgdgdg');die();
 
-        $subject = 'Confirm Your Email-Farook College PG Admission';
+        $subject = 'Confirm Your Email-MES-MAMPAD PG Admission';
         // $message1 = "Hello User,<br> You signed up at this site,Your account is almost ready,but before you can login you need to confirm your email address by visiting the link below";
         //$message2 = "Once you have visited the verification URL your account will be activated Thanks, Team.";
         $message1 = "Hello User,  You signed up at this site,Your account is almost ready,but before you can login you need to <br> confirm your email address by visiting the link below ";
         $message2 = " Once you have visited the verification URL your account will be activated. Thanks, Team.";
         $message = $message1 . '  ' . $link . '  ' . $message2;
         // $message = $message1 . $link. $message2;
-        $headers = 'From: info@farookadmission.in' . "\r\n" .
-                'Reply-To: info@farookadmission.in' . "\r\n" .
+        $headers = 'From: admission@mesmampadadmission.com' . "\r\n" .
+                'Reply-To: admission@mesmampadadmission.com' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
         //mail($to, $subject, $message, $headers);
         CakeEmail::deliver($to, $subject, $message, array(
             'transport' => 'Smtp',
-            'from' => array('admission@farookcollege.ac.in' => 'Farook College PG Admission'),
+            'from' => array('admission@mesmampadadmission.com' => 'MES-MAMPAD PG Admission'),
             'host' => 'email-smtp.us-west-2.amazonaws.com',
             'tls' => true,
             'port' => 587,
             'timeout' => 30,
-            'username' => 'AKIAJJ62UMBPAOB3AAQA',
-            'password' => 'Ar12GanG4JddabSgQOQrQk0KFetnHANF5dwFx2vs/GmX',
+            'username' => 'AKIAI246XOASKA3FLHBA',
+            'password' => 'AoC1MuBsLsgW4RWMOerwbq3qWrbFNoG1IZOFzjdooB6M',
             'client' => null,
             'log' => false,
                 //'charset' => 'utf-8',

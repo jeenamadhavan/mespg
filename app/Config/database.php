@@ -71,10 +71,10 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'localhost',
+		'host' => 'mespg.cszmtbbmfrkf.ap-southeast-1.rds.amazonaws.com',
 		'login' => 'mentordbuser',
 		'password' => 'm3nt0r#DB',
-		'database' => 'mes_pg_admission',
+		'database' => 'mespg_db',
 		'prefix' => '',
 		
 	);
