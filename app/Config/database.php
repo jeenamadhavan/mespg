@@ -71,10 +71,10 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'farookpg.cbj29qizqyan.ap-southeast-1.rds.amazonaws.com',
-		'login' => 'mentor',
+		'host' => 'localhost',
+		'login' => 'mentordbuser',
 		'password' => 'm3nt0r#DB',
-		'database' => 'fkpg_db',
+		'database' => 'mes_pg_admission',
 		'prefix' => '',
 		
 	);
@@ -82,10 +82,10 @@ class DATABASE_CONFIG {
 	public $test = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'myfkpg.cbj29qizqyan.ap-southeast-1.rds.amazonaws.com',
-		'login' => 'mentor',
+		'host' => 'localhost',
+		'login' => 'mentordbuser',
 		'password' => 'm3nt0r#DB',
-		'database' => 'fkpg_db',
+		'database' => 'farookad_pgadmission',
 		'prefix' => '',
 		'port' => 3306,
 		//'encoding' => 'utf8',

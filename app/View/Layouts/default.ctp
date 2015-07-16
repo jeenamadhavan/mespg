@@ -25,7 +25,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?php echo $this->Html->charset(); ?>
         <title>
-            Farook College PG Admission | <?php echo $title_for_layout; ?>
+            MES College Mampad PG Admission | <?php echo $title_for_layout; ?>
         </title>
         <script type="text/javascript">
             var BASEURL = "<?php echo $this->base; ?>";
@@ -39,18 +39,24 @@
         echo $this->Html->script($all_scripts);
         echo $this->fetch('script');
         ?> 
+        <style type="text/css">
+        #top-bar {
+              background-color: #389226;
+        }
+        
+        </style>
     </head>
 <body>
     <div class="wrapper">
         <header>
             <div class="container top-bar">
                 <div class="col-md-12">
-                    <a href="#"><img src="<?php echo $this->webroot; ?>images/logo.jpg"></a>
+                    <a href="#"><img src="<?php echo $this->webroot; ?>images/logo.png" style="  width: 460px;"></a>
                 </div>
 
             </div>
             <div class="container zero-padding">
-                <nav class="navbar navbar-inverse">
+                <nav class="navbar navbar-inverse" id="top-bar">
                     <div class="container-fluid">
                         <!-- Brand and toggle get grouped for better mobile display -->
                         <div class="navbar-header">
@@ -75,7 +81,7 @@
                                 <?php } ?>
 								
                                 <!--<li><?php //echo $this->Html->link(__('INSTRUCTIONS'), "/pages/maininstruction", array('escape' => false)) ?></li>-->
-                                <li><?php echo $this->Html->link(__('PROSPECTUS'), "/pages/downloadprospectus", array('escape' => false)) ?></li>
+                                <!--<li><?php echo $this->Html->link(__('PROSPECTUS'), "/pages/downloadprospectus", array('escape' => false)) ?></li>-->
                                 <li><?php echo $this->Html->link(__('CONTACT'), "/pages/contact", array('escape' => false)) ?></li>
                             </ul>
                             <?php
@@ -83,9 +89,9 @@
                             if(!isset($_SESSION['User']['name'])){
                                 
                             ?>
-                            <ul class="nav navbar-nav navbar-right">
+                            <!--<ul class="nav navbar-nav navbar-right">
                                <li><?php echo $this->Html->link(__('Click Here For UG Admission'), "http://52.74.128.49/", array('escape' => false)) ?></li>
-                            </ul>
+                            </ul>-->
                             <?php } else { ?>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
@@ -105,7 +111,7 @@
               <?php 
                   $flashContent=$this->Session->flash();
                   if($flashContent!=null) {
-                      echo "<script type='text/javascript'>$.alert.open('".$flashContent."');</script>";
+                      //echo "<script type='text/javascript'>$.alert.open('".$flashContent."');</script>";
                   }
 
               ?>
@@ -115,7 +121,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <p>&copy; 2015 Farook College. All Rights are reserved<span class="pull-right">Driven by: <a href="http://www.mentorperformance.com" target="_blank">Mentor Performance Rating Private Limited</a></span</p>
+                        <p>&copy; 2015 MES Mampad College. All Rights are reserved<span class="pull-right">Driven by: <a href="http://www.mentorperformance.com" target="_blank">Mentor Performance Rating Private Limited</a></span</p>
 
                     </div>
                 </div>

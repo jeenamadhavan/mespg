@@ -33,25 +33,12 @@ body{
 }
 .fk-jumbotron{
     
-    background-size: cover;
+   
     margin-top: -23px;
     border-radius: 0px !important;
 }
-.banner-1{
-  background: url('../images/banner1.jpg');  
-}
-.banner-2{
-  background: url('../images/banner2.jpg');  
-}
-.banner-3{
-  background: url('../images/banner3.jpg');  
-}
-.banner-4{
-  background: url('../images/banner4.jpg');  
-}
-.banner-5{
-  background: url('../images/banner5.jpg');  
-}
+
+
 .banner{
     padding: 0px;
     

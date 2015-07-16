@@ -1,9 +1,9 @@
 <?php 
-$randnum=rand ( 1 ,5 );
+//$randnum=rand ( 1 ,5 );
 ?>
 <div class="container banner">
-    <div class="jumbotron fk-jumbotron banner-<?php echo $randnum; ?>">
-        <h1>Contact</h1>
+    <div class="banner-1" style="background: url('../images/mes_banner.png');background-size: 1170px 424px;background-repeat: no-repeat;height: 400px;margin-top: -40px;">
+        <h1 style="color:white;padding: 125px;">Contact Us</h1>
 <!--        <ul style="color: #fff; font-size: 16px; margin: 0px;">
             <li>The Biggest residential Post Graduate Institution Under Calicut university.</li>
             <li>18 UG Courses, 14 PG Courses and 8 Research Centers.</li>
@@ -22,15 +22,14 @@ $randnum=rand ( 1 ,5 );
         <p>If you want to know more about Farook College please reach us on following address or visit our Website.</p>
         <br>
         <p><strong>For Admission Queries</strong></p>
-        <p>Farook College</p>
-        <p>P.O Farook College, Kozhikode</p>
+        <p>M.E.S Mampad College</p>
+        <p>Mampad College P.O, Malappuram Dist.</p>
         <p>Kerala, India.</p>
-        <p>Phone: +91 495 2440660, +91 495 2440661</p> 
-        <p>fax: +91 495 2440464</p>
-        <p>email: <a href="mailto:mail@farookcollege.ac.in">mail@farookcollege.ac.in</a></p>
-        <p>College Website: <a href="http://www.farookcollege.ac.in" target="_blank">www.farookcollege.ac.in</a></p>
+        <p>Phone 04931 - 200387,  04931 - 200337, 04931 - 200754</p>
+        <p>email: <a href="mailto:info@mesmampad.org ">info@mesmampad.org </a></p>
+        <p>College Website: <a href="http://www.mesmampad.org/" target="_blank">http://www.mesmampad.org/</a></p>
         <p><strong>For Technical queries:</strong></p>
-        <p>email: <a href="mailto:admission@farookcollege.ac.in">admission@farookcollege.ac.in</a></p>
+        <p>email: <a href="mailto:admission@mesmampadadmission.com">admission@mesmampadadmission.com</a></p>
         <p>Phone: +91 495 2727411, +91 9656223366</p>
     
     </div>
@@ -74,9 +73,9 @@ $randnum=rand ( 1 ,5 );
                 <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
         </form>
     </div>
-    <div class="col-md-12" style="margin-top: 30px;">
+    <!--<div class="col-md-12" style="margin-top: 30px;">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15655.642002677654!2d75.85257595!3d11.19425755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba65a7d44f38971%3A0x3e4f202596bc766b!2sFarook+College%2C+Kerala+673632!5e0!3m2!1sen!2sin!4v1430985418881" style="width: 100%" height="450" frameborder="0" style="border:0"></iframe>
-    </div>
+    </div>-->
 </div>
 <script type="text/javascript">
 //jQuery(document).ready(function(){ 

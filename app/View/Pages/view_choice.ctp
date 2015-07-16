@@ -37,21 +37,56 @@
 			</tr>
 			<tr>
 				<th>Total Amount :</th>
-				<td><?php echo $choices[0]['Choice']['amount']; ?></td>
+				<td><?php echo $choices[0]['Choice']['amount']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->Html->link('Pay Online', "https://www.sbtonline.in/prelogin/icollecthome.htm", array('target' => '_blank','escape' => false,'class'=>'btn btn-primary')); ?></td>
+			</tr>
+			<tr>
+				<th>SBT Collect Reference ID :</th>
+				<?php if(isset($reference_entered) && $reference_entered==1) { ?>
+				<td><?php echo $reference_no; ?></td>
+				<?php } else { ?>
+				<?php echo $this->Form->create('transaction_id_form',array('url' => '/pages/add_transaction/')); ?>
+				<td><?php echo $this->form->input('transaction_id_form.ref_no',array('class'=>'form-control','required'=>'required','id'=>'transaction_id')); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->Form->submit('Submit',array('class'=>'btn btn-succes','id'=>'refer_submit')); ?></td>
+				<?php } ?>
 			</tr>
 		</table>
-                <?php if(!isset($cannot_fill)) { // if payment verified
-			echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;'));
-		} else { ?>
-		<?php if(isset($cannot_edit)&&$cannot_edit==1) {echo $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right','disabled'=>'disabled')); ?>
+                <?php /*if(!isset($cannot_fill)) { // if payment verified
+                	if(isset($edit_form) && $edit_form==1) {
+                		echo $this->Html->link('Edit Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;'));
+                	} else {
+                		echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;'));
+                	}
+			
+		} else { */?>
+		<?php /*if(isset($cannot_edit)&&$cannot_edit==1) {
+			echo $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right','disabled'=>'disabled')); ?>
 		<?php echo $this->Html->link('Proceed to Payment',array('controller'=>'pages','action'=>'befor_payment'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>'disabled')); ?>
 		<?php 
-echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>'disabled')); 
-} else {
-   echo $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right'));
-  echo  $this->Html->link('Proceed to Payment',array('controller'=>'pages','action'=>'befor_payment'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;'));
-echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); 
-} } ?>
+		echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>'disabled')); 
+		} else {
+		   echo $this->Html->link('Confirm Payment',array('controller'=>'pages','action'=>'after_payment'),array('class'=>'btn btn-danger pull-right'));
+		  echo  $this->Html->link('Proceed to Payment',array('controller'=>'pages','action'=>'befor_payment'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;'));
+		echo $this->Html->link('Edit',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); 
+		} } */?>
 
 	</div>
 </div>
+
+<script>
+$(document).ready(function(){
+ $('#refer_submit').click(function(){
+ 	//$("#transaction_id").blur(function(){
+    var data = $('#transaction_id').val() ;
+    re=/^[A-Z]{2}[0-9]{8}$/;
+     var result = re.test(data);
+     if(result){
+    return true;
+}else{
+    $('#transaction_id').focus();
+    return false;
+}
+   
+//});
+ });   
+    
+}); 
+</script>

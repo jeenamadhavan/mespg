@@ -51,7 +51,7 @@
                                     'id' => 'fee_concession',
                                     'required' => 'required',
                                     'class' => false,
-                                    'value'=> isset($reservations['Reservation']['frkFeeConcession'])?$reservations['Reservation']['frkFeeConcession']:"No",
+                                    //'value'=> isset($reservations['Reservation']['frkFeeConcession'])?$reservations['Reservation']['frkFeeConcession']:"No",
                                     'options' => array(
                                         'Yes' => 'Yes',
                                         'No' => 'No',
@@ -71,7 +71,7 @@
                                     'id' => 'HandiCapped',
                                     'required' => 'required',
                                     'class' => false,
-                                     'value'=> isset($reservations['Reservation']['frkHandiCapped'])?$reservations['Reservation']['frkHandiCapped']:"No",
+                                     //'value'=> isset($reservations['Reservation']['frkHandiCapped'])?$reservations['Reservation']['frkHandiCapped']:"No",
                                     'options' => array(
                                         'Yes' => 'Yes',
                                         'No' => 'No',
@@ -428,5 +428,11 @@
             $('#ncc_c').attr('checked',false);
         }
         
+    });
+
+    $('#ncc_nss, #ex_service,#ncc_a, #ncc_b, #ncc_c').change(function(){
+        if($(this).is(':checked')) {
+            $('#none').attr('checked',false);
+        }
     });
 </script>

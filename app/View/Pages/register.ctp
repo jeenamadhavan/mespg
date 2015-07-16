@@ -1,16 +1,16 @@
 <script>
 $(document).ready(function(){
-$('.datepicker').datepicker({ format: 'dd/mm/yyyy' ,autoclose:true});
+$('.datepicker').datepicker({ format: 'yyyy-mm-dd' ,autoclose:true});
 }); 
 </script>
 
 <?php 
-$randnum=rand ( 1 ,5 );
+//$randnum=rand ( 1 ,5 );
 ?>
 <div class="container banner">
-    <div class="jumbotron fk-jumbotron banner-<?php echo $randnum; ?>">
-        <h1>Register!</h1>
-         <h2 style="color:white;">PG Admission Portal 2015!</h2>
+    <div class="banner-1" style="background: url('../images/mes_banner.png');background-size: 1170px 424px;background-repeat: no-repeat;height: 400px;margin-top: -40px;">
+        <!--<h1>Register!</h1>-->
+         <h2 style="color:white;padding: 125px;">PG Admission Portal 2015!</h2>
 <!--        <ul style="color: #fff; font-size: 16px; margin: 0px;">
             <li>The Biggest residential Post Graduate Institution Under Calicut university.</li>
             <li>18 UG Courses, 14 PG Courses and 8 Research Centers.</li>

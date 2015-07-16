@@ -21,7 +21,7 @@
 		</div>
                 <div class="form-group">
 			<label>Date of Birth:<sup class="mandatory">*</sup></label>
-			<?php echo $this->Form->input('choice.dob',array('id'=>'datepicker','class'=>'form-control ','label'=>false,'placeholder'=>'enter your Date of Birth as in SSLC','required'=>'required')); ?>
+			<?php echo $this->Form->input('choice.dob',array('id'=>'datepicker','class'=>'form-control ','label'=>false,'placeholder'=>'enter your Date of Birth as in SSLC','required'=>'required','value'=>$user['User']['frkUserDOB'])); ?>
 		</div>
 		<div class="form-group">
 			<label>Religion:<sup class="mandatory">*</sup></label>
@@ -100,6 +100,6 @@ $(document).ready(function(){
 </script>
 <script>
   $(function() {
-    $( "#datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker({ format: 'yyyy-mm-dd' ,autoclose:true});
   });
   </script>

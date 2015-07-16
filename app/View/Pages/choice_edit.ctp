@@ -20,9 +20,9 @@
 			<label>Gender:<sup class="mandatory">*</sup></label>
 			<?php echo $this->form->input('choice.gender',array('options'=>$gender,'empty'=>'-- select gender --','class'=>'form-control','label'=>false,'value'=>$choices[0]['User']['frkUserGender'],'required'=>'required')); ?>
 		</div>
-                <div class="form-group">
-			<label>Date of Birth:(MM-DD-YYYY)<sup class="mandatory">*</sup></label>
-			<?php echo $this->Form->input('dob',array('id'=>'datepicker','class'=>'form-control','placeholder'=>'MM-DD-YYYY','label'=>false,'value'=>$choices[0]['User']['frkUserDOB'],'required'=>'required')); ?>
+        <div class="form-group">
+			<label>Date of Birth:(yyyy-mm-dd)<sup class="mandatory">*</sup></label>
+			<?php echo $this->Form->input('dob',array('id'=>'datepicker','class'=>'form-control','placeholder'=>'yyyy-mm-dd','name'=>'dob','label'=>false,'value'=>$choices[0]['User']['frkUserDOB'],'required'=>'required')); ?>
 		</div>
 		<div class="form-group">
 			<label>Community Category:<sup class="mandatory">*</sup></label>
@@ -102,6 +102,6 @@
 </script>
  <script>
   $(function() {
-    $( "#datepicker" ).datepicker();
+    $("#datepicker").datepicker({ format: 'yyyy-mm-dd' });
   });
   </script>
