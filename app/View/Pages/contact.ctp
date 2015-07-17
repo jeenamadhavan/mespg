@@ -19,7 +19,7 @@
     <div class="col-md-6">
         <h3>ADDRESS INFORMATION</h3>
         <hr style="border-top:1px dashed #ccc;">
-        <p>If you want to know more about Farook College please reach us on following address or visit our Website.</p>
+        <p>If you want to know more about the College please reach us on following address or visit our Website.</p>
         <br>
         <p><strong>For Admission Queries</strong></p>
         <p>M.E.S Mampad College</p>
