@@ -2296,17 +2296,17 @@ class PagesController extends AppController {
                 $tempAppNumber = $numbergen['Generatenumber']['currvalue'] + 1;
                 $remindigits = 6 - strlen($tempAppNumber);
                 if ($remindigits == 5) {
-                    $ApplicationNumber = 'FKPG00000' . $tempAppNumber;
+                    $ApplicationNumber = 'MESPG00000' . $tempAppNumber;
                 } elseif ($remindigits == 4) {
-                    $ApplicationNumber = 'FKPG0000' . $tempAppNumber;
+                    $ApplicationNumber = 'MESPG0000' . $tempAppNumber;
                 } elseif ($remindigits == 3) {
-                    $ApplicationNumber = 'FKPG000' . $tempAppNumber;
+                    $ApplicationNumber = 'MESPG000' . $tempAppNumber;
                 } elseif ($remindigits == 2) {
-                    $ApplicationNumber = 'FKPG00' . $tempAppNumber;
+                    $ApplicationNumber = 'MESPG00' . $tempAppNumber;
                 } elseif ($remindigits == 1) {
-                    $ApplicationNumber = 'FKPG0' . $tempAppNumber;
+                    $ApplicationNumber = 'MESPG0' . $tempAppNumber;
                 } else {
-                    $ApplicationNumber = 'FKPG' . $tempAppNumber;
+                    $ApplicationNumber = 'MESPG' . $tempAppNumber;
                 }
                 $cnd3 = array(
                     'Generatenumber.typecode' => 1,
@@ -2493,17 +2493,17 @@ class PagesController extends AppController {
             $tempAppNumber = $numbergen['Generatenumber']['currvalue'] + 1;
             $remindigits = 6 - strlen($tempAppNumber);
             if ($remindigits == 5) {
-                $ApplicationNumber = 'FKPG00000' . $tempAppNumber;
+                $ApplicationNumber = 'MESPG00000' . $tempAppNumber;
             } elseif ($remindigits == 4) {
-                $ApplicationNumber = 'FKPG0000' . $tempAppNumber;
+                $ApplicationNumber = 'MESPG0000' . $tempAppNumber;
             } elseif ($remindigits == 3) {
-                $ApplicationNumber = 'FKPG000' . $tempAppNumber;
+                $ApplicationNumber = 'MESPG000' . $tempAppNumber;
             } elseif ($remindigits == 2) {
-                $ApplicationNumber = 'FKPG00' . $tempAppNumber;
+                $ApplicationNumber = 'MESPG00' . $tempAppNumber;
             } elseif ($remindigits == 1) {
-                $ApplicationNumber = 'FKPG0' . $tempAppNumber;
+                $ApplicationNumber = 'MESPG0' . $tempAppNumber;
             } else {
-                $ApplicationNumber = 'FKPG' . $tempAppNumber;
+                $ApplicationNumber = 'MESPG' . $tempAppNumber;
             }
             $cnd3 = array(
                 'Generatenumber.typecode' => 1,
