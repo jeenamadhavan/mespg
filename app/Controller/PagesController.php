@@ -227,7 +227,7 @@ class PagesController extends AppController {
         }
 
         if (isset($result['User']['frkRandomString']) && $result['User']['frkRandomString'] != " ") {
-            $sql = "UPDATE `fkpg_db`.`users` SET `frkUserStatus` = '1', `frkRandomString` = 'verified' WHERE `users`.`frkUserID` = " . $id . "; ";
+            $sql = "UPDATE `mespg_db`.`users` SET `frkUserStatus` = '1', `frkRandomString` = 'verified' WHERE `users`.`frkUserID` = " . $id . "; ";
             $usercredentials = $this->User->query($sql);
             $this->Session->setFlash(__('Congratulation,Your Account is Activated!. Please Login'));
             $this->redirect(array('action' => 'login', 'controller' => 'pages'));
@@ -2104,7 +2104,7 @@ class PagesController extends AppController {
                     return $this->redirect(array('action' => 'reset/' . $randstring . '/' . $id));
                 } else {
                     $frkUserPassword = base64_encode($password);
-                    $sql = "UPDATE `fkpg_db`.`users` SET `frkUserPassword` = '" . $frkUserPassword . "', `frkPasswordReset` = ' ' WHERE `users`.`frkUserID` = " . $id . " AND `users`.`frkPasswordReset` = '" . $randstring . "'; ";
+                    $sql = "UPDATE `mespg_db`.`users` SET `frkUserPassword` = '" . $frkUserPassword . "', `frkPasswordReset` = ' ' WHERE `users`.`frkUserID` = " . $id . " AND `users`.`frkPasswordReset` = '" . $randstring . "'; ";
                     $this->User->query($sql);
                     $this->Session->setFlash(__('You have changed your password successfully'));
                     return $this->redirect(array('action' => 'index'));
