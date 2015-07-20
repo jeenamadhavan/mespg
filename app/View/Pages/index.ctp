@@ -43,7 +43,7 @@
               </div>
           </div>-->
           
-          
+          <b><center><font color="red">Application form entry will be open for registered candidates by 12pm on 21st July 2015</font></center></b>
           <div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
