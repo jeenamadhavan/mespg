@@ -154,6 +154,30 @@ $randnum=rand ( 1 ,5 );
                                         <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> As in SSLC Book</span>
                                     </div>
                                     <div class="form-group">
+                                        <label for="village" class="control-label">Village/Municipality<sup class="madadatory">*</sup></label>
+                                        <?php echo $this->Form->input('PrimaryRegister.village', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Your Village/Municipality',
+                                            'maxlength' => '250',
+                                            'id' => 'village',
+                                            'required'=>'required'
+                                            )); ?>
+                                        <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Your Village</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taluk" class="control-label">Taluk<sup class="madadatory">*</sup></label>
+                                        <?php echo $this->Form->input('PrimaryRegister.taluk', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Your Taluk',
+                                            'maxlength' => '250',
+                                            'id' => 'taluk',
+                                            'required'=>'required'
+                                            )); ?>
+                                        <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Your Taluk</span>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="ParentName" class="control-label">Parent's Name<sup class="madadatory">*</sup></label>
                                         <?php echo $this->Form->input('PrimaryRegister.parent-name', array(
                                             'label' => false, 
@@ -321,6 +345,39 @@ $randnum=rand ( 1 ,5 );
                                         <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Your Birth Place</span>
                                     </div>
                                     <div class="form-group">
+                                        <label for="ParentRelation" class="control-label">Relation with Parent<sup class="madadatory">*</sup></label>
+                                        <?php
+                                        echo $this->Form->input('PrimaryRegister.parent-relation', array(
+                                            'options' => array(
+                                                'Father'=>'Father',
+                                                'Mother'=>'Mother',
+                                                'Uncle'=>'Uncle',
+                                                'Brother'=>'Brother',
+                                                'Sister'=>'Sister',
+                                                ),
+                                            'empty' => '-- select one --',
+                                            'class' => 'form-control',
+                                            'id' => 'ParentRelation',
+                                            'label' => false,
+                                            'required' =>'required'
+                                        ));
+                                        ?>
+                                        <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Select Relationship with Parent</span>
+                                        
+                                        <!--<div id="otherParentRelation" style="display: none;">
+                                            <label for="specify">Specify<sup class="madadatory">*</sup></label>
+                                            <?php echo $this->Form->input('PrimaryRegister.parent-relation-other', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'value' => 'null',
+                                            'maxlength' => '250',
+                                            'placeholder' => 'Specify The Relation',
+                                            'required'=>'required')
+                                        ); ?>
+                                        </div>-->
+
+                                    </div>
+                                    <div class="form-group">
                                         <label for="ParentOccupation" class="control-label">Parent's Occupation<sup class="madadatory">*</sup></label>
                                         <?php
                                         echo $this->Form->input('PrimaryRegister.parent-occupation', array(
@@ -333,7 +390,19 @@ $randnum=rand ( 1 ,5 );
                                         ));
                                         ?>
                                         <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Parent's Occupation</span>
-                                        <?php if(!isset($appenddata['PrimaryRegister']['parent-occupation-other'])) {} ?>
+                                        <?php if(isset($other_occupation)) { ?>
+                                        <div id="otherParentOccupation">
+                                            <label for="specify">Specify<sup class="madadatory">*</sup></label>
+                                            <?php echo $this->Form->input('PrimaryRegister.parent-occupation-other', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'value' => $other_occupation,
+                                            'maxlength' => '250',
+                                            'placeholder' => 'Specify Father Occupation',
+                                            'required'=>'required')
+                                        ); ?>
+                                        </div>
+                                        <?php } else { ?>
                                         <div id="otherParentOccupation" style="display: none;">
                                             <label for="specify">Specify<sup class="madadatory">*</sup></label>
                                             <?php echo $this->Form->input('PrimaryRegister.parent-occupation-other', array(
@@ -345,6 +414,7 @@ $randnum=rand ( 1 ,5 );
                                             'required'=>'required')
                                         ); ?>
                                         </div>
+                                        <?php } ?>
 
                                     </div>
                                     <!--<div class="form-group">
@@ -426,10 +496,11 @@ $randnum=rand ( 1 ,5 );
                 <div class="col-md-12">
                     <div class="panel panel-default panel-fk">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Address Information</h3>
+                            <h3 class="panel-title">Address Information of Candidate</h3>
                         </div>
                         <div class="panel-body">
-                            <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
                                 <h4>Permanent Address</h4>
                                 <div class="form-group">
                                     <label for="perma-addline1" class="control-label">Address Line 1<sup class="madadatory">*</sup></label>
@@ -546,16 +617,15 @@ $randnum=rand ( 1 ,5 );
                                     <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Please Select appropriate one</span>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="checkbox">
+                                
+                             <div class="col-md-6">
+                                <h4>Address for Communication</h4>
+                                <div class="checkbox" style="margin-left: -25px;">
                                     <label>
                                         <input type="checkbox" value="" id="Copy">
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copy Permanent Address to Communication Address
                                     </label>
                                 </div>
-                            </div>
-                             <div class="col-md-12">
-                                <h4>Address for Communication</h4>
                                 <div class="form-group">
                                     <label for="comm-addline1" class="control-label">Address Line 1<sup class="madadatory">*</sup></label>
                                     <?php echo $this->Form->input('PrimaryRegister.comm-addline1', array(
@@ -671,10 +741,11 @@ $randnum=rand ( 1 ,5 );
                                     <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Please Select appropriate one</span>
                                 </div>
                             </div>
-                            
-                             <div class="col-xs-6">
+                            </div> <!-- row -->
+                            <hr style="border-top: 2px solid #CDCCC9;">
+                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="phonestd" class="control-label">Phone STD Code</label>
+                                    <label for="phonestd" class="control-label">Phone STD Code (Optional)</label>
                                     
                                     <?php echo $this->Form->input('PrimaryRegister.phonestd', array(
                                             'label' => false, 
@@ -687,9 +758,9 @@ $randnum=rand ( 1 ,5 );
                                     <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter STD Code(Eg:-0466)</span>
                                 </div>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="phonenumber" class="control-label">Phone Number</label>
+                                    <label for="phonenumber" class="control-label">Phone Number (Optional)</label>
                                     <?php echo $this->Form->input('PrimaryRegister.phonenumber', array(
                                             'label' => false, 
                                             'class' => 'form-control', 
@@ -701,6 +772,120 @@ $randnum=rand ( 1 ,5 );
                                     <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Phone Number</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default panel-fk">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Address Information of Parent/Local guardian</h3>
+                        </div>
+                        <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Parent Address</h4>
+                                <div class="form-group">
+                                    <label for="parent-addline1" class="control-label">Address Line 1<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.parent-addline1', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Address Line 1',
+                                            'maxlength' => '250',
+                                            'id' => 'parent-addline1',
+                                            'required'=>'required')
+                                        ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Address line 1(Eg:-House Name)</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent-addline2" class="control-label">Address Line 2<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.parent-addline2', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Address Line 2',
+                                        'maxlength' => '250',
+                                            'id' => 'parent-addline2',
+                                            'required'=>'required')
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Address line 2(Eg:-Street Name)</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent-postoffice" class="control-label">Post Office<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.parent-postoffice', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Post Office',
+                                        'maxlength' => '250',
+                                            'id' => 'parent-postoffice',
+                                            'required'=>'required')
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Post Office</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent-pincode" class="control-label">Pin Code<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.parent-pincode', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Pin Code',
+                                            'maxlength' => '6',
+                                            'id' => 'parent-pincode',
+                                            'required'=>'required')
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Pin Code</span>
+                                </div>
+                            </div>
+                             <div class="col-md-6">
+                                <h4>Local guardian Address (Optional)</h4>
+                                
+                                <div class="form-group">
+                                    <label for="local-addline1" class="control-label">Address Line 1<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.local-addline1', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Address Line 1',
+                                        'maxlength' => '250',
+                                            'id' => 'local-addline1',
+                                            )
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Address line 1(Eg:-House Name)</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="local-addline2" class="control-label">Address Line 2<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.local-addline2', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Address Line 2',
+                                        'maxlength' => '250',
+                                            'id' => 'local-addline2',
+                                            )
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Address line 2(Eg:-Street Name)</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="local-postoffice" class="control-label">Post Office<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.local-postoffice', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Post Office',
+                                        'maxlength' => '250',
+                                            'id' => 'local-postoffice',
+                                            )
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Post Office</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="local-pincode" class="control-label">Pin Code<sup class="madadatory">*</sup></label>
+                                    <?php echo $this->Form->input('PrimaryRegister.local-pincode', array(
+                                            'label' => false, 
+                                            'class' => 'form-control', 
+                                            'placeholder' => 'Enter Pin Code',
+                                        'maxlength' => '6',
+                                            'id' => 'local-pincode',
+                                            )
+                                     ); ?>
+                                    <span class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Enter Pin Code</span>
+                                </div>
+                                
+                            </div>
+                            </div> <!-- row -->
+                            
                         </div>
                     </div>
                     <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button>
@@ -1067,6 +1252,10 @@ $randnum=rand ( 1 ,5 );
                                         <tr>
                                             <th>Degree:</th>
                                             <td><?php echo $marks['Degree']['name']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Institution:</th>
+                                            <td><?php echo $marks['Mark']['institution']; ?></td>
                                         </tr>
                                         <tr>
                                             <th>Grade/Mark System:</th>
@@ -1451,6 +1640,7 @@ $randnum=rand ( 1 ,5 );
                                             <th>University<sup class="madadatory">*</sup></th>
                                             <!--<th>Year of Study<sup class="madadatory">*</sup></th>-->
                                             <th>Degree<sup class="madadatory">*</sup></th>
+                                            <th>Institution attended<sup class="madadatory">*</sup></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1475,6 +1665,16 @@ $randnum=rand ( 1 ,5 );
                                                             'label' => false, 
                                                             'class' => 'form-control',
                                                             'id' => 'degree',
+                                                            'required'=>'required')
+                                                     ); ?>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <?php echo $this->Form->input('PrimaryRegister.degree_institute', array(
+                                                            'label' => false, 
+                                                            'class' => 'form-control',
+                                                            'id' => 'degree_institute',
                                                             'required'=>'required')
                                                      ); ?>
                                                 </div>
@@ -2005,6 +2205,9 @@ $randnum=rand ( 1 ,5 );
         else if($('#degree').val()=='') {
             alert('You should select your degree first');
             return false;
+        } else if($('#degree_institute').val()=='') {
+            alert('You should enter your degree institution');
+            return false;
         }
         else if(!$('#grade').is(':checked') && !$('#mark').is(':checked')) {
             alert('You should select grade or mark system first');
@@ -2012,6 +2215,9 @@ $randnum=rand ( 1 ,5 );
         }
         else if(!$('#single_main').is(':checked') && !$('#double_main').is(':checked') && !$('#triple_main').is(':checked')) {
             alert('You should select your main first');
+            return false;
+        } else if($('.markTable').length==0){
+            alert('You should enter your marks and try again.');
             return false;
         }
     });
@@ -2483,6 +2689,9 @@ $(document).ready(function(){
         }
         else if($('#degree').val()=='') {
             alert('You should select your degree first');
+            return;
+        }else if($('#degree_institute').val()=='') {
+            alert('You should enter your degree institute');
             return;
         }
         else if(!$('#grade').is(':checked') && !$('#mark').is(':checked')) {
