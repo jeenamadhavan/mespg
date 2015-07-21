@@ -49,12 +49,14 @@
 				<?php } ?>
 			</tr>
 		</table>
+
                 <?php if(!isset($cannot_fill)) { ?>
                 	<?php if(isset($edit_form)) { ?>
                 		<?php echo $this->Html->link('Edit Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
                 	<?php } else { ?>
                 	<?php echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
                 <?php } } ?>
+                <?php echo $this->Html->link('Edit Choice',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
 
 	</div>
 </div>
