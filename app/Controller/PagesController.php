@@ -533,7 +533,7 @@ class PagesController extends AppController {
                 $newdob = date('Y-m-d', strtotime($date));
                 
                 $frkUserName=str_replace("'","",$this->request->data['PrimaryRegister']['name']);
-                $frkUserName=str_replace(","," ",$frkUserName);
+                $frkUserName=str_replace(",",".",$frkUserName);
                 $frkUserName=trim($frkUserName);
                 
                 $userTabaleSaveData = array(
@@ -1312,10 +1312,10 @@ class PagesController extends AppController {
                 
                 if(isset($_GET['edit_marks']) || empty($marks)) {
                     if($usersaved && $applicantsaved && $marksaved) {
-                        if($IndexObject->indexing($this->Session->read('User.userid')) && $IndexObject->ranking($choice_arr)) {
+                        //if($IndexObject->indexing($this->Session->read('User.userid')) && $IndexObject->ranking($choice_arr)) {
                                 $this->Session->setFlash(__('Data have been saved successfully, Now you can enter your Additional Information'));
                                 return $this->redirect(array('action' => 'reservations'));
-                            }
+                           // }
                         } else {
                             $this->Session->setFlash(__('Could not Save entered Details'));
                             return $this->redirect(array('action' => 'primary_registration'));
