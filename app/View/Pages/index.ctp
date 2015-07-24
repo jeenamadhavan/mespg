@@ -42,8 +42,15 @@
                   </ul>
               </div>
           </div>-->
+          <ul><br>
+            <li><b><font color="red">Last date for accepting application fee is extended to 30th July 2015.</font></b></li>
+            <li><b><font color="red">Preliminary rank list will be published on 1st August 2015.</font></b></li>
+            <li><b><font color="red">Final rank list will be published on 3rd August 2015.</font></b></li>
+            <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am.</font></b></li>
+            <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
+            <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
+          </ul>
           
-          <b><center><font color="red">Last date for accepting application fee is 25th july 2015.</font></center></b>
           <div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
