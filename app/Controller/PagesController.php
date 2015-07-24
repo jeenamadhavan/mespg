@@ -3488,8 +3488,12 @@ class PagesController extends AppController {
             $this->set('reference_entered',1);
             $this->set('reference_no',$payment['Payment']['transaction_id']);
         }
-        // allowing undetected payments to fill the form
-        //$paymentUndetected=$this->Undetectedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+        $paymentUndetected=$this->Undetectedpayment->find('first',array('conditions'=>array('user_id'=>$userid)));
+        if(!empty($paymentUndetected)) {
+            if(!empty($payment)) {
+                $this->set('choice_edit',1);
+            }
+        }
         $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
         if(empty($paymentCompleted)) {
             $this->set('cannot_fill',1);
