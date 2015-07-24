@@ -1864,7 +1864,8 @@ $randnum=rand ( 1 ,5 );
                                                                 'Urudu'=>'Urudu',
                                                                 'Sanskrit'=>'Sanskrit',
                                                                 'Kannada'=>'Kannada',
-                                                                'Tamil'=>'Tamil'
+                                                                'Tamil'=>'Tamil',
+                                                                'French'=>'French'
                                                                 ),
                                                             'class'=>'form-control',
                                                             //'placeholder'=>'Enter Part II (Second Language) Subject Name',
