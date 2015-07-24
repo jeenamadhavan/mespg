@@ -42,11 +42,23 @@
 			<tr>
 				<th>SBT Collect Reference ID :</th>
 				<?php if(isset($reference_entered) && $reference_entered==1) { ?>
-				<td><?php echo $reference_no; ?></td>
+				<td>
+					<div id="id_entered"><?php echo $reference_no; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php if(isset($choice_edit)) { ?>
+						<button class="btn" id="edit_reference_btn">Edit</button>
+					<?php } ?>
+					</div>
+					<div class="id_form" style="display:none;">
+						<?php echo $this->Form->create('transaction_id_form',array('url' => '/pages/add_transaction/')); ?>
+						<?php echo $this->form->input('transaction_id_form.ref_no',array('class'=>'form-control','required'=>'required','id'=>'transaction_id')); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->Form->submit('Submit',array('class'=>'btn','id'=>'refer_submit','style'=>'  float: left;')); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn cancel_edit">Cancel</button>
+					</div>
+				</td>
 				<?php } else { ?>
-				<?php echo $this->Form->create('transaction_id_form',array('url' => '/pages/add_transaction/')); ?>
-				<td><?php echo $this->form->input('transaction_id_form.ref_no',array('class'=>'form-control','required'=>'required','id'=>'transaction_id')); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->Form->submit('Submit',array('class'=>'btn btn-succes','id'=>'refer_submit')); ?></td>
+					<?php echo $this->Form->create('transaction_id_form',array('url' => '/pages/add_transaction/')); ?>
+					<td><?php echo $this->form->input('transaction_id_form.ref_no',array('class'=>'form-control','required'=>'required','id'=>'transaction_id')); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->Form->submit('Submit',array('class'=>'btn','id'=>'refer_submit')); ?>
+					</td>
 				<?php } ?>
+				
+
 			</tr>
 		</table>
 
@@ -56,7 +68,7 @@
                 	<?php } else { ?>
                 	<?php echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
                 <?php } } ?>
-                <?php echo $this->Html->link('Edit Choice',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
+                <?php echo $this->Html->link('Edit Choice',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>(isset($reference_entered) ? 'disabled' : ''))); ?>
 
 	</div>
 </div>
@@ -79,4 +91,15 @@ $(document).ready(function(){
  });   
     
 }); 
+</script>
+<script type="text/javascript">
+	$('#edit_reference_btn').click(function(){
+		//alert('hii');
+		$('#id_entered').hide();
+		$('.id_form').show();
+	});
+	$('.cancel_edit').click(function(){
+		$('.id_form').hide();
+		$('#id_entered').show();
+	});
 </script>
