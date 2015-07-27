@@ -1312,10 +1312,10 @@ class PagesController extends AppController {
                 
                 if(isset($_GET['edit_marks']) || empty($marks)) {
                     if($usersaved && $applicantsaved && $marksaved) {
-                        //if($IndexObject->indexing($this->Session->read('User.userid')) && $IndexObject->ranking($choice_arr)) {
+                        if($IndexObject->indexing($this->Session->read('User.userid')) && $IndexObject->ranking($choice_arr)) {
                                 $this->Session->setFlash(__('Data have been saved successfully, Now you can enter your Additional Information'));
                                 return $this->redirect(array('action' => 'reservations'));
-                           // }
+                            }
                         } else {
                             $this->Session->setFlash(__('Could not Save entered Details'));
                             return $this->redirect(array('action' => 'primary_registration'));
@@ -2396,9 +2396,173 @@ class PagesController extends AppController {
         $this->set($setarry);
     }
    
+    public function reservations() {
+        
+        $userid=$this->Session->read('User.userid');
+        if (!isset($userid)) {
+            $this->Session->setFlash(__('Please Login!.'));
+            return $this->redirect(array('action' => 'login'));
+        } else {
+            $reservations = $this->Reservation->find('first', array(
+                'conditions' => array(
+                    'frkUserID' => $userid
+                )
+                    ));
+        
+        if(!empty($reservations)){
+            $appenddata['SecondaryRegister']['HandiCapped'] = $reservations['Reservation']['frkHandiCapped'];
+            $appenddata['SecondaryRegister']['NCC/NSS'] = $reservations['Reservation']['frkNcc/Nss'];
+            $appenddata['SecondaryRegister']['Ex-ServiceMan'] = $reservations['Reservation']['frkEx-ServiceMan'];
+            
+            $appenddata['SecondaryRegister']['NCC_Certificate_A'] = $reservations['Reservation']['NCC_Certificate_A'];
+            $appenddata['SecondaryRegister']['NCC_Certificate_B'] = $reservations['Reservation']['NCC_Certificate_B'];
+            $appenddata['SecondaryRegister']['NCC_Certificate_C'] = $reservations['Reservation']['NCC_Certificate_C'];
+            
+            
+            $appenddata['SecondaryRegister']['None'] = $reservations['Reservation']['None'];
+            $appenddata['SecondaryRegister']['Illiteracy'] = $reservations['Reservation']['Illiteracy'];
+            
+            $appenddata['SecondaryRegister']['Sports1'] = $reservations['Reservation']['sportDis1'];
+            $appenddata['SecondaryRegister']['SportsLevel1'] = $reservations['Reservation']['sportlevel1'];
+            $appenddata['SecondaryRegister']['Sports2'] = $reservations['Reservation']['sportDis2'];
+            $appenddata['SecondaryRegister']['SportsLevel2'] = $reservations['Reservation']['sportlevel2'];
+            $appenddata['SecondaryRegister']['Sports3'] = $reservations['Reservation']['sportDis3'];
+            $appenddata['SecondaryRegister']['SportsLevel3'] = $reservations['Reservation']['sportlevel3'];
+            
+            
+            $appenddata['SecondaryRegister']['Arts1'] = $reservations['Reservation']['Arts1'];
+            $appenddata['SecondaryRegister']['ArtsLevel1'] = $reservations['Reservation']['ArtsLevel1'];
+            $appenddata['SecondaryRegister']['Arts2'] = $reservations['Reservation']['Arts2'];
+            $appenddata['SecondaryRegister']['ArtsLevel2'] = $reservations['Reservation']['ArtsLevel2'];
+            $appenddata['SecondaryRegister']['Arts3'] = $reservations['Reservation']['Arts3'];
+            $appenddata['SecondaryRegister']['ArtsLevel3'] = $reservations['Reservation']['ArtsLevel3'];
+            
+            $appenddata['SecondaryRegister']['extra_course'] = $reservations['Reservation']['frkExtra_course'];
+            $appenddata['SecondaryRegister']['FeeConcession'] = $reservations['Reservation']['frkFeeConcession'];
+            
+            }
+        
+        if($this->request->is('post')) {
+            if(!empty($this->request->data['SecondaryRegister'])){
+                if (!empty($reservations)) {
+                    $extraCourse=str_replace("'","",$this->request->data['SecondaryRegister']['extra_course']);
+                    $Sports1=str_replace("'","",$this->request->data['SecondaryRegister']['Sports1']);
+                    $Sports2=str_replace("'","",$this->request->data['SecondaryRegister']['Sports2']);
+                    $Sports3=str_replace("'","",$this->request->data['SecondaryRegister']['Sports3']);
+                    $Arts1=str_replace("'","",$this->request->data['SecondaryRegister']['Arts1']);
+                    $Arts2=str_replace("'","",$this->request->data['SecondaryRegister']['Arts2']);
+                    $Arts3=str_replace("'","",$this->request->data['SecondaryRegister']['Arts3']);
+
+                    $ReservationTableData = array(
+                     'frkHandiCapped' => "'" .$this->request->data['SecondaryRegister']['HandiCapped']."'" ,
+                   
+                    'frkNcc/Nss' => "'" .$this->request->data['SecondaryRegister']['NCC/NSS']."'",
+                    'frkEx-ServiceMan' => "'" .$this->request->data['SecondaryRegister']['Ex-ServiceMan']."'",
+                    'NCC_Certificate_A' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_A']."'",
+                    'NCC_Certificate_B' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_B']."'",
+                    'NCC_Certificate_C' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_C']."'",
+                    'None' => "'" .$this->request->data['SecondaryRegister']['None']."'",
+                    'Illiteracy' => "'" .$this->request->data['SecondaryRegister']['Illiteracy']."'",
+                    'frkExtra_course' => "'" .$extraCourse."'",
+                    'frkFeeConcession' => "'" .$this->request->data['SecondaryRegister']['FeeConcession']."'",
+
+                    'sportDis1' => "'" .$Sports1."'",
+                    'sportlevel1' => "'" .$this->request->data['SecondaryRegister']['SportsLevel1']."'",
+                    'sportDis2' => "'" .$Sports2."'",
+                    'sportlevel2' => "'" .$this->request->data['SecondaryRegister']['SportsLevel2']."'",
+                    'sportDis3' => "'" .$Sports3."'",
+                    'sportlevel3' => "'" .$this->request->data['SecondaryRegister']['SportsLevel3']."'",
+                    'Arts1' => "'" .$Arts1."'",
+                    'ArtsLevel1' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel1']."'",
+                    'Arts2' => "'" .$Arts2."'",
+                    'ArtsLevel2' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel2']."'",
+                    'Arts3' => "'" .$Arts3."'",
+                    'ArtsLevel3' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel3']."'"
+
+                    );
+                    $cnd3 = array(
+                        'Reservation.frkUserID' => $userid,
+                    );
+                    $IndexObject = new IndexesController;
+                    $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+                    $choice_str=$choice[0]['Choice']['choices'];
+                    $choice_arr=explode(',',$choice_str);
+
+                    if (!$this->Reservation->updateAll($ReservationTableData, $cnd3)) {
+                        $this->Session->setFlash(__('Could not Save Application Data'));
+                        return $this->redirect(array('action' => 'reservations'));
+                    } else {
+                        if($IndexObject->indexing($this->Session->read('User.userid')) && $IndexObject->ranking($choice_arr)) {
+                            $this->Session->setFlash(__('Additional Information have been saved'));
+                            return $this->redirect(array('action' => 'choice_select'));
+                        }
+                        
+                    }
+                } else{
+
+                    $extraCourse=str_replace("'","",$this->request->data['SecondaryRegister']['extra_course']);
+                    $Sports1=str_replace("'","",$this->request->data['SecondaryRegister']['Sports1']);
+                    $Sports2=str_replace("'","",$this->request->data['SecondaryRegister']['Sports2']);
+                    $Sports3=str_replace("'","",$this->request->data['SecondaryRegister']['Sports3']);
+                    $Arts1=str_replace("'","",$this->request->data['SecondaryRegister']['Arts1']);
+                    $Arts2=str_replace("'","",$this->request->data['SecondaryRegister']['Arts2']);
+                    $Arts3=str_replace("'","",$this->request->data['SecondaryRegister']['Arts3']);
+
+                $reservations1 = array(
+                    'frkHandiCapped' => $this->request->data['SecondaryRegister']['HandiCapped'],
+                    'frkUserID' => $userid,
+                    'frkNcc/Nss' => $this->request->data['SecondaryRegister']['NCC/NSS'],
+                    'frkEx-ServiceMan' => $this->request->data['SecondaryRegister']['Ex-ServiceMan'],
+                    'NCC_Certificate_A' => $this->request->data['SecondaryRegister']['NCC_Certificate_A'],
+                    'NCC_Certificate_B' => $this->request->data['SecondaryRegister']['NCC_Certificate_B'],
+                    'NCC_Certificate_C' => $this->request->data['SecondaryRegister']['NCC_Certificate_C'],
+                    'None' => $this->request->data['SecondaryRegister']['None'],
+                    'Illiteracy' => $this->request->data['SecondaryRegister']['Illiteracy'],
+                    'frkExtra_course' => $extraCourse,
+                    'frkFeeConcession' => $this->request->data['SecondaryRegister']['FeeConcession'],
+
+                    'sportDis1' => $Sports1,
+                    'sportlevel1' => $this->request->data['SecondaryRegister']['SportsLevel1'],
+                    'sportDis2' => $Sports2,
+                    'sportlevel2' => $this->request->data['SecondaryRegister']['SportsLevel2'],
+                    'sportDis3' => $Sports3,
+                    'sportlevel3' => $this->request->data['SecondaryRegister']['SportsLevel3'],
+                    'Arts1' => $Arts1,
+                    'ArtsLevel1' => $this->request->data['SecondaryRegister']['ArtsLevel1'],
+                    'Arts2' => $Arts2,
+                    'ArtsLevel2' => $this->request->data['SecondaryRegister']['ArtsLevel2'],
+                    'Arts3' => $Arts3,
+                    'ArtsLevel3' => $this->request->data['SecondaryRegister']['ArtsLevel3']
+                ); 
+                $IndexObject = new IndexesController;
+                $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+                $choice_str=$choice[0]['Choice']['choices'];
+                $choice_arr=explode(',',$choice_str);
+                
+                $this->Reservation->create();
+                if ($this->Reservation->save($reservations1)) { 
+                     if($IndexObject->indexing($this->Session->read('User.userid')) && $IndexObject->ranking($choice_arr)) {            
+                        $this->Session->setFlash(__('Your Application has been successfully saved!'));
+                        return $this->redirect(array('action' => 'choice_select'));
+                    }
+                    
+                } else {
+                    $this->Session->setFlash(__('Your Additional Information could not be saved. Please, try again.'));
+                     return $this->redirect(array('action' => 'reservations'));
+                }
+                }
+                }
+        }
+        if(!empty($reservations)) {
+            if (!$this->request->data) {
+                $this->request->data = $appenddata;
+            }
+        }
+    }
+        
+    }
     
-    
-	public function reservations() {
+	public function reservationsold() {
         
         $userid=$this->Session->read('User.userid');
         if (!isset($userid)) {
@@ -2553,162 +2717,7 @@ class PagesController extends AppController {
         
     }
     
-    public function reservationsold() {
-        
-        $userid=$this->Session->read('User.userid');
-        if (!isset($userid)) {
-            $this->Session->setFlash(__('Please Login!.'));
-            return $this->redirect(array('action' => 'login'));
-        } else {
-            $reservations = $this->Reservation->find('first', array(
-                'conditions' => array(
-                    'frkUserID' => $userid
-                )
-                    ));
-        
-        if(!empty($reservations)){
-            $appenddata['SecondaryRegister']['HandiCapped'] = $reservations['Reservation']['frkHandiCapped'];
-            $appenddata['SecondaryRegister']['NCC/NSS'] = $reservations['Reservation']['frkNcc/Nss'];
-            $appenddata['SecondaryRegister']['Ex-ServiceMan'] = $reservations['Reservation']['frkEx-ServiceMan'];
-            
-            $appenddata['SecondaryRegister']['NCC_Certificate_A'] = $reservations['Reservation']['NCC_Certificate_A'];
-            $appenddata['SecondaryRegister']['NCC_Certificate_B'] = $reservations['Reservation']['NCC_Certificate_B'];
-            $appenddata['SecondaryRegister']['NCC_Certificate_C'] = $reservations['Reservation']['NCC_Certificate_C'];
-            
-            
-            $appenddata['SecondaryRegister']['None'] = $reservations['Reservation']['None'];
-            $appenddata['SecondaryRegister']['Illiteracy'] = $reservations['Reservation']['Illiteracy'];
-            
-            $appenddata['SecondaryRegister']['Sports1'] = $reservations['Reservation']['sportDis1'];
-            $appenddata['SecondaryRegister']['SportsLevel1'] = $reservations['Reservation']['sportlevel1'];
-            $appenddata['SecondaryRegister']['Sports2'] = $reservations['Reservation']['sportDis2'];
-            $appenddata['SecondaryRegister']['SportsLevel2'] = $reservations['Reservation']['sportlevel2'];
-            $appenddata['SecondaryRegister']['Sports3'] = $reservations['Reservation']['sportDis3'];
-            $appenddata['SecondaryRegister']['SportsLevel3'] = $reservations['Reservation']['sportlevel3'];
-            
-            
-            $appenddata['SecondaryRegister']['Arts1'] = $reservations['Reservation']['Arts1'];
-            $appenddata['SecondaryRegister']['ArtsLevel1'] = $reservations['Reservation']['ArtsLevel1'];
-            $appenddata['SecondaryRegister']['Arts2'] = $reservations['Reservation']['Arts2'];
-            $appenddata['SecondaryRegister']['ArtsLevel2'] = $reservations['Reservation']['ArtsLevel2'];
-            $appenddata['SecondaryRegister']['Arts3'] = $reservations['Reservation']['Arts3'];
-            $appenddata['SecondaryRegister']['ArtsLevel3'] = $reservations['Reservation']['ArtsLevel3'];
-            
-            $appenddata['SecondaryRegister']['extra_course'] = $reservations['Reservation']['frkExtra_course'];
-            $appenddata['SecondaryRegister']['FeeConcession'] = $reservations['Reservation']['frkFeeConcession'];
-            
-            }
-        
-        if($this->request->is('post')) {
-            if(!empty($this->request->data['SecondaryRegister'])){
-                if (!empty($reservations)) {
-                    $extraCourse=str_replace("'","",$this->request->data['SecondaryRegister']['extra_course']);
-                    $Sports1=str_replace("'","",$this->request->data['SecondaryRegister']['Sports1']);
-                    $Sports2=str_replace("'","",$this->request->data['SecondaryRegister']['Sports2']);
-                    $Sports3=str_replace("'","",$this->request->data['SecondaryRegister']['Sports3']);
-                    $Arts1=str_replace("'","",$this->request->data['SecondaryRegister']['Arts1']);
-                    $Arts2=str_replace("'","",$this->request->data['SecondaryRegister']['Arts2']);
-                    $Arts3=str_replace("'","",$this->request->data['SecondaryRegister']['Arts3']);
-
-                    $ReservationTableData = array(
-                     'frkHandiCapped' => "'" .$this->request->data['SecondaryRegister']['HandiCapped']."'" ,
-                   
-                    'frkNcc/Nss' => "'" .$this->request->data['SecondaryRegister']['NCC/NSS']."'",
-                    'frkEx-ServiceMan' => "'" .$this->request->data['SecondaryRegister']['Ex-ServiceMan']."'",
-                    'NCC_Certificate_A' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_A']."'",
-                    'NCC_Certificate_B' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_B']."'",
-                    'NCC_Certificate_C' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_C']."'",
-                    'None' => "'" .$this->request->data['SecondaryRegister']['None']."'",
-                    'Illiteracy' => "'" .$this->request->data['SecondaryRegister']['Illiteracy']."'",
-                    'frkExtra_course' => "'" .$extraCourse."'",
-                    'frkFeeConcession' => "'" .$this->request->data['SecondaryRegister']['FeeConcession']."'",
-
-                    'sportDis1' => "'" .$Sports1."'",
-                    'sportlevel1' => "'" .$this->request->data['SecondaryRegister']['SportsLevel1']."'",
-                    'sportDis2' => "'" .$Sports2."'",
-                    'sportlevel2' => "'" .$this->request->data['SecondaryRegister']['SportsLevel2']."'",
-                    'sportDis3' => "'" .$Sports3."'",
-                    'sportlevel3' => "'" .$this->request->data['SecondaryRegister']['SportsLevel3']."'",
-                    'Arts1' => "'" .$Arts1."'",
-                    'ArtsLevel1' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel1']."'",
-                    'Arts2' => "'" .$Arts2."'",
-                    'ArtsLevel2' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel2']."'",
-                    'Arts3' => "'" .$Arts3."'",
-                    'ArtsLevel3' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel3']."'"
-
-                    );
-                    $cnd3 = array(
-                        'Reservation.frkUserID' => $userid,
-                    );
-                    $Indexes = new IndexesController;
-
-                    if (!$this->Reservation->updateAll($ReservationTableData, $cnd3)) {
-                        $this->Session->setFlash(__('Could not Save Application Data'));
-                        return $this->redirect(array('action' => 'reservations'));
-                    } else {
-                        if($Indexes->indexing($this->Session->read('User.userid'))){
-                            $this->Session->setFlash(__('Additional Information have been saved'));
-                            return $this->redirect(array('action' => 'choice_select'));
-                        }
-                    }
-                } else{
-
-                    $extraCourse=str_replace("'","",$this->request->data['SecondaryRegister']['extra_course']);
-                    $Sports1=str_replace("'","",$this->request->data['SecondaryRegister']['Sports1']);
-                    $Sports2=str_replace("'","",$this->request->data['SecondaryRegister']['Sports2']);
-                    $Sports3=str_replace("'","",$this->request->data['SecondaryRegister']['Sports3']);
-                    $Arts1=str_replace("'","",$this->request->data['SecondaryRegister']['Arts1']);
-                    $Arts2=str_replace("'","",$this->request->data['SecondaryRegister']['Arts2']);
-                    $Arts3=str_replace("'","",$this->request->data['SecondaryRegister']['Arts3']);
-
-                $reservations1 = array(
-                    'frkHandiCapped' => $this->request->data['SecondaryRegister']['HandiCapped'],
-                    'frkUserID' => $userid,
-                    'frkNcc/Nss' => $this->request->data['SecondaryRegister']['NCC/NSS'],
-                    'frkEx-ServiceMan' => $this->request->data['SecondaryRegister']['Ex-ServiceMan'],
-                    'NCC_Certificate_A' => $this->request->data['SecondaryRegister']['NCC_Certificate_A'],
-                    'NCC_Certificate_B' => $this->request->data['SecondaryRegister']['NCC_Certificate_B'],
-                    'NCC_Certificate_C' => $this->request->data['SecondaryRegister']['NCC_Certificate_C'],
-                    'None' => $this->request->data['SecondaryRegister']['None'],
-                    'Illiteracy' => $this->request->data['SecondaryRegister']['Illiteracy'],
-                    'frkExtra_course' => $extraCourse,
-                    'frkFeeConcession' => $this->request->data['SecondaryRegister']['FeeConcession'],
-
-                    'sportDis1' => $Sports1,
-                    'sportlevel1' => $this->request->data['SecondaryRegister']['SportsLevel1'],
-                    'sportDis2' => $Sports2,
-                    'sportlevel2' => $this->request->data['SecondaryRegister']['SportsLevel2'],
-                    'sportDis3' => $Sports3,
-                    'sportlevel3' => $this->request->data['SecondaryRegister']['SportsLevel3'],
-                    'Arts1' => $Arts1,
-                    'ArtsLevel1' => $this->request->data['SecondaryRegister']['ArtsLevel1'],
-                    'Arts2' => $Arts2,
-                    'ArtsLevel2' => $this->request->data['SecondaryRegister']['ArtsLevel2'],
-                    'Arts3' => $Arts3,
-                    'ArtsLevel3' => $this->request->data['SecondaryRegister']['ArtsLevel3']
-                ); 
-                $Indexes = new IndexesController;
-                $this->Reservation->create();
-                if ($this->Reservation->save($reservations1)) { 
-                    if($Indexes->indexing($this->Session->read('User.userid'))){                 
-                        $this->Session->setFlash(__('Your Application has been successfully saved!'));
-                        return $this->redirect(array('action' => 'choice_select'));
-                    }
-                } else {
-                    $this->Session->setFlash(__('Your Additional Information could not be saved. Please, try again.'));
-                     return $this->redirect(array('action' => 'reservations'));
-                }
-                }
-                }
-        }
-        if(!empty($reservations)) {
-            if (!$this->request->data) {
-                $this->request->data = $appenddata;
-            }
-        }
-    }
-        
-    } 
+     
     
     
 
