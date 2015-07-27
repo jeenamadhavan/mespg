@@ -3503,6 +3503,12 @@ class PagesController extends AppController {
                 $this->set('choice_edit',1);
             }
         }
+        // hall ticket for food science
+        $query="select * from choices where user_id=".$userid." and FIND_IN_SET(8,choices)";
+        $food_science=$this->Choice->query($query);
+        if(!empty($food_science)) {
+            $this->set('food_science',1);
+        }
         $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
         if(empty($paymentCompleted)) {
             $this->set('cannot_fill',1);
