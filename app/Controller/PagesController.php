@@ -4105,6 +4105,349 @@ public function choice_edit() {
         pr($courses);
         exit;
     }
+    
+    public function generatepdfapplication($choice_select)
+    {
+        // echo $choice_select; exit;
+        $this->layout = 'generatepdfapplication';
+    // $this->autoRender= false;
+        $userid = $this->Session->read('User.userid');
+
+        $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+        $User=$this->User->find('first',array('conditions'=>array('frkUserID'=>$userid),'fields'=>array('frkParentOccupation')));
+        if(!is_numeric($User['User']['frkParentOccupation']))
+        {
+//            echo "asdasd"; exit;
+           if(!empty($choice)) {
+
+            $choice_result=$this->Choice->find('all',array(
+            'conditions'=>array('Choice.user_id'=>$userid),
+            'joins'=>array(array(
+                'table'=>'users',
+                'alias'=>'User',
+                'type'=>'LEFT',
+                'conditions'=>array('User.frkUserID=Choice.user_id')
+                ),
+
+                array(
+                    'table'=>'final_communities',
+                    'alias'=>'Community',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Community.id=User.frkUserCommunity')
+                    ),
+               array(
+                    'table'=>'religions',
+                    'alias'=>'Religion',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Religion.id=User.frkUserReligion')
+                    ),
+               array(
+                    'table'=>'countries',
+                    'alias'=>'Countrie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Countrie.id=User.frkUserNationality_ID')
+                    ),
+                array(
+                    'table'=>'states',
+                    'alias'=>'State',
+                    'type'=>'LEFT',
+                    'conditions'=>array('State.id=User.frkUserState')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'District',
+                    'type'=>'LEFT',
+                    'conditions'=>array('District.id=User.frkUserDistrict')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'DistrictComm',
+                    'type'=>'LEFT',
+                    'conditions'=>array('DistrictComm.id=User.frkUserCommDistrict')
+                    ),
+                 array(
+                    'table'=>'final_communities',
+                    'alias'=>'Final_communitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Final_communitie.id=User.frkUserCommunity')
+                    ),
+                   array(
+                    'table'=>'castes',
+                    'alias'=>'Caste',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Caste.id=User.frkUserCasteID')
+                    ),
+                   
+                   array(
+                    'table'=>'reservations',
+                    'alias'=>'Reservation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Reservation.frkUserID=User.frkUserID')
+                    ),
+                   // array(
+                   //  'table'=>'academicdetails',
+                   //  'alias'=>'Academicdetail',
+                   //  'type'=>'INNER',
+                   //  'conditions'=>array('Academicdetail.frkUserID=User.frkUserID')
+                   //  ),
+                   
+                   array(
+                    'table'=>'applicants',
+                    'alias'=>'Applicant',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Applicant.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'boards',
+                    'alias'=>'Board',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Board.id=Applicant.plusTwoBoard')
+                    ),
+                   array(
+                    'table'=>'streams',
+                    'alias'=>'Stream',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Stream.board_id=Applicant.plusTwoStream')
+                    ),
+                   array(
+                    'table'=>'marks',
+                    'alias'=>'Mark',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Mark.user_id=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'universities',
+                    'alias'=>'Universitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Universitie.id=Mark.university_id')
+                    ),
+                   array(
+                    'table'=>'degrees',
+                    'alias'=>'Degree',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Degree.id=Mark.degree_id')
+                    ),
+                   array(
+                    'table'=>'courses',
+                    'alias'=>'Course',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Course.frkCourseID'=>$choice_select)
+                    ),
+                   array(
+                    'table'=>'indexes',
+                    'alias'=>'Index',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Index.user_id=User.frkUserID','Index.course_id'=>$choice_select)
+                    )
+
+            ),
+            'fields'=>array('Index.*','Course.*','Choice.*','Universitie.*','Degree.*','Mark.*','Stream.*','Applicant.*','Board.*','Community.*','Religion.*','User.*','Countrie.*','State.*','District.*','DistrictComm.*','Final_communitie.*','Caste.*','Reservation.*')
+            ));
+            
+        }
+        }
+        else
+        {
+            if(!empty($choice)) {
+
+            $choice_result=$this->Choice->find('all',array(
+            'conditions'=>array('Choice.user_id'=>$userid),
+            'joins'=>array(array(
+                'table'=>'users',
+                'alias'=>'User',
+                'type'=>'LEFT',
+                'conditions'=>array('User.frkUserID=Choice.user_id')
+                ),
+
+                array(
+                    'table'=>'final_communities',
+                    'alias'=>'Community',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Community.id=User.frkUserCommunity')
+                    ),
+               array(
+                    'table'=>'religions',
+                    'alias'=>'Religion',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Religion.id=User.frkUserReligion')
+                    ),
+               array(
+                    'table'=>'countries',
+                    'alias'=>'Countrie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Countrie.id=User.frkUserNationality_ID')
+                    ),
+                array(
+                    'table'=>'states',
+                    'alias'=>'State',
+                    'type'=>'LEFT',
+                    'conditions'=>array('State.id=User.frkUserState')
+                    ),
+                array(
+                    'table'=>'occupations',
+                    'alias'=>'Occupation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Occupation.id=User.frkParentOccupation')
+                    
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'District',
+                    'type'=>'LEFT',
+                    'conditions'=>array('District.id=User.frkUserDistrict')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'DistrictComm',
+                    'type'=>'LEFT',
+                    'conditions'=>array('DistrictComm.id=User.frkUserCommDistrict')
+                    ),
+                 array(
+                    'table'=>'final_communities',
+                    'alias'=>'Final_communitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Final_communitie.id=User.frkUserCommunity')
+                    ),
+                   array(
+                    'table'=>'castes',
+                    'alias'=>'Caste',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Caste.id=User.frkUserCasteID')
+                    ),
+                   array(
+                    'table'=>'reservations',
+                    'alias'=>'Reservation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Reservation.frkUserID=User.frkUserID')
+                    ),
+                   // array(
+                   //  'table'=>'academicdetails',
+                   //  'alias'=>'Academicdetail',
+                   //  'type'=>'INNER',
+                   //  'conditions'=>array('Academicdetail.frkUserID=User.frkUserID')
+                   //  ),
+                   
+                   array(
+                    'table'=>'applicants',
+                    'alias'=>'Applicant',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Applicant.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'boards',
+                    'alias'=>'Board',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Board.id=Applicant.plusTwoBoard')
+                    ),
+                   array(
+                    'table'=>'streams',
+                    'alias'=>'Stream',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Stream.board_id=Applicant.plusTwoStream')
+                    ),
+                   array(
+                    'table'=>'marks',
+                    'alias'=>'Mark',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Mark.user_id=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'universities',
+                    'alias'=>'Universitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Universitie.id=Mark.university_id')
+                    ),
+                   array(
+                    'table'=>'degrees',
+                    'alias'=>'Degree',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Degree.id=Mark.degree_id')
+                    ),
+                   array(
+                    'table'=>'courses',
+                    'alias'=>'Course',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Course.frkCourseID'=>$choice_select)
+                    ),
+                   array(
+                    'table'=>'indexes',
+                    'alias'=>'Index',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Index.user_id=User.frkUserID','Index.course_id'=>$choice_select)
+                    )
+
+            ),
+            'fields'=>array('Index.*','Course.*','Choice.*','Universitie.*','Degree.*','Mark.*','Stream.*','Applicant.*','Board.*','Community.*','Religion.*','User.*','Countrie.*','State.*','District.*','DistrictComm.*','Final_communitie.*','Caste.*','Occupation.*','Reservation.*')
+            ));
+        }
+        }
+//        pr($User); exit;
+        
+        
+// pr($choice_result); exit;
+  $from = new DateTime($choice_result[0]['User']['frkUserDOB']);
+        $to   = new DateTime('today');
+        $age  = $from->diff($to)->y;
+       
+//asdasd
+$choice_result['age']=$age;
+        
+         if(!isset($choice_result[0]['Occupation']['name'])){
+             $choice_result[0]['Occupation']['id']=16;
+             $choice_result[0]['Occupation']['name']=$choice_result[0]['User']['frkParentOccupation'];
+         
+             
+         }
+        //pr($choice_result[0]);exit;
+            $this->set('All_result',$choice_result);
+
+        }
+
+        public function generatehallticket()
+           {
+             $this->layout = 'generatehallticket';
+                // $this->autoRender= false;
+                   $userid = $this->Session->read('User.userid');
+                    $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+                  
+                    if(!empty($choice)) {
+
+                        $hallticket=$this->Choice->find('all',array(
+                        'conditions'=>array('Choice.user_id'=>$userid),
+                        'joins'=>array(
+                            array(
+                            'table'=>'users',
+                            'alias'=>'User',
+                            'type'=>'INNER',
+                            'conditions'=>array('User.frkUserID=Choice.user_id')
+                            ),
+                            array(
+                            'table'=>'courses',
+                            'alias'=>'Course',
+                            'type'=>'INNER',
+                            'conditions'=>array('Course.frkCourseID=Choice.choices')
+                            )
+
+                        ),
+                        'fields'=>array('Choice.*','User.*','Course.*')
+                        ));
+                    }
+                        
+               $this->set('All_result',$hallticket);
+               $choice_array=explode(',', $hallticket[0]['Choice']['choices'] ); 
+               $courses=array();
+               foreach($choice_array as $choice)
+               {
+                $course=$this->Course->find('first',array('conditions'=>array('frkCourseID'=>$choice)));
+                $courses[]=$course['Course']['frkCourseName'];
+                
+                
+               }
+               $this->set('Program',$courses);
+
+            // pr($hallticket); exit;
+
+               }
 
     
 
