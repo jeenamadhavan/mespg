@@ -109,6 +109,7 @@ class IndexesController extends AppController {
 						'D'=>"\$DRindex =$c1+($c2)+($c3)+($c4);"
 						)
         );
+        $indexing_rules['M.Sc. Food Science'] = array();
 		/*$indexing_rules['MLISc'] = array(
             'M' => '',
             'G' => array(
@@ -1212,6 +1213,8 @@ class IndexesController extends AppController {
 										}
 				  					}
 						  }
+					  } else if($course_name=='M.Sc. Food Science') {
+						 	$flag=1;
 					  }
 					  /*else if($course_name=='MLISc' || $course_name=='BLISc') {
 						  $m1=$this->part1_marks($mark)+$mark['part2_mark']+$this->part3_marks($mark);
