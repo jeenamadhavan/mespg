@@ -3650,25 +3650,42 @@ class PagesController extends AppController {
     }
 
     public function add_transaction() {
+        $user_id=$this->Session->read('User.userid');
         $this->autoRender=false;
         if($this->request->is('post')){
             $choices=$this->Choice->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+            $payment=$this->Payment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
         
             $application_no=$choices['Choice']['application_no'];
             $amount=$choices['Choice']['amount'];
 
-            $paymentData=array(
+            if(empty($payment)) {
+                $paymentData=array(
                     'user_id'=>$this->Session->read('User.userid'),
                     'application_no'=>$application_no,
                     'transaction_id'=>$this->request->data['transaction_id_form']['ref_no'],
                     'amount'=>$amount,
                     'date'=>date('Y-m-d')
                 );
-            $this->Payment->create();
-            if($this->Payment->save($paymentData)) {
-                $this->Session->setFlash('The Reference Number has been submitted successfully. You will recieve an automated confirmation mail within 48 Hrs. You can fill the application only after recieving the confirmation mail.');
-                return $this->redirect(array('controller'=>'pages','action'=>'choice_select'));
+                $this->Payment->create();
+                if($this->Payment->save($paymentData)) {
+                    $this->Session->setFlash('The Reference Number has been submitted successfully. You will recieve an automated confirmation mail within 48 Hrs. You can fill the application only after recieving the confirmation mail.');
+                    return $this->redirect(array('controller'=>'pages','action'=>'choice_select'));
+                }
+            } else {
+                $paymentupdateData=array(
+                    'user_id'=>"'".$this->Session->read('User.userid')."'",
+                    'application_no'=>"'".$application_no."'",
+                    'transaction_id'=>"'".$this->request->data['transaction_id_form']['ref_no']."'",
+                    'amount'=>"'".$amount."'",
+                    'date'=>"'".date('Y-m-d')."'"
+                );
+                if($this->Payment->updateAll($paymentupdateData,array('user_id'=>$user_id))) {
+                    $this->Session->setFlash('The Reference Number has been submitted updated. We will verify your reference Id soon. You can fill the application only after recieving the confirmation mail.');
+                    return $this->redirect(array('controller'=>'pages','action'=>'choice_select'));
+                }
             }
+            
         }
         
     }
