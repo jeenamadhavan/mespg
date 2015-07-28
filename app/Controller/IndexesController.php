@@ -583,7 +583,9 @@ class IndexesController extends AppController {
 										}
 				  					}
 						 }
-					 }
+					 } else if($course_name=='M.Sc. Food Science') {
+						 	$flag=1;
+					  }
 					 /*else if($course_name=='MLISc' || $course_name=='BLISc') {
 						eval($indexing_rules[$course_name]['G']['N']);
 						eval($indexing_rules[$course_name]['G']['D']);
