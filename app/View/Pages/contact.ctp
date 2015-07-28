@@ -30,7 +30,7 @@
         <p>College Website: <a href="http://www.mesmampad.org/" target="_blank">http://www.mesmampad.org/</a></p>
         <p><strong>For Technical queries:</strong></p>
         <p>email: <a href="mailto:admission@mesmampadadmission.com">admission@mesmampadadmission.com</a></p>
-        <p>Phone: +91 495 2727411, +91 9656223366</p>
+        <p>Phone: +91 495 4050995, +91 9656223366</p>
     
     </div>
     
