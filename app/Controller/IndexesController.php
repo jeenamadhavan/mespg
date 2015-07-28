@@ -1500,17 +1500,22 @@ class IndexesController extends AppController {
 		//$db = mysqli_connect("localhost", "mentordbuser", "m3nt0r#DB", "mes_pg_admission") or die("No db connection");
 		if($choice_array) {
 			foreach($choice_array as $choice) {
-				$query="select id from indexes where course_id=$choice order by `index` desc";
-		    	//echo $query;exit();
-		    	$indexes = mysqli_query($db,$query);
-		    	$rank=0;
-		    	while($index = mysqli_fetch_array($indexes)) {
-		      		$rank += 1;
-		      		if(mysqli_query($db,"update indexes set rank=$rank where id=".$index['id'])) {
-		      			$flag=1;
-		      		}
-		      		//Wmysql_query("update indexes set rank=$rank where id=$index['id']");
-		    	}
+				if($choice==8) {
+					$flag=1;
+				} else {
+					$query="select id from indexes where course_id=$choice order by `index` desc";
+			    	//echo $query;exit();
+			    	$indexes = mysqli_query($db,$query);
+			    	$rank=0;
+			    	while($index = mysqli_fetch_array($indexes)) {
+			      		$rank += 1;
+			      		if(mysqli_query($db,"update indexes set rank=$rank where id=".$index['id'])) {
+			      			$flag=1;
+			      		}
+			      		//Wmysql_query("update indexes set rank=$rank where id=$index['id']");
+			    	}
+				}
+				
 			}
 		} else {
 			$query="select frkCourseID, frkCourseName from courses";
@@ -1518,19 +1523,23 @@ class IndexesController extends AppController {
 		  	while($row = mysqli_fetch_array($courses)) {
 		    	$course_id = $row['frkCourseID'];
 		    	$course_name=$row['frkCourseName'];
+		    	if($course_id==8) {
+					$flag=1;
+				} else {
+					$query="select id from indexes where course_id=$course_id order by `index` desc";
+			    	//echo $query;exit();
+			    	$indexes = mysqli_query($db,$query);
+			    	$rank=0;
+			    	while($index = mysqli_fetch_array($indexes)) {
+			      		$rank += 1;
+			      		if(mysqli_query($db,"update indexes set rank=$rank where id=".$index['id'])) {
+			      			$flag=1;
+			      		}
+			      		//Wmysql_query("update indexes set rank=$rank where id=$index['id']");
+			    	}
+				}
 
-		    	$query="select id from indexes where course_id=$course_id order by `index` desc";
-		    	//echo $query;exit();
-		    	$indexes = mysqli_query($db,$query);
-		    	$rank=0;
-		    	while($index = mysqli_fetch_array($indexes)) {
-		      		$rank += 1;
-		      		if(mysqli_query($db,"update indexes set rank=$rank where id=".$index['id'])) {
-		      			$flag=1;
-		      		}
-		      		//Wmysql_query("update indexes set rank=$rank where id=$index['id']");
-		    	}
-
+		    	
 		  	}
 		}
     		
