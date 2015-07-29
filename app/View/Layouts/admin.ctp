@@ -19,14 +19,23 @@
 
         echo $this->Html->script($all_scripts);
         echo $this->fetch('script');
-        ?> 
+        ?>
+        <style type="text/css">
+        #top-bar {
+              background-color: #389226;
+        }
+        a {
+            color: #389226 !important;
+        }
+        
+        </style>
     </head>
 <body>
     <div class="wrapper">
         <header>
             
             <div class="container zero-padding">
-                <nav class="navbar navbar-inverse">
+                <nav class="navbar navbar-inverse" id="top-bar">
                     <div class="container-fluid">
                         <!-- Brand and toggle get grouped for better mobile display -->
                         <div class="navbar-header">
@@ -47,8 +56,8 @@
                             if($this->Session->read('User.admin')==1){
                                 
                             ?>
-                                <li><?php echo $this->Html->link(__('View Payment Details'), "/admins/viewpaymentdetails", array('escape' => false)) ?></li>
-                                <li><?php echo $this->Html->link(__('Upload Excel'), "/admins/uploadexcel", array('escape' => false)) ?></li>
+                                <li><?php echo $this->Html->link(__('View Index Details'), "/admins/indexdetails", array('escape' => false)) ?></li>
+                                <li><?php echo $this->Html->link(__('Generate PDF'), "/admins/generatecourse", array('escape' => false)) ?></li>
                                     <?php } ?>
                                 
                             </ul>
