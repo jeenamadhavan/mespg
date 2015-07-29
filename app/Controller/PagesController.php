@@ -3492,7 +3492,10 @@ class PagesController extends AppController {
             $result=$this->Course->find('first',array('conditions'=>array('frkCourseID'=>$choice_arr[$i])));
             $choices_name[$i+1]=$result['Course']['frkCourseName'];
         }
-        $payment=$this->Payment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+        $payment=$this->Payment->find('first',array(
+            'conditions'=>array('user_id'=>$this->Session->read('User.userid')),
+            'order'=>array('date DESC')
+            ));
         if(count($payment)>0) {
             $this->set('reference_entered',1);
             $this->set('reference_no',$payment['Payment']['transaction_id']);
