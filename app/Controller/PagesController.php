@@ -322,10 +322,10 @@ class PagesController extends AppController {
         } else {
             $paymentUndetected=$this->Undetectedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
             $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
-            if(empty($paymentCompleted)) {
+            /*if(empty($paymentCompleted)) {
                 $this->Session->setFlash(__('Your Payment is pending! For further details, please contact admission@mesmampadadmission.com'));
                 return $this->redirect(array('action' => 'choice_select'));
-            }
+            }*/
 
             $users = $this->User->find('first', array(
                 'conditions' => array(
