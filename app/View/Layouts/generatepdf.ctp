@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?php echo $this->Html->charset(); ?>
         <title>
-            Farook College PG Admission | <?php echo $title_for_layout; ?>
+            M E S Mampad College PG Admission | <?php echo $title_for_layout; ?>
         </title>
         <script type="text/javascript">
             var BASEURL = "<?php echo $this->base; ?>";
