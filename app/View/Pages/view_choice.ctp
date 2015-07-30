@@ -60,16 +60,16 @@
 				
 
 			</tr>
-			<?php if(isset($edit_form)) { ?>
-			<tr>
+			<?php //if(isset($edit_form)) { ?>
+			<!--<tr>
 				<th>Download Application Form (PDF):</th>
 				<td>
 					<?php foreach($choices_name as $choice_id=>$choice) {
 						echo $this->Html->link($choice,array('controller'=>'pages','action'=>'generatepdfapplication/'.$choice_id),array('class'=>'btn btn-success pull-left','style'=>'margin-right: 5px;'));
 						} ?>
 				</td>
-			</tr>
-			<?php } ?>
+			</tr>-->
+			<?php //} ?>
 		</table>
 
                 <?php if(!isset($cannot_fill)) { ?>
@@ -80,9 +80,9 @@
                 	<?php echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
                 <?php } } ?>
                 <?php echo $this->Html->link('Edit Choice',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>(isset($reference_entered) ? 'disabled' : ''))); ?>
-                <?php //if(isset($food_science)) { ?>
-                <?php //echo $this->Html->link('Hall Ticket',array('controller'=>'pages','action'=>'generatehallticket'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
-                <?php //} ?>
+                <?php if(isset($food_science)) { ?>
+                <?php echo $this->Html->link('Hall Ticket',array('controller'=>'pages','action'=>'generatehallticket'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
+                <?php } ?>
 
 	</div>
 </div>
