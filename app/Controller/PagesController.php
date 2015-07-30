@@ -3495,10 +3495,12 @@ class PagesController extends AppController {
         $choice_arr=explode(',',$choice_str);
         $choice_count=count($choice_arr);
 
+        $this->Session->write('choice_array',$choice_arr);
+
         $choices_name=array();
         for($i=0;$i<$choice_count;$i++) {
             $result=$this->Course->find('first',array('conditions'=>array('frkCourseID'=>$choice_arr[$i])));
-            $choices_name[$i+1]=$result['Course']['frkCourseName'];
+            $choices_name[$result['Course']['frkCourseID']]=$result['Course']['frkCourseName'];
         }
         $payment=$this->Payment->find('first',array(
             'conditions'=>array('user_id'=>$this->Session->read('User.userid')),
@@ -3508,6 +3510,7 @@ class PagesController extends AppController {
             $this->set('reference_entered',1);
             $this->set('reference_no',$payment['Payment']['transaction_id']);
         }
+        $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
         $paymentUndetected=$this->Undetectedpayment->find('first',array('conditions'=>array('user_id'=>$userid)));
         if(!empty($paymentUndetected)) {
             if(!empty($payment)) {
@@ -3518,17 +3521,31 @@ class PagesController extends AppController {
         $query="select * from choices where user_id=".$userid." and FIND_IN_SET(8,choices)";
         $food_science=$this->Choice->query($query);
         if(!empty($food_science)) {
-            $this->set('food_science',1);
+            if(!empty($paymentCompleted) || !empty($paymentUndetected)) {
+                $this->set('food_science',1);
+            }
+            
         }
-        $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+        
+        
         if(empty($paymentCompleted) && empty($paymentUndetected)) {
             $this->set('cannot_fill',1);
         }
         // if marks exists, allowing to edit
         $markExists=$this->Mark->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+
+        $choice_array=explode(',', $choice_result[0]['Choice']['choices'] ); 
+           $courses=array();
+           foreach($choice_array as $choice)
+           {
+            $course=$this->Course->find('first',array('conditions'=>array('frkCourseID'=>$choice)));
+            $courses[]=$course['Course']['frkCourseName'];
+           }
+
         if(!empty($markExists)) {
             $this->set('edit_form',1);
         }
+
 
         $this->set('choices_name',$choices_name);
         
