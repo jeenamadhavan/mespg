@@ -83,7 +83,7 @@ doc.rect(5, 5, 199, 100);
 
     doc.text(107, 84, 'Date :     03/08/2015');
     doc.rect(120, 78, 25, 9);
-    doc.text(147, 84, 'Time :          10:30 To 12:30');
+    doc.text(147, 84, 'Time :          10:30am To 12:30pm');
     doc.rect(162, 78, 38, 9);   
 
     doc.text(10, 97, 'Mobile No :');
