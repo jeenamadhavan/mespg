@@ -80,9 +80,9 @@
                 	<?php echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
                 <?php } } ?>
                 <?php echo $this->Html->link('Edit Choice',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>(isset($reference_entered) ? 'disabled' : ''))); ?>
-                <?php if(isset($food_science)) { ?>
-                <?php echo $this->Html->link('Hall Ticket',array('controller'=>'pages','action'=>'generatehallticket'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
-                <?php } ?>
+                <?php //if(isset($food_science)) { ?>
+                <?php //echo $this->Html->link('Hall Ticket',array('controller'=>'pages','action'=>'generatehallticket'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;')); ?>
+                <?php //} ?>
 
 	</div>
 </div>
