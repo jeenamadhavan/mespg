@@ -3513,7 +3513,7 @@ class PagesController extends AppController {
             $this->set('food_science',1);
         }
         $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
-        if(empty($paymentCompleted)) {
+        if(empty($paymentCompleted) && empty($paymentUndetected)) {
             $this->set('cannot_fill',1);
         }
         // if marks exists, allowing to edit
