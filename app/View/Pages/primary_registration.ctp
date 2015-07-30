@@ -3,7 +3,7 @@ $randnum=rand ( 1 ,5 );
 ?>
 <div class="container banner">
     <div class="banner-1" style="background: url('../images/mes_banner.png');background-size: 1170px 424px;background-repeat: no-repeat;height: 400px;margin-top: -40px;">
-        <h1 style="color:white;padding: 125px;">Fill Application</h1>
+        <h1 style="color:white;padding: 125px;">Welcome!</h1>
 <!--        <ul style="color: #fff; font-size: 16px; margin: 0px;">
             <li>The Biggest residential Post Graduate Institution Under Calicut university.</li>
             <li>18 UG Courses, 14 PG Courses and 8 Research Centers.</li>
@@ -1371,6 +1371,11 @@ $randnum=rand ( 1 ,5 );
                                             <td><?php echo $marks['Mark']['add_common_course_credit']; ?></td>
                                             <td><?php echo $marks['Mark']['add_common_course_cgpa']; ?></td>
                                         </tr>
+                                        <tr>
+                                            <td>Open course: <?php echo $marks['Mark']['open_sub']; ?></td>
+                                            <td><?php echo $marks['Mark']['open_credit']; ?></td>
+                                            <td><?php echo $marks['Mark']['open_cgpa']; ?></td>
+                                        </tr>
                                     <?php } // if kannur ?>
                                     <?php } else if($marks['Mark']['main']==2) { ?>
                                         <tr>
@@ -1781,7 +1786,7 @@ $randnum=rand ( 1 ,5 );
                                                 <th>Part-1 (English)<sup class="madadatory">*</sup></th>
                                                 <th>Part-2 (Language)<sup class="madadatory">*</sup></th>
                                                 <th>Part-2 (other)<sup class="madadatory">*</sup></th>
-                                                <!--<th>Open Course<sup class="madadatory">*</sup></th>-->
+                                                <th>Open Course<sup class="madadatory">*</sup></th>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -1825,12 +1830,27 @@ $randnum=rand ( 1 ,5 );
                                                             'options'=>array(
                                                                 'Common course other than languages'=>'Common course other than languages',
                                                                 'General Course'=>'General Course',
-                                                                'Open Course'=>'Open Course',
+                                                                //'Open Course'=>'Open Course',
                                                                 'Nil'=>'Nil',
                                                                 ),
                                                             'class'=>'form-control',
                                                             //'placeholder'=>'Enter Common Course (Other the English)',
                                                             'id'=>'part_two_other',
+                                                            'empty'=>'-- select one --',
+                                                            //'required'=>'required'
+                                                            )); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $this->Form->input('PrimaryRegister.open_course',
+                                                        array(
+                                                            'label'=>false,
+                                                            'options'=>array(
+                                                                'Open Course'=>'Open Course',
+                                                                'Nil'=>'Nil',
+                                                                ),
+                                                            'class'=>'form-control',
+                                                            //'placeholder'=>'Enter Common Course (Other the English)',
+                                                            'id'=>'kannur_open_course',
                                                             'empty'=>'-- select one --',
                                                             //'required'=>'required'
                                                             )); ?>
@@ -2935,14 +2955,15 @@ $(document).ready(function(){
             }
             
             if($('#grade').is(':checked')) {
-                if($('#part_one_english').val().length==0 || $('#part_two_lang').val().length==0 || $('#part_two_other').val().length==0) {
-                    alert('You should enter/select all your part-1, part-2 (Language) and part-2 other subject names');
+                if($('#part_one_english').val().length==0 || $('#part_two_lang').val().length==0 || $('#part_two_other').val().length==0 || $('#kannur_open_course').val().length==0) {
+                    alert('You should enter/select all your part-1, part-2 (Language), part-2 other and open course subject names');
                     return;
                 }
                 var part_one_english=$('#part_one_english').val();
                 var part_two_lang=$('#part_two_lang').val();
                 var part_two_other=$('#part_two_other').val();
-                    $("#mark_table").append("<table class='table table-bordered markTable'><tr><th>Course</th><th>Weights</th><th>SGPA</th></tr><tr><td>1. Part-3 (main): "+core+"</td><td><input type='number' name='core_credit' min='0' class='form-control' required></td><td><input type='number' step='0.01' min='0' max='4' name='core_cgpa' class='form-control' required></td></tr><tr><td>2. Part-3 (Sub-1): "+comp1+"</td><td><input type='number' name='comp1_credit' min='0' class='form-control' "+(comp1=='Nil' ? 'readonly' : '')+"></td><td><input type='number' name='comp1_cgpa'  step='0.01' min='0' max='4' class='form-control' "+(comp1=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>3. Part-3 (Sub-2): "+comp2+"</td><td><input type='number' name='comp2_credit' min='0' class='form-control' "+(comp2=='Nil' ? 'readonly' : '')+"></td><td><input type='number' name='comp2_cgpa' step='0.01' min='0' max='4' class='form-control' "+(comp2=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>4. Part-1: "+part_one_english+"</td><td><input type='number' name='part_one_credit' min='0' class='form-control' required></td><td><input type='number' step='0.01' min='0' max='4' name='part_one_cgpa' class='form-control' required></td></tr><tr><td>5. part-2 (Language): "+part_two_lang+"</td><td><input type='number' name='part_two_lang_credit' min='0' class='form-control' required "+(part_two_lang=='Nil' ? 'readonly' : '')+"></td><td><input type='number' step='0.01' min='0' max='4' name='part_two_lang_cgpa' class='form-control' required "+(part_two_lang=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>6. Part-2 (Other): "+part_two_other+"</td><td><input type='number' name='part_two_other_credit' min='0' class='form-control' required "+(part_two_other=='Nil' ? 'readonly' : '')+"></td><td><input type='number' step='0.01' min='0' max='4' name='part_two_other_cgpa' class='form-control' required "+(part_two_other=='Nil' ? 'readonly' : '')+"></td></tr><tr><td> Overall Weights for part-3: </td><td><input type='number' name='overall_credit' min='0' class='form-control' required></td></tr><tr><td>Overall CGPA for part-3: </td><td><input type='number' step='0.01' min='0' max='4' name='overall_cgpa' class='form-control' required></td></tr></table>");
+                var kannur_open_course=$('#kannur_open_course').val();
+                    $("#mark_table").append("<table class='table table-bordered markTable'><tr><th>Course</th><th>Weights</th><th>SGPA</th></tr><tr><td>1. Part-3 (main): "+core+"</td><td><input type='number' name='core_credit' min='0' class='form-control' required></td><td><input type='number' step='0.01' min='0' max='4' name='core_cgpa' class='form-control' required></td></tr><tr><td>2. Part-3 (Sub-1): "+comp1+"</td><td><input type='number' name='comp1_credit' min='0' class='form-control' "+(comp1=='Nil' ? 'readonly' : '')+"></td><td><input type='number' name='comp1_cgpa'  step='0.01' min='0' max='4' class='form-control' "+(comp1=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>3. Part-3 (Sub-2): "+comp2+"</td><td><input type='number' name='comp2_credit' min='0' class='form-control' "+(comp2=='Nil' ? 'readonly' : '')+"></td><td><input type='number' name='comp2_cgpa' step='0.01' min='0' max='4' class='form-control' "+(comp2=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>4. Part-1: "+part_one_english+"</td><td><input type='number' name='part_one_credit' min='0' class='form-control' required></td><td><input type='number' step='0.01' min='0' max='4' name='part_one_cgpa' class='form-control' required></td></tr><tr><td>5. part-2 (Language): "+part_two_lang+"</td><td><input type='number' name='part_two_lang_credit' min='0' class='form-control' required "+(part_two_lang=='Nil' ? 'readonly' : '')+"></td><td><input type='number' step='0.01' min='0' max='4' name='part_two_lang_cgpa' class='form-control' required "+(part_two_lang=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>6. Part-2 (Other): "+part_two_other+"</td><td><input type='number' name='part_two_other_credit' min='0' class='form-control' required "+(part_two_other=='Nil' ? 'readonly' : '')+"></td><td><input type='number' step='0.01' min='0' max='4' name='part_two_other_cgpa' class='form-control' required "+(part_two_other=='Nil' ? 'readonly' : '')+"></td></tr><tr><td>7. Open Course: "+kannur_open_course+"</td><td><input type='number' name='open_course_credit' min='0' class='form-control' required "+(kannur_open_course=='Nil' ? 'readonly' : '')+"></td><td><input type='number' step='0.01' min='0' max='4' name='open_course_cgpa' class='form-control' required "+(kannur_open_course=='Nil' ? 'readonly' : '')+"></td></tr><tr><td> Overall Weights for part-3: </td><td><input type='number' name='overall_credit' min='0' class='form-control' required></td></tr><tr><td>Overall CGPA for part-3: </td><td><input type='number' step='0.01' min='0' max='4' name='overall_cgpa' class='form-control' required></td></tr></table>");
                 $('#mark_table').show();
             } else if($('#mark').is(':checked')) {
                 if($('#part_one_subject').val()=='' || $('#part_two_subject').val()=='') {
