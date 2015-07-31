@@ -60,16 +60,16 @@
 				
 
 			</tr>
-			<?php //if(isset($edit_form)) { ?>
-			<!--<tr>
+			<?php if(isset($edit_form)) { ?>
+			<tr>
 				<th>Download Application Form (PDF):</th>
 				<td>
 					<?php foreach($choices_name as $choice_id=>$choice) {
 						echo $this->Html->link($choice,array('controller'=>'pages','action'=>'generatepdfapplication/'.$choice_id),array('class'=>'btn btn-success pull-left','style'=>'margin-right: 5px;'));
 						} ?>
 				</td>
-			</tr>-->
-			<?php //} ?>
+			</tr>
+			<?php } ?>
 		</table>
 
                 <?php if(!isset($cannot_fill)) { ?>
