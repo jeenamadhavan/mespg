@@ -91,6 +91,9 @@ class PagesController extends AppController {
     }
 
     public function register() {
+    	$this->Session->setFlash('You Cannot register further');
+        return $this->redirect(array('action'=>'index'));
+        
          //$this->render('register', 'register');
          if($this->Session->read('User.userid')) {
             $this->Session->setFlash('You are already logged in');
