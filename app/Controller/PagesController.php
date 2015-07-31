@@ -3684,6 +3684,9 @@ class PagesController extends AppController {
         $user_id=$this->Session->read('User.userid');
         $this->autoRender=false;
         if($this->request->is('post')){
+        	$this->Session->setFlash(__('You cannot enter reference ID further'));
+            	return $this->redirect(array('action' => 'choice_select'));
+            	
             $choices=$this->Choice->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
             $payment=$this->Payment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
         
