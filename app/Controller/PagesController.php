@@ -3557,6 +3557,9 @@ class PagesController extends AppController {
             
         }
         if($this->request->is('post')) {
+        	$this->Session->setFlash(__('You cannot select choices further'));
+            	return $this->redirect(array('action' => 'index'));
+            	
             $course_count=$this->Course->find('count');
             $choices='';
 
