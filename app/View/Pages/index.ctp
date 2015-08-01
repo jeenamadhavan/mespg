@@ -44,7 +44,7 @@
               <?php echo $this->Html->link(__('Provisional List for M.Com.'), "/pages/downloadproranklistmcom", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
           </div>
           
-          <div class="panel panel-default panel-fk">
+          <!--<div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
                 </div>
@@ -73,22 +73,22 @@
                             <li>Candidate must make sure that all entried filled in the application form are correct. Invalid/wrong entries cannot be considered for admission process.</li>
                             <!--<li>After filling application form, candidate can submit the form and wait for rank lists.</li>-->
 
-                        </ul>
-                    </li>
+                        <!--</ul>
+                    </li>-->
                     <!--<li>
                         <strong>STEP 3 ( Payment Confirmation):-</strong>
                         <ul>
                             <li>On successful payment, the candidate will get an e-receipt with a Transaction ID(SBT Collect Reference Number). Candidate must enter Transaction ID in appropriate format and other required information in order to process further towards submission of application.</li>
                             <li>Candidate’s payment will be confirmed by the system within 48 hrs and a confirmation mail will be sent to your registered e-mail ID. After receiving Payment Confirmation mail, candidate may proceed further for filling application in detail, and then submission of final application for admission process.</li>                           
                         </ul>
-                    </li>-->
+                    </li>
                     
                     
                 </ul>
 
 
                 </div>
-        </div>
+        </div>-->
 
             
 			<div class="text-center">
