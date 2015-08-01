@@ -1,7 +1,7 @@
 
 <div class="panel panel-default panel-fk">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Transaction Details</h3>
+                        <h3 class="panel-title">Index Details</h3>
                     </div>
 </div>
 <div class="main-content">
@@ -12,31 +12,42 @@
                 <div class="panel panel-default">
 
                     <div class="panel-body">
-                        <a href="#" class="btn btn-default changesuccess"><span class=""></span>Add to Success List</a>
-                        <a href="#" class="btn btn-default changereject"><span class=""></span>Add to Rejected List</a>
-                        <a href="#" class="btn btn-default changepending"><span class=""></span>Add to Pending List</a>
+                        
                         <div  style="padding:20px;"></div>
-                        <table class="table table-bordered" id="datatable">
+                        <table class="table table-bordered" id="datatable" >
+                           
                                 <thead>
+                                    <tr><label for="QualifyingExam" class="control-label">Programmes<sup class="madadatory">*</sup></label><br>
+                            <?php
+                            echo $this->Form->input('', array(
+                                'options' => $options,
+                                'empty' => '-- select one --',
+                                'class' => '',
+                                'id' => 'courses',
+                                'required' => 'required',
+                                'label' => false
+                            ));
+                            ?><b><a href='indexdetails'>View All List</a></b></tr>
+                                
                                     <tr>
-                                        <th></th>
+                                    
                                         
                                         <th>Application Number</th>
                                         <th>Name</th>
-                                        <th>Transaction Id</th>
-                                        <th>Transaction Date</th>
-                                        <th>Transaction Status</th>
-                                        <th>Community</th>
-                                        <th>Total Fee</th>
-                                        <th>Date</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Course name</th>
+                                        <th>Index</th>
+                                        
                                         
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php echo($this->Form->create('Choice')); ?>
-                                    <?php  $num=1;foreach ($Choices as $row){  ?>
-                                    <tr><?php if(isset($row['Payments']['id'])){?>
-                                        <th><input type="checkbox" class="chk" value="<?php echo $row['Payments']['id'];?>" /></th>
+                                    
+                                    <?php  $num=1;foreach ($indexes as $row){ ?>
+                                    <tr><?php if(isset($row['indexes']['id'])){?>
+                                        
                                         <?php }else{?>
                                         <th></th>
                                        <?php }?>
@@ -45,58 +56,45 @@
                                             <?php 
                                             echo $this->Form->input('application_no', array('label' => false, 'class' => 'form-control',  'type' => 'hidden')); 
                                             ?>
-                                            <?php echo $row['Choices']['application_no'] ?>
+                                            <?php //echo $row['choices']['application_no'] ?>
+                                              <?php echo $this->Html->link($row['choices']['application_no'], "/admins/generatepdf/".$row['indexes']['user_id']."/".$row['courses']['frkCourseID'], array('escape' => false)) ?>
                                         </td>
                                         
-                                        <td>
+                                       <td>
                                             <?php 
                                             echo $this->Form->input('name', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'name')); 
                                             ?>
-                                            <?php echo $row['User']['frkName']; ?>
+                                                                      <?php echo $this->Html->link($row['users']['frkUserName'], "/admins/edit_applicant/".$row['indexes']['user_id'], array('escape' => false)) ?>
+
+                                            
                                             
                                         </td>
                                         <td>
                                             <?php 
-                                            echo $this->Form->input('transaction_id', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            echo $this->Form->input('email', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'name')); 
                                             ?>
-                                            <?php echo $row['Payments']['transaction_id']; ?>
+                                            <?php echo $row['users']['frkUserEmail']; ?>
                                             
                                         </td>
                                         <td>
                                             <?php 
-                                            echo $this->Form->input('date', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            echo $this->Form->input('mobile', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'name')); 
                                             ?>
-                                            <?php echo $row['Payments']['date']; ?>
+                                            <?php echo $row['users']['frkUserMobile']; ?>
                                             
                                         </td>
                                         <td>
                                             <?php 
-                                            echo $this->Form->input('status', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
+                                            echo $this->Form->input('coursename', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'name')); 
                                             ?>
-                                            
-                                            <?php if($row['Payments']['status']=='P'){echo 'Pending';}else if($row['Payments']['status']=='R'){ echo 'Rejected';}else if($row['Payments']['status']=='C'){ echo 'Completed';}else if($row['Payments']['status']==''){ echo 'Transaction Id Not Submitted';}
-                                                 ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <?php 
-                                            echo $this->Form->input('community', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'community')); 
-                                            ?>
-                                            <?php echo $row['Communities']['name']; ?>
+                                            <?php echo $row['courses']['coursename']; ?>
                                             
                                         </td>
                                        <td>
                                             <?php 
-                                            echo $this->Form->input('amount', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'amount')); 
+                                            echo $this->Form->input('index', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'name')); 
                                             ?>
-                                            <?php echo $row['Choices']['amount']; ?>
-                                            
-                                        </td>
-                                        <td>
-                                            <?php 
-                                            echo $this->Form->input('date', array('label' => false, 'class' => 'form-control', 'type' => 'hidden','id' => 'gender')); 
-                                            ?>
-                                            <?php echo $row['Choices']['date']; ?>
+                                            <?php echo $row['indexes']['index']; ?>
                                             
                                         </td>
                                         
@@ -114,6 +112,24 @@
     <script>
         
         $(document).ready(function() {
+            $('#courses').on('change',function(e){
+            var id=$(this).val();
+            $.ajax({
+            type: "POST",
+            url: '<?php echo Router::url('/', true) . "admins/ajax_view"; ?>',
+            data: { 'id':id  },
+            success: function(response){
+                $(".panel-body").html(response);
+           
+               }
+            
+        });
+        
+    });
+            
+            
+            
+            
             $('#datatable').DataTable();
             
             

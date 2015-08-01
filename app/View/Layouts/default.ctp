@@ -111,7 +111,7 @@
               <?php 
                   $flashContent=$this->Session->flash();
                   if($flashContent!=null) {
-                      //echo "<script type='text/javascript'>$.alert.open('".$flashContent."');</script>";
+                      echo "<script type='text/javascript'>$.alert.open('".$flashContent."');</script>";
                   }
 
               ?>

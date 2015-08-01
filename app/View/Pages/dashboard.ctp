@@ -10,10 +10,7 @@
 				<th>Pending Payments :</th>
 				<td><?php echo $no_of_pending; ?></td>
 			</tr>
-			<tr>
-				<th>Rejected Payments :</th>
-				<td><?php echo $no_of_rejected; ?></td>
-			</tr>
+			
 			<tr>
 				<th>Completed Payments:</th>
 				<td><?php echo $no_of_confirmed; ?></td>

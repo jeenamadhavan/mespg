@@ -28,6 +28,8 @@ App::uses('AppController', 'Controller');
  * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
+App::import('Controller', 'Indexes');
+App::uses('AppController', 'Controller');
 class AdminsController extends AppController {
 
     /**
@@ -35,16 +37,15 @@ class AdminsController extends AppController {
      *
      * @var array
      */
-    public $uses = array(
+   public $uses = array(
         'Country',
         'Religion',
-        'Choice',
         'Qualification',
         'Occupation',
-        'Community',
+        'Final_community',
         'State',
+        'Caste',
         'User',
-        'Page',
         'Applicant',
         'Generatenumber',
         'District',
@@ -60,9 +61,21 @@ class AdminsController extends AppController {
         'Grade',
         'Temp',
         'Stream',
-        'Payment',
         'Streamsubject',
-        'Markdetail'
+        'Markdetail',
+        'Choice',
+        'User',
+        'Payment',
+        'Stream',
+        'University',
+        'Degree',
+        'Subjects',
+        'Mark',
+        'Completedpayment',
+        'Final_community',
+        'Undetectedpayment',
+        'Index',
+        'Choices'
     );
     var $name = 'Pages';
     public $helpers = array('Html', 'Form', 'Session');
@@ -79,12 +92,27 @@ class AdminsController extends AppController {
      *
      * @return void
      * @throws NotFoundException When the view file could not be found
-     * 	or MissingViewException in debug mode.
+     *  or MissingViewException in debug mode.
      */
     public function index() {
         
     }
-   
+   public function get_castes() {
+        $community_id=$this->data['cummunity_id'];
+        $userid=$this->data['userid'];
+        $castes=$this->Caste->find('list',array('conditions'=>array('reservation_category_id'=>$community_id),'fields'=>array('id','name')));
+
+        $result=$this->User->find('first',array(
+        'conditions'=>array('frkUserID'=>$userid),
+        'fields'=>array('User.frkUserCasteID')));
+
+        if($result['User']['frkUserCasteID']>0) {
+        $this->set('caste',$result['User']['frkUserCasteID']);
+
+        }
+        $this->set('castes',$castes);
+        $this->render('get_castes','ajax');
+      }
     public function checkpasswords() {
 
         if (strcmp($this->request->data['User']['frkUserPassword'], $this->request->data['User']['frkRepeatUserPassword']) == 0) {
@@ -92,14 +120,1335 @@ class AdminsController extends AppController {
         }
         return false;
     }
+    public function generatemarks()
+    {
+
+
+    $this->layout = 'generatemarks';
+    // pr($this->request->data);
+    $choicesID=$this->request->data['courses'];
+    // exit;
+
+
+    // $this->autoRender= false;
+    // $userid = $this->Session->read('User.userid');
+    // echo $choicesID;
+    $choice=$this->Choice->find('all');
+    if(!empty($choice)) {
+    $choice_result=$this->Choice->find('all',array(
+    'joins'=>array(array(
+                        'table'=>'users',
+                        'alias'=>'User',
+                        'type'=>'INNER',
+                        'conditions'=>array('FIND_IN_SET(\''. $choicesID .'\',Choice.choices)','Choice.user_id=User.frkUserID')
+                        ),
+                       array(
+                        'table'=>'final_communities',
+                        'alias'=>'Community',
+                        'type'=>'INNER',
+                        'conditions'=>array('Community.id=User.frkUserCommunity')
+                        ),
+                       array(
+                        'table'=>'reservations',
+                        'alias'=>'Reservation',
+                        'type'=>'INNER',
+                        'conditions'=>array('Reservation.frkUserID=User.frkUserID')
+                        ),
+                       array(
+                        'table'=>'applicants',
+                        'alias'=>'Applicant',
+                        'type'=>'INNER',
+                        'conditions'=>array('Applicant.frkUserID=User.frkUserID')
+                        ),
+                       array(
+                        'table'=>'marks',
+                        'alias'=>'Mark',
+                        'type'=>'INNER',
+                        'conditions'=>array('Mark.user_id=User.frkUserID')
+                        ),
+                       array(
+                        'table'=>'universities',
+                        'alias'=>'Universitie',
+                        'type'=>'INNER',
+                        'conditions'=>array('Universitie.id=Mark.university_id')
+                        ),
+                       array(
+                        'table'=>'degrees',
+                        'alias'=>'Degree',
+                        'type'=>'INNER',
+                        'conditions'=>array('Degree.id = Mark.degree_id')
+                        ),
+                       array(
+                        'table'=>'courses',
+                        'alias'=>'Course',
+                        'type'=>'INNER',
+                        'conditions'=>array('Course.frkCourseID'=>$choicesID )
+                        ),
+                       array(
+                        'table'=>'indexes',
+                        'alias'=>'Index',
+                        'type'=>'INNER',
+                        'conditions'=>array('Index.user_id=User.frkUserID','Index.course_id'=>$choicesID),
+                        
+                        )
+                ),
+                
+                
+                'fields'=> array('Choice.*','Index.*','Course.*','Universitie.*','Degree.*','Mark.*','Applicant.*','Community.*','User.*','Reservation.*'),
+                // 'group_by' => 'Course.frkCourseName'
+                //'order_by' =>  'Course.frkCourseID DESC'
+                // 'order' => array('Course.frkCourseID DESC' )
+                // 'order' => array('Course.frkCourseID DESC')
+                'order'=>array('Index.index DESC'),
+                )
+                );
+            }
+             // echo $this->element('sql_dump');
+             // die();
+             //pr($choice_result); exit;
+            // pr($choice_result[9]);pr($choice_result[10]);exit;
+                $this->set('All_result',$choice_result);
+
+       }
+   public function generatecourse()
+   {
+        $this->layout = 'admin';
+    if ($this->Session->read('User.admin') == 1) {
+
+            $sql = 'select indexes.id,indexes.course_id,choices.application_no,courses.frkCourseID,users.frkUserID,users.frkUserName,users.frkUserMobile,users.frkUserEmail,courses.frkCourseName as coursename,indexes.* from indexes   LEFT JOIN users ON(users.frkUserID=indexes.user_id) LEFT JOIN courses ON(courses.frkCourseID=indexes.course_id) LEFT JOIN choices ON(choices.user_id=indexes.user_id) ';
+            $indexes = $this->User->query($sql);  
+            $this->set('indexes', $indexes);
+            $options = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
+            $this->set('options', $options);
+            $this->render('generatecompletecourse', 'admin');
+        } else {
+            return $this->redirect(array('action' => 'adminlogin', 'controller' => 'admins'));
+        }
+   }
+    
+    
+      public function edit_applicant($userid=null) {
+            $this->layout = 'admin';
+       if ($this->Session->read('User.admin') != 1) 
+        {
+            $this->Session->setFlash(__('Please Login!.'));
+            return $this->redirect(array('action' => 'adminlogin'));
+        } else {
+            $paymentUndetected=$this->Undetectedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+            $paymentCompleted=$this->Completedpayment->find('first',array('conditions'=>array('user_id'=>$this->Session->read('User.userid'))));
+            
+
+            $users = $this->User->find('first', array(
+                'conditions' => array(
+                    'frkUserID' => $userid
+                )
+                    ));
+            $applicant = $this->Applicant->find('first', array(
+                'conditions' => array(
+                    'frkUserID' => $userid
+                )
+                    ));
+            $reservations = $this->Reservation->find('first', array(
+                'conditions' => array(
+                    'frkUserID' => $userid
+                )
+                    ));
+
+            $markTest=$this->Mark->find('first',array('conditions'=>array('user_id'=>$userid)));
+        
+            if(count($markTest)>0) {
+                $markDetails=$this->Mark->find('first',array(
+                    'conditions'=>array('user_id'=>$userid),
+                    'joins'=>array(array(
+                        'table'=>'universities',
+                        'alias'=>'University',
+                        'type'=>'INNER',
+                        'conditions'=>array('Mark.university_id=University.id')
+                        ),array(
+                        'table'=>'degrees',
+                        'alias'=>'Degree',
+                        'type'=>'INNER',
+                        'conditions'=>array('Mark.degree_id=Degree.id')
+                        ),/*array(
+                        'table'=>'subjects',
+                        'alias'=>'Subject',
+                        'type'=>'INNER',
+                        'conditions'=>array('Subject.id=Degree.id')
+                        )*/),
+                    'fields'=>array(
+                        'Mark.*',
+                        'University.name',
+                        'Degree.name'
+                        )
+                    ));
+                //pr($markDetails); exit;
+                $this->set('marks',$markDetails);
+                $this->set('mark_entered',1);
+            }
+
+            
+            
+            $appenddata = array();
+            $appenddata['PrimaryRegister']['name'] = $users['User']['frkUserName'];
+            $appenddata['PrimaryRegister']['email'] = $users['User']['frkUserEmail'];
+            //$appenddata['PrimaryRegister']['adhaar'] = $users['User']['frkUserAdhaarNo'];
+            $appenddata['PrimaryRegister']['blood'] = $users['User']['frkUserBloodGroup'];
+            $appenddata['PrimaryRegister']['religion'] = $users['User']['frkUserReligion'];
+            //$appenddata['PrimaryRegister']['religion-other'] = $users['User']['frkUserReligion'];
+            if ($users['User']['frkUserDOB'] != '0000-00-00') {
+                $appenddata['PrimaryRegister']['dob'] = date("d/m/Y", strtotime($users['User']['frkUserDOB']));
+            }
+            $appenddata['PrimaryRegister']['parent-name'] = $users['User']['frkParentName'];
+            $appenddata['PrimaryRegister']['parent-relation'] = $users['User']['frkParentRelation'];
+
+            if(!is_numeric($users['User']['frkParentOccupation'])) {
+                $this->set('other_occupation',$users['User']['frkParentOccupation']);
+                $appenddata['PrimaryRegister']['parent-occupation'] = 'other';
+            } else {
+                $appenddata['PrimaryRegister']['parent-occupation'] = $users['User']['frkParentOccupation'];
+            }
+
+            $appenddata['PrimaryRegister']['parent-income'] = $users['User']['frkParentIncome'];
+            //$appenddata['PrimaryRegister']['parent-occupation-other'] = $users['User']['frkParentOccupation'];
+            //$appenddata['PrimaryRegister']['father-occupation-other'] = $users['User']['frkFatherOccupation'];
+            $appenddata['PrimaryRegister']['gender'] = $users['User']['frkUserGender'];
+            $appenddata['PrimaryRegister']['mobile'] = $users['User']['frkUserMobile'];
+            $appenddata['PrimaryRegister']['nationality'] = $users['User']['frkUserNationality_ID'];
+            $appenddata['PrimaryRegister']['community'] = $users['User']['frkUserCommunity'];
+            $appenddata['PrimaryRegister']['caste'] = $users['User']['frkUserCasteID'];
+            //$appenddata['PrimaryRegister']['community-other'] = $users['User']['frkUserCommunity'];
+            $appenddata['PrimaryRegister']['placeofbirth'] = $users['User']['frkUserPOB'];
+            $appenddata['PrimaryRegister']['village'] = $users['User']['Village'];
+            $appenddata['PrimaryRegister']['taluk'] = $users['User']['Taluk'];
+            //$appenddata['PrimaryRegister']['mother-name'] = $users['User']['frkMotherName'];
+            //$appenddata['PrimaryRegister']['mother-qualification'] = $users['User']['frkMotherQualification'];
+            //$appenddata['PrimaryRegister']['mother-qualification-other'] = $users['User']['frkMotherQualification'];
+            //$appenddata['PrimaryRegister']['mother-occupation'] = $users['User']['frkMotherOccupation'];
+            //$appenddata['PrimaryRegister']['mother-occupation-other'] = $users['User']['frkMotherOccupation'];
+            $appenddata['PrimaryRegister']['perma-addline1'] = $users['User']['frkUserAddressline1'];
+            $appenddata['PrimaryRegister']['perma-addline2'] = $users['User']['frkUserAddressline2'];
+            $appenddata['PrimaryRegister']['perma-postoffice'] = $users['User']['frkUserTaluk'];
+            $appenddata['PrimaryRegister']['perma-pincode'] = $users['User']['frkUserPincode'];
+            $appenddata['PrimaryRegister']['perma-city'] = $users['User']['frkUserDistrict'];
+            $appenddata['PrimaryRegister']['perma-city-other'] = $users['User']['frkUserDistrict'];
+            $appenddata['PrimaryRegister']['perma-state'] = $users['User']['frkUserState'];
+            $appenddata['PrimaryRegister']['perma-state-other'] = $users['User']['frkUserState'];
+            $appenddata['PrimaryRegister']['perma-country'] = $users['User']['frkUserCountry_ID'];
+            $appenddata['PrimaryRegister']['comm-addline1'] = $users['User']['frkUserCommAddressline1'];
+            $appenddata['PrimaryRegister']['comm-addline2'] = $users['User']['frkUserCommAddressline2'];
+            $appenddata['PrimaryRegister']['comm-postoffice'] = $users['User']['frkUserCommTaluk'];
+            $appenddata['PrimaryRegister']['comm-pincode'] = $users['User']['frkUserCommPincode'];
+            $appenddata['PrimaryRegister']['comm-city'] = $users['User']['frkUserCommDistrict'];
+            $appenddata['PrimaryRegister']['comm-city-other'] = $users['User']['frkUserCommDistrict'];
+            $appenddata['PrimaryRegister']['comm-state'] = $users['User']['frkUserCommState'];
+            $appenddata['PrimaryRegister']['comm-state-other'] = $users['User']['frkUserCommState'];
+            $appenddata['PrimaryRegister']['comm-country'] = $users['User']['frkUserCommCountryID'];
+
+            $appenddata['PrimaryRegister']['parent-addline1'] = $users['User']['parent_address1'];
+            $appenddata['PrimaryRegister']['parent-addline2'] = $users['User']['parent_address2'];
+            $appenddata['PrimaryRegister']['parent-postoffice'] = $users['User']['parent_post'];
+            $appenddata['PrimaryRegister']['parent-pincode'] = $users['User']['parent_pin'];
+
+            $appenddata['PrimaryRegister']['local-addline1'] = $users['User']['local_address1'];
+            $appenddata['PrimaryRegister']['local-addline2'] = $users['User']['local_address2'];
+            $appenddata['PrimaryRegister']['local-postoffice'] = $users['User']['local_post'];
+            $appenddata['PrimaryRegister']['local-pincode'] = $users['User']['local_pin'];
+
+            $appenddata['PrimaryRegister']['phonestd'] = $users['User']['frkPhoneStd'];
+            $appenddata['PrimaryRegister']['phonenumber'] = $users['User']['frkPhoneNumber'];
+            if ($applicant != null) {
+                //$appenddata['PrimaryRegister']['qualifyingexam'] = $applicant['Applicant']['frkTenth'];
+                //$appenddata['PrimaryRegister']['otherqualifyingexam'] = $applicant['Applicant']['frkTenth'];
+                $appenddata['PrimaryRegister']['ten-school'] = $applicant['Applicant']['frkTenthSchool'];
+                //$appenddata['PrimaryRegister']['tenyearofstudy'] = $applicant['Applicant']['frkTenthYOS'];
+                $appenddata['PrimaryRegister']['TenYearofPassing'] = $applicant['Applicant']['frlTenthYOP'];
+                $appenddata['PrimaryRegister']['tenthRegno'] = $applicant['Applicant']['frkTenthRegno'];
+                $appenddata['PrimaryRegister']['tenthRegno'] = $applicant['Applicant']['frkTenthRegno'];
+                $appenddata['PrimaryRegister']['tenthRegno'] = $applicant['Applicant']['frkTenthRegno'];
+                $appenddata['PrimaryRegister']['tenthParcentage'] = $applicant['Applicant']['tenthParcentage'];
+                //$appenddata['PrimaryRegister']['tenthMaxMarks'] = $applicant['Applicant']['TenthMaxMarks'];
+                $appenddata['PrimaryRegister']['caste'] = $users['User']['frkUserCasteID'];
+
+                $appenddata['PrimaryRegister']['plusTwo-school'] = $applicant['Applicant']['plusTwoSchool'];
+                $appenddata['PrimaryRegister']['plusTwoStream'] = $applicant['Applicant']['plusTwoStream'];
+                $appenddata['PrimaryRegister']['plusTwoRegno'] = $applicant['Applicant']['plusTwoRegno'];
+                $appenddata['PrimaryRegister']['plusTwoBoard'] = $applicant['Applicant']['plusTwoBoard'];
+                //$appenddata['PrimaryRegister']['plusTwoTotalMarks'] = $applicant['Applicant']['plusTwoTotalMarks'];
+                $appenddata['PrimaryRegister']['plusTwoPercentage'] = $applicant['Applicant']['plusTwoPercentage'];
+                $appenddata['PrimaryRegister']['plusTwoYearofPassing'] = $applicant['Applicant']['plusTwoYOP'];
+                
+
+
+
+
+//$appenddata['PrimaryRegister']['carrer-ambition'] = $applicant['Applicant']['frkApplicantAmbition'];
+                //$appenddata['PrimaryRegister']['other-carrer-ambition'] = $applicant['Applicant']['frkApplicantAmbition'];
+            }
+            $countries = $this->Country->find('list', array('fields' => array('id', 'country_name')));
+            $religions = $this->Religion->find('list', array('fields' => array('id', 'name')));
+            $qualifications = $this->Qualification->find('list', array('fields' => array('id', 'name')));
+            $occupations = $this->Occupation->find('list', array('fields' => array('id', 'name')));
+            $communities = $this->Final_community->find('list', array('fields' => array('id', 'name')));
+            $states = $this->State->find('list', array('fields' => array('id', 'name')));
+            $districts = $this->District->find('list', array('fields' => array('id', 'name')));
+            //$ambitions = $this->Ambition->find('list', array('fields' => array('id', 'name')));
+            $streams = $this->Stream->find('list', array('fields' => array('id', 'name')));
+            $boards= $this->Board->find('list', array('fields' => array('id', 'name')));
+            $universities=$this->University->find('list',array('fields'=>array('id','name')));
+            $degrees=$this->Degree->find('list',array('fields'=>array('id','name')));
+
+
+            //$communities['other'] = 'Other';
+            //$religions['other'] = 'Other';
+            //$qualifications['other'] = 'Other';
+            $occupations['other'] = 'Other';
+            $states['other'] = 'Other';
+            $districts['other'] = 'Other';
+            //$universities['other']='Other';
+            
+            //$ambitions['other'] = 'Other';
+            if ($this->request->is('post')) {
+                //pr($this->request->data); exit;
+                $userRelegion = $this->request->data['PrimaryRegister']['religion'];
+                $userCommunity = $this->request->data['PrimaryRegister']['community'];
+
+                if ($this->request->data['PrimaryRegister']['parent-occupation'] != 'other') {
+                    $frkParentOccupation = $this->request->data['PrimaryRegister']['parent-occupation'];
+                } else {
+                    $frkParentOccupation = $this->request->data['PrimaryRegister']['parent-occupation-other'];
+                }
+                
+                if ($this->request->data['PrimaryRegister']['perma-state'] != 'other') {
+                    $PermaState = $this->request->data['PrimaryRegister']['perma-state'];
+                } else {
+                    $PermaState = $this->request->data['PrimaryRegister']['perma-state-other'];
+                }
+                if ($this->request->data['PrimaryRegister']['comm-state'] != 'other') {
+                    $CommState = $this->request->data['PrimaryRegister']['comm-state'];
+                } else {
+                    $CommState = $this->request->data['PrimaryRegister']['comm-state-other'];
+                }
+                if ($this->request->data['PrimaryRegister']['comm-city'] != 'other') {
+                    $CommCity = $this->request->data['PrimaryRegister']['comm-city'];
+                } else {
+                    $CommCity = $this->request->data['PrimaryRegister']['comm-city-other'];
+                }
+                if ($this->request->data['PrimaryRegister']['perma-city'] != 'other') {
+                    $PermaCity = $this->request->data['PrimaryRegister']['perma-city'];
+                } else {
+                    $PermaCity = $this->request->data['PrimaryRegister']['perma-city-other'];
+                }
+
+                $dob = $this->request->data['PrimaryRegister']['dob'];
+                $date = str_replace('/', '-', $dob);
+                $newdob = date('Y-m-d', strtotime($date));
+                
+                
+                
+                $frkUserName=str_replace("'","",$this->request->data['PrimaryRegister']['name']);
+                $frkUserName=str_replace(","," ",$frkUserName);
+                $frkUserName=trim($frkUserName);
+                
+                $userTabaleSaveData = array(
+                    'frkUserName' => "'" . $frkUserName . "'",
+                    //'frkUserEmail' => "'" . $this->request->data['PrimaryRegister']['email'] . "'",
+                    //'frkUserAdhaarNo' => "'" . $this->request->data['PrimaryRegister']['adhaar'] . "'",
+                    'frkUserBloodGroup' => "'" . $this->request->data['PrimaryRegister']['blood'] . "'",
+                    'frkUserReligion' => "'" . $userRelegion . "'",
+                    'frkUserDOB' => "'" . $newdob . "'",
+                    'frkParentName' => "'" . $this->request->data['PrimaryRegister']['parent-name'] . "'",
+                    'frkParentRelation' => "'" . $this->request->data['PrimaryRegister']['parent-relation'] . "'",
+                    'frkParentOccupation' => "'" . $frkParentOccupation . "'",
+                    'frkParentIncome' => "'" . $this->request->data['PrimaryRegister']['parent-income'] . "'",
+                    'frkUserGender' => "'" . $this->request->data['PrimaryRegister']['gender'] . "'",
+                    'frkUserMobile' => "'" . $this->request->data['PrimaryRegister']['mobile'] . "'",
+                    'Village' => "'" . $this->request->data['PrimaryRegister']['village'] . "'",
+                    'Taluk' => "'" . $this->request->data['PrimaryRegister']['taluk'] . "'",
+                    'frkUserNationality_ID' => $this->request->data['PrimaryRegister']['nationality'],
+                    'frkUserCommunity' => "'" . $userCommunity . "'",
+                    'frkUserCasteID' => $this->request->data['PrimaryRegister']['caste'],
+                    'frkUserPOB' => "'" . $this->request->data['PrimaryRegister']['placeofbirth'] . "'",
+                    //'frkMotherName' => "'" . $this->request->data['PrimaryRegister']['mother-name'] . "'",
+                    //'frkMotherQualification' => "'" . $userMotherQualification . "'",
+                    //'frkMotherOccupation' => "'" . $userMotherOccupation . "'",
+                    'frkUserAddressline1' => "'" . $this->request->data['PrimaryRegister']['perma-addline1'] . "'",
+                    'frkUserAddressline2' => "'" . $this->request->data['PrimaryRegister']['perma-addline2'] . "'",
+                    'frkUserTaluk' => "'" . $this->request->data['PrimaryRegister']['perma-postoffice'] . "'",
+                    'frkUserDistrict' => "'" . $PermaCity . "'",
+                    'frkUserState' => "'" . $PermaState . "'",
+                    'frkUserPincode' => "'" . $this->request->data['PrimaryRegister']['perma-pincode'] . "'",
+                    'frkUserCountry_ID' => $this->request->data['PrimaryRegister']['perma-country'],
+                    'frkUserCommAddressline1' => "'" . $this->request->data['PrimaryRegister']['comm-addline1'] . "'",
+                    'frkUserCommAddressline2' => "'" . $this->request->data['PrimaryRegister']['comm-addline2'] . "'",
+                    'frkUserCommTaluk' => "'" . $this->request->data['PrimaryRegister']['comm-postoffice'] . "'",
+                    'frkUserCommDistrict' => "'" . $CommCity . "'",
+                    'frkUserCommState' => "'" . $CommState . "'",
+                    'frkUserCommPincode' => "'" . $this->request->data['PrimaryRegister']['comm-pincode'] . "'",
+                    'frkUserCommCountryID' => $this->request->data['PrimaryRegister']['comm-country'],
+                    'parent_address1' => "'" . $this->request->data['PrimaryRegister']['parent-addline1'] . "'",
+                    'parent_address2' => "'" . $this->request->data['PrimaryRegister']['parent-addline2'] . "'",
+                    'parent_post' => "'" . $this->request->data['PrimaryRegister']['parent-postoffice'] . "'",
+                    'parent_pin' => "'" . $this->request->data['PrimaryRegister']['parent-pincode'] . "'",
+                    'local_address1' => "'" . $this->request->data['PrimaryRegister']['local-addline1'] . "'",
+                    'local_address2' => "'" . $this->request->data['PrimaryRegister']['local-addline2'] . "'",
+                    'local_post' => "'" . $this->request->data['PrimaryRegister']['local-postoffice'] . "'",
+                    'local_pin' => "'" . $this->request->data['PrimaryRegister']['local-pincode'] . "'",
+                    'frkPhoneStd' => "'" . $this->request->data['PrimaryRegister']['phonestd'] . "'",
+                    'frkPhoneNumber' => "'" . $this->request->data['PrimaryRegister']['phonenumber'] . "'",
+                );
+                
+                $applicantdetails = $this->Applicant->find('first', array(
+                    'conditions' => array(
+                        'Applicant.frkUserID' => $userid
+                    )
+                        ));
+                
+
+                $cnd = array(
+                    'User.frkUserID' => $userid,
+                );
+                $cnd2 = array(
+                    'Applicant.frkUserID' => $userid,
+                );
+                $usersaved=$this->User->updateAll($userTabaleSaveData, $cnd);
+                /*if (!$this->User->updateAll($userTabaleSaveData, $cnd)) {
+                    $this->Session->setFlash(__('Could not Save Application Data'));
+                    return $this->redirect(array('action' => 'primary_registration'));
+                }*/
+
+
+
+
+                if ($this->request->data['PrimaryRegister']['plusTwoBoard'] != 'other') {
+                    $plusTwoBoard = $this->request->data['PrimaryRegister']['plusTwoBoard'];
+                } else {
+                    $plusTwoBoard = $this->request->data['PrimaryRegister']['otherPlusTwoBoard'];
+                }
+
+
+
+
+                if (count($applicantdetails) > 0) {
+                        $frkTenthSchool=str_replace("'","`",$this->request->data['PrimaryRegister']['ten-school']);
+                        $plusTwoSchool=str_replace("'","`",$this->request->data['PrimaryRegister']['plusTwo-school']);
+                        $frkTenthSchool=str_replace(",",".",$frkTenthSchool);
+                        $plusTwoSchool=str_replace(",",".",$plusTwoSchool);
+                    $ApplicantTableData = array(
+                        //'frkApplicantAmbition' => "'" . $careerAmbition . "'",
+                        'frkTenthSchool' => "'".$frkTenthSchool."'",
+                        'frkTenthRegno' => "'".$this->request->data['PrimaryRegister']['tenthRegno']."'",
+                        //'frkTenthYOS' => "'" . $this->request->data['PrimaryRegister']['tenyearofstudy'] . "'",
+                        'frlTenthYOP' => "'".$this->request->data['PrimaryRegister']['TenYearofPassing']."'",
+                        //'TenthTotalMarks' => "'" . $this->request->data['PrimaryRegister']['tenthTotalMarks'] . "'",
+                        'tenthParcentage' => "'".$this->request->data['PrimaryRegister']['tenthParcentage']."'",
+                        'plusTwoSchool' => "'".$plusTwoSchool."'",
+                        'plusTwoStream' => "'".$this->request->data['PrimaryRegister']['plusTwoStream']."'",
+                        'plusTwoRegno' => "'".$this->request->data['PrimaryRegister']['plusTwoRegno']."'",
+                        'plusTwoBoard' => "'".$plusTwoBoard."'",
+                        //'plusTwoTotalMarks' => $this->request->data['PrimaryRegister']['plusTwoTotalMarks'],
+                        'plusTwoPercentage' => "'".$this->request->data['PrimaryRegister']['plusTwoPercentage']."'",
+                        'plusTwoYOP' => "'".$this->request->data['PrimaryRegister']['plusTwoYearofPassing']."'",
+
+                    );
+                    $applicantsaved=$this->Applicant->updateAll($ApplicantTableData, $cnd2);
+                    /*if (!$this->Applicant->updateAll($ApplicantTableData, $cnd2)) {
+                        $this->Session->setFlash(__('Could not Save Application Data'));
+                        return $this->redirect(array('action' => 'primary_registration'));
+                    }*/
+                } else {
+                    $result=$this->Choice->find('first',array('conditions'=>array('user_id'=>$userid),
+                        'fields'=>array('application_no')
+                        ));
+                    $ApplicationNumber=$result['Choice']['application_no'];
+                    $frkTenthSchool=str_replace("'","`",$this->request->data['PrimaryRegister']['ten-school']);
+                    $plusTwoSchool=str_replace("'","`",$this->request->data['PrimaryRegister']['plusTwo-school']);
+                    $frkTenthSchool=str_replace(",",".",$frkTenthSchool);
+                    $plusTwoSchool=str_replace(",",".",$plusTwoSchool);
+
+                    $ApplicantTableData = array(
+                        'frkUserID' => $userid,
+                        //'frkApplicantAmbition' => $careerAmbition,
+                        'frkApplicationNumber' => $ApplicationNumber,
+                        'frkTenthSchool' =>$frkTenthSchool,
+                        'frkTenthRegno' => $this->request->data['PrimaryRegister']['tenthRegno'],
+                        //'frkTenthYOS' => "'" . $this->request->data['PrimaryRegister']['tenyearofstudy'] . "'",
+                        'frlTenthYOP' => $this->request->data['PrimaryRegister']['TenYearofPassing'],
+                        //'TenthTotalMarks' => $this->request->data['PrimaryRegister']['tenthTotalMarks'],
+                        'tenthParcentage' => $this->request->data['PrimaryRegister']['tenthParcentage'],
+                        'plusTwoSchool' => $plusTwoSchool,
+                        'plusTwoStream' => $this->request->data['PrimaryRegister']['plusTwoStream'],
+                        'plusTwoRegno' => $this->request->data['PrimaryRegister']['plusTwoRegno'],
+                        'plusTwoBoard' => $plusTwoBoard,
+                        //'plusTwoTotalMarks' => $this->request->data['PrimaryRegister']['plusTwoTotalMarks'],
+                        'plusTwoPercentage' => $this->request->data['PrimaryRegister']['plusTwoPercentage'],
+                        'plusTwoYOP' => $this->request->data['PrimaryRegister']['plusTwoYearofPassing'],
+                    );
+                    $this->Applicant->create();
+                    $applicantsaved=$this->Applicant->save($ApplicantTableData);
+                     
+                }
+
+                $marks=$this->Mark->find('first',array('conditions'=>array('user_id'=>$userid)));
+                
+                if(empty($marks)) {
+                    $institution=str_replace("'","`",$this->request->data['PrimaryRegister']['degree_institute']);
+                    $institution=str_replace(",",".",$institution);
+                    if($this->request->data['mark_grade']=='M') {
+                        if($this->request->data['main_system']==1) {
+                            if($this->request->data['PrimaryRegister']['degree']==2 || $this->request->data['PrimaryRegister']['degree']==4 || $this->request->data['PrimaryRegister']['degree']==5) { // B com or bba or bmmc
+                            $markSaveData=array(
+                                'user_id'=>$this->Session->read('User.userid'),
+                                'university_id'=>$this->request->data['PrimaryRegister']['University'],
+                                'degree_id'=>$this->request->data['PrimaryRegister']['degree'],
+                                'institution'=>$institution,
+                                'mark_grade'=>$this->request->data['mark_grade'],
+                                'main'=>$this->request->data['main_system'],
+                                'main1_sub'=>'Core',
+                                'main1_mark'=>$this->request->data['core_marks'],
+                                'main1_max'=>$this->request->data['core_max'],
+                                'comp1_sub'=>'Complementary',
+                                'comp1_mark'=>$this->request->data['comp1_marks'],
+                                'comp1_max'=>$this->request->data['comp1_max'],
+                                'part1_sub'=>$this->request->data['PrimaryRegister']['part_one_subject'],
+                                'part1_mark'=>$this->request->data['part_one_marks'],
+                                'part1_max'=>$this->request->data['part_one_max'],
+                                'part2_sub'=>$this->request->data['PrimaryRegister']['part_two_subject'],
+                                'part2_mark'=>$this->request->data['part_two_marks'],
+                                'part2_max'=>$this->request->data['part_two_max'],
+
+                                );
+                        
+                        
+                    } else {
+                        $markSaveData=array(
+                                'user_id'=>$this->Session->read('User.userid'),
+                                'university_id'=>$this->request->data['PrimaryRegister']['University'],
+                                'degree_id'=>$this->request->data['PrimaryRegister']['degree'],
+                                'institution'=>$institution,
+                                'mark_grade'=>$this->request->data['mark_grade'],
+                                'main'=>$this->request->data['main_system'],
+                                'main1_sub'=>$this->request->data['PrimaryRegister']['singleMainSubject1'],
+                                'main1_mark'=>$this->request->data['core_marks'],
+                                'main1_max'=>$this->request->data['core_max'],
+                                'comp1_sub'=>$this->request->data['PrimaryRegister']['singleCompSubject1'],
+                                'comp1_mark'=>$this->request->data['comp1_marks'],
+                                'comp1_max'=>$this->request->data['comp1_max'],
+                                'comp2_sub'=>$this->request->data['PrimaryRegister']['singleCompSubject2'],
+                                'comp2_mark'=>$this->request->data['comp2_marks'],
+                                'comp2_max'=>$this->request->data['comp2_max'],
+                                'part1_sub'=>$this->request->data['PrimaryRegister']['part_one_subject'],
+                                'part1_mark'=>$this->request->data['part_one_marks'],
+                                'part1_max'=>$this->request->data['part_one_max'],
+                                'part2_sub'=>$this->request->data['PrimaryRegister']['part_two_subject'],
+                                'part2_mark'=>$this->request->data['part_two_marks'],
+                                'part2_max'=>$this->request->data['part_two_max'],
+
+                                );
+                    }
+                        $this->Mark->create();
+                        $marksaved=$this->Mark->save($markSaveData);
+
+                        } else if($this->request->data['main_system']==2) {
+                            $markSaveData=array(
+                                'user_id'=>$this->Session->read('User.userid'),
+                                'university_id'=>$this->request->data['PrimaryRegister']['University'],
+                                'degree_id'=>$this->request->data['PrimaryRegister']['degree'],
+                                'institution'=>$institution,
+                                'mark_grade'=>$this->request->data['mark_grade'],
+                                'main'=>$this->request->data['main_system'],
+                                'main1_sub'=>$this->request->data['PrimaryRegister']['doubleMainSubject1'],
+                                'main1_mark'=>$this->request->data['core1_marks'],
+                                'main1_max'=>$this->request->data['core1_max'],
+                                'main2_sub'=>$this->request->data['PrimaryRegister']['doubleMainSubject2'],
+                                'main2_mark'=>$this->request->data['core2_marks'],
+                                'main2_max'=>$this->request->data['core2_max'],
+                                'comp1_sub'=>$this->request->data['PrimaryRegister']['doubleCompSubject1'],
+                                'comp1_mark'=>$this->request->data['comp1_marks'],
+                                'comp1_max'=>$this->request->data['comp1_max'],
+                                'part1_sub'=>$this->request->data['PrimaryRegister']['part_one_subject'],
+                                'part1_mark'=>$this->request->data['part_one_marks'],
+                                'part1_max'=>$this->request->data['part_one_max'],
+                                'part2_sub'=>$this->request->data['PrimaryRegister']['part_two_subject'],
+                                'part2_mark'=>$this->request->data['part_two_marks'],
+                                'part2_max'=>$this->request->data['part_two_max'],
+
+                                );
+                            $this->Mark->create();
+                            $marksaved=$this->Mark->save($markSaveData);
+                            
+                        } else if($this->request->data['main_system']==3) {
+                            $markSaveData=array(
+                                'user_id'=>$this->Session->read('User.userid'),
+                                'university_id'=>$this->request->data['PrimaryRegister']['University'],
+                                'degree_id'=>$this->request->data['PrimaryRegister']['degree'],
+                                'institution'=>$institution,
+                                'mark_grade'=>$this->request->data['mark_grade'],
+                                'main'=>$this->request->data['main_system'],
+                                'main1_sub'=>$this->request->data['PrimaryRegister']['tripleMainSubject1'],
+                                'main1_mark'=>$this->request->data['core1_marks'],
+                                'main1_max'=>$this->request->data['core1_max'],
+                                'main2_sub'=>$this->request->data['PrimaryRegister']['tripleMainSubject2'],
+                                'main2_mark'=>$this->request->data['core2_marks'],
+                                'main2_max'=>$this->request->data['core2_max'],
+                                'main3_sub'=>$this->request->data['PrimaryRegister']['tripleMainSubject3'],
+                                'main3_mark'=>$this->request->data['core3_marks'],
+                                'main3_max'=>$this->request->data['core3_max'],
+                                'part1_sub'=>$this->request->data['PrimaryRegister']['part_one_subject'],
+                                'part1_mark'=>$this->request->data['part_one_marks'],
+                                'part1_max'=>$this->request->data['part_one_max'],
+                                'part2_sub'=>$this->request->data['PrimaryRegister']['part_two_subject'],
+                                'part2_mark'=>$this->request->data['part_two_marks'],
+                                'part2_max'=>$this->request->data['part_two_max'],
+
+                                );
+                            $this->Mark->create();
+                            $marksaved=$this->Mark->save($markSaveData);
+                            
+                        }
+                    } else if($this->request->data['mark_grade']=='G') {
+                        if($this->request->data['main_system']==1) {
+                            //if($this->request->data['PrimaryRegister']['degree']!=2 && $this->request->data['PrimaryRegister']['degree']!=4 && $this->request->data['PrimaryRegister']['degree']!=5) { // Not B com, bba and bmmc
+                            $markSaveData=array();
+                                $markSaveData['user_id']=$this->Session->read('User.userid');
+                                $markSaveData['university_id']=$this->request->data['PrimaryRegister']['University'];
+                                $markSaveData['degree_id']=$this->request->data['PrimaryRegister']['degree'];
+                                $markSaveData['institution']=$institution;
+                                $markSaveData['mark_grade']=$this->request->data['mark_grade'];
+                                $markSaveData['main']=$this->request->data['main_system'];
+                                if($this->request->data['PrimaryRegister']['degree']!=2 && $this->request->data['PrimaryRegister']['degree']!=4 && $this->request->data['PrimaryRegister']['degree']!=5 && $this->request->data['PrimaryRegister']['degree']!=6) { // Not B com, bba, bca and bmmc
+                                    if($this->request->data['PrimaryRegister']['University']!=4) {
+                                        $markSaveData['main1_sub']=$this->request->data['PrimaryRegister']['singleMainSubject1'];
+                                        $markSaveData['main1_credit']=$this->request->data['core_credit'];
+                                        $markSaveData['main1_cgpa']=$this->request->data['core_cgpa'];
+                                        $markSaveData['comp1_sub']=$this->request->data['PrimaryRegister']['singleCompSubject1'];
+                                        $markSaveData['comp1_credit']=$this->request->data['comp1_credit'];
+                                        $markSaveData['comp1_cgpa']=$this->request->data['comp1_cgpa'];
+                                        $markSaveData['comp2_sub']=$this->request->data['PrimaryRegister']['singleCompSubject2'];
+                                        $markSaveData['comp2_credit']=$this->request->data['comp2_credit'];
+                                        $markSaveData['comp2_cgpa']=$this->request->data['comp2_cgpa'];
+                                        if($this->request->data['PrimaryRegister']['University']!=5) {
+                                            $markSaveData['open_sub']=$this->request->data['PrimaryRegister']['open_course'];
+                                            $markSaveData['open_credit']=$this->request->data['open_course_credit'];
+                                            $markSaveData['open_cgpa']=$this->request->data['open_course_cgpa'];
+                                        }
+
+                                        $markSaveData['common_sub']=$this->request->data['PrimaryRegister']['common_course'];
+                                        $markSaveData['common_credit']=$this->request->data['common_course_credit'];
+                                        $markSaveData['common_cgpa']=$this->request->data['common_course_cgpa'];
+                                        $markSaveData['com_other_sub']=$this->request->data['PrimaryRegister']['common_course_other'];
+                                        $markSaveData['com_other_credit']=$this->request->data['common_course_other_credit'];
+                                        $markSaveData['com_other_cgpa']=$this->request->data['common_course_other_cgpa'];
+                                        $markSaveData['add_common_course_sub']=$this->request->data['PrimaryRegister']['additional_common_course'];
+                                        $markSaveData['add_common_course_credit']=$this->request->data['add_common_course_credit'];
+                                        $markSaveData['add_common_course_cgpa']=$this->request->data['add_common_course_cgpa'];
+                                        $markSaveData['overall_credit']=$this->request->data['overall_credit'];
+                                        $markSaveData['overall_cgpa']=$this->request->data['overall_cgpa'];
+                                    } else {
+                                        $markSaveData['main1_sub']=$this->request->data['PrimaryRegister']['part_three_main'];
+                                        $markSaveData['main1_credit']=$this->request->data['core_credit'];
+                                        $markSaveData['main1_cgpa']=$this->request->data['core_cgpa'];
+                                        $markSaveData['comp1_sub']=$this->request->data['PrimaryRegister']['part_three_sub1'];
+                                        $markSaveData['comp1_credit']=$this->request->data['comp1_credit'];
+                                        $markSaveData['comp1_cgpa']=$this->request->data['comp1_cgpa'];
+                                        $markSaveData['comp2_sub']=$this->request->data['PrimaryRegister']['part_three_sub2'];
+                                        $markSaveData['comp2_credit']=$this->request->data['comp2_credit'];
+                                        $markSaveData['comp2_cgpa']=$this->request->data['comp2_cgpa'];
+
+                                        $markSaveData['common_sub']=$this->request->data['PrimaryRegister']['part_one_english'];
+                                        $markSaveData['common_credit']=$this->request->data['part_one_credit'];
+                                        $markSaveData['common_cgpa']=$this->request->data['part_one_cgpa'];
+                                        $markSaveData['com_other_sub']=$this->request->data['PrimaryRegister']['part_two_lang'];
+                                        $markSaveData['com_other_credit']=$this->request->data['part_two_lang_credit'];
+                                        $markSaveData['com_other_cgpa']=$this->request->data['part_two_lang_cgpa'];
+                                        $markSaveData['add_common_course_sub']=$this->request->data['PrimaryRegister']['part_two_other'];
+                                        $markSaveData['add_common_course_credit']=$this->request->data['part_two_other_credit'];
+                                        $markSaveData['add_common_course_cgpa']=$this->request->data['part_two_other_cgpa'];
+                                        $markSaveData['overall_credit']=$this->request->data['overall_credit'];
+                                        $markSaveData['overall_cgpa']=$this->request->data['overall_cgpa'];
+
+                                    }
+
+                                    
+                                    
+                                } else if($this->request->data['PrimaryRegister']['degree']==2 || $this->request->data['PrimaryRegister']['degree']==4 || $this->request->data['PrimaryRegister']['degree']==5 || $this->request->data['PrimaryRegister']['degree']==6) { // B com or bba or bmmc or bca
+                                    if($this->request->data['PrimaryRegister']['University']!=4) {
+                                        $markSaveData['main1_sub']='Core';
+                                        $markSaveData['main1_credit']=$this->request->data['core_credit'];
+                                        $markSaveData['main1_cgpa']=$this->request->data['core_cgpa'];
+                                        $markSaveData['comp1_sub']='Complementary';
+                                        $markSaveData['comp1_credit']=$this->request->data['comp1_credit'];
+                                        $markSaveData['comp1_cgpa']=$this->request->data['comp1_cgpa'];
+                                        if($this->request->data['PrimaryRegister']['University']!=5) {
+                                            $markSaveData['open_sub']=$this->request->data['PrimaryRegister']['open_course'];
+                                            $markSaveData['open_credit']=$this->request->data['open_course_credit'];
+                                            $markSaveData['open_cgpa']=$this->request->data['open_course_cgpa'];
+                                        }
+
+                                        $markSaveData['common_sub']=$this->request->data['PrimaryRegister']['common_course'];
+                                        $markSaveData['common_credit']=$this->request->data['common_course_credit'];
+                                        $markSaveData['common_cgpa']=$this->request->data['common_course_cgpa'];
+                                        $markSaveData['com_other_sub']=$this->request->data['PrimaryRegister']['common_course_other'];
+                                        $markSaveData['com_other_credit']=$this->request->data['common_course_other_credit'];
+                                        $markSaveData['com_other_cgpa']=$this->request->data['common_course_other_cgpa'];
+                                        $markSaveData['add_common_course_sub']=$this->request->data['PrimaryRegister']['additional_common_course'];
+                                        $markSaveData['add_common_course_credit']=$this->request->data['add_common_course_credit'];
+                                        $markSaveData['add_common_course_cgpa']=$this->request->data['add_common_course_cgpa'];
+                                        $markSaveData['overall_credit']=$this->request->data['overall_credit'];
+                                        $markSaveData['overall_cgpa']=$this->request->data['overall_cgpa'];
+                                    } else {
+                                        $markSaveData['main1_sub']=$this->request->data['PrimaryRegister']['com_part_three_main'];
+                                        $markSaveData['main1_credit']=$this->request->data['core_credit'];
+                                        $markSaveData['main1_cgpa']=$this->request->data['core_cgpa'];
+                                        $markSaveData['comp1_sub']=$this->request->data['PrimaryRegister']['com_part_three_sub1'];
+                                        $markSaveData['comp1_credit']=$this->request->data['comp1_credit'];
+                                        $markSaveData['comp1_cgpa']=$this->request->data['comp1_cgpa'];
+                                        $markSaveData['comp2_sub']=$this->request->data['PrimaryRegister']['com_part_three_sub2'];
+                                        $markSaveData['comp2_credit']=$this->request->data['comp2_credit'];
+                                        $markSaveData['comp2_cgpa']=$this->request->data['comp2_cgpa'];
+
+                                        $markSaveData['add_common_course_sub']=$this->request->data['PrimaryRegister']['part_two_other'];
+                                        $markSaveData['add_common_course_credit']=$this->request->data['part_two_other_credit'];
+                                        $markSaveData['add_common_course_cgpa']=$this->request->data['part_two_other_cgpa'];
+                                        $markSaveData['common_sub']=$this->request->data['PrimaryRegister']['part_one_english'];
+                                        $markSaveData['common_credit']=$this->request->data['part_one_credit'];
+                                        $markSaveData['common_cgpa']=$this->request->data['part_one_cgpa'];
+                                        $markSaveData['com_other_sub']=$this->request->data['PrimaryRegister']['part_two_lang'];
+                                        $markSaveData['com_other_credit']=$this->request->data['part_two_lang_credit'];
+                                        $markSaveData['com_other_cgpa']=$this->request->data['part_two_lang_cgpa'];
+                                        $markSaveData['overall_credit']=$this->request->data['overall_credit'];
+                                        $markSaveData['overall_cgpa']=$this->request->data['overall_cgpa'];
+                                        
+                                    }
+                                    
+                                    
+                                }
+                                
+
+                            $this->Mark->create();
+                            $marksaved=$this->Mark->save($markSaveData);
+
+                        } else if($this->request->data['main_system']==2) {
+                            $markSaveData=array();
+
+                                $markSaveData['user_id']=$this->Session->read('User.userid');
+                                $markSaveData['university_id']=$this->request->data['PrimaryRegister']['University'];
+                                $markSaveData['degree_id']=$this->request->data['PrimaryRegister']['degree'];
+                                $markSaveData['institution']=$institution;
+                                $markSaveData['mark_grade']=$this->request->data['mark_grade'];
+                                $markSaveData['main']=$this->request->data['main_system'];
+                                $markSaveData['main1_sub']=$this->request->data['PrimaryRegister']['doubleMainSubject1'];
+                                $markSaveData['main1_credit']=$this->request->data['core1_credit'];
+                                $markSaveData['main1_cgpa']=$this->request->data['core1_cgpa'];
+                                $markSaveData['main2_sub']=$this->request->data['PrimaryRegister']['doubleMainSubject2'];
+                                $markSaveData['main2_credit']=$this->request->data['core2_credit'];
+                                $markSaveData['main2_cgpa']=$this->request->data['core2_cgpa'];
+                                $markSaveData['comp1_sub']=$this->request->data['PrimaryRegister']['doubleCompSubject1'];
+                                $markSaveData['comp1_credit']=$this->request->data['comp1_credit'];
+                                $markSaveData['comp1_cgpa']=$this->request->data['comp1_cgpa'];
+                                $markSaveData['common_sub']=$this->request->data['PrimaryRegister']['common_course'];
+                                $markSaveData['common_credit']=$this->request->data['common_course_credit'];
+                                $markSaveData['common_cgpa']=$this->request->data['common_course_cgpa'];
+                                $markSaveData['com_other_sub']=$this->request->data['PrimaryRegister']['common_course_other'];
+                                $markSaveData['com_other_credit']=$this->request->data['common_course_other_credit'];
+                                $markSaveData['com_other_cgpa']=$this->request->data['common_course_other_cgpa'];
+                                $markSaveData['add_common_course_sub']=$this->request->data['PrimaryRegister']['additional_common_course'];
+                                $markSaveData['add_common_course_credit']=$this->request->data['add_common_course_credit'];
+                                $markSaveData['add_common_course_cgpa']=$this->request->data['add_common_course_cgpa'];
+                                if($this->request->data['PrimaryRegister']['University']!=5) {
+                                    $markSaveData['open_sub']=$this->request->data['PrimaryRegister']['open_course'];
+                                    $markSaveData['open_credit']=$this->request->data['open_course_credit'];
+                                    $markSaveData['open_cgpa']=$this->request->data['open_course_cgpa'];
+                                }
+                                $markSaveData['overall_credit']=$this->request->data['overall_credit'];
+                                $markSaveData['overall_cgpa']=$this->request->data['overall_cgpa'];
+
+                            $this->Mark->create();
+                            $marksaved=$this->Mark->save($markSaveData);
+
+                        } else if($this->request->data['main_system']==3) {
+                            $markSaveData=array();
+                                $markSaveData['user_id']=$this->Session->read('User.userid');
+                                $markSaveData['university_id']=$this->request->data['PrimaryRegister']['University'];
+                                $markSaveData['degree_id']=$this->request->data['PrimaryRegister']['degree'];
+                                $markSaveData['institution']=$institution;
+                                $markSaveData['mark_grade']=$this->request->data['mark_grade'];
+                                $markSaveData['main']=$this->request->data['main_system'];
+                                $markSaveData['main1_sub']=$this->request->data['PrimaryRegister']['tripleMainSubject1'];
+                                $markSaveData['main1_credit']=$this->request->data['core1_credit'];
+                                $markSaveData['main1_cgpa']=$this->request->data['core1_cgpa'];
+                                $markSaveData['main2_sub']=$this->request->data['PrimaryRegister']['tripleMainSubject2'];
+                                $markSaveData['main2_credit']=$this->request->data['core2_credit'];
+                                $markSaveData['main2_cgpa']=$this->request->data['core2_cgpa'];
+                                $markSaveData['main3_sub']=$this->request->data['PrimaryRegister']['tripleMainSubject3'];
+                                $markSaveData['main3_credit']=$this->request->data['core3_credit'];
+                                $markSaveData['main3_cgpa']=$this->request->data['core3_cgpa'];
+                                $markSaveData['common_sub']=$this->request->data['PrimaryRegister']['common_course'];
+                                $markSaveData['common_credit']=$this->request->data['common_course_credit'];
+                                $markSaveData['common_cgpa']=$this->request->data['common_course_cgpa'];
+                                $markSaveData['com_other_sub']=$this->request->data['PrimaryRegister']['common_course_other'];
+                                $markSaveData['com_other_credit']=$this->request->data['common_course_other_credit'];
+                                $markSaveData['com_other_cgpa']=$this->request->data['common_course_other_cgpa'];
+                                $markSaveData['add_common_course_sub']=$this->request->data['PrimaryRegister']['additional_common_course'];
+                                $markSaveData['add_common_course_credit']=$this->request->data['add_common_course_credit'];
+                                $markSaveData['add_common_course_cgpa']=$this->request->data['add_common_course_cgpa'];
+                                if($this->request->data['PrimaryRegister']['University']!=5) {
+                                    $markSaveData['open_sub']=$this->request->data['PrimaryRegister']['open_course'];
+                                    $markSaveData['open_credit']=$this->request->data['open_course_credit'];
+                                    $markSaveData['open_cgpa']=$this->request->data['open_course_cgpa'];
+                                }
+                                $markSaveData['overall_credit']=$this->request->data['overall_credit'];
+                                $markSaveData['overall_cgpa']=$this->request->data['overall_cgpa'];
+                                
+
+                            $this->Mark->create();
+                            $marksaved=$this->Mark->save($markSaveData);
+                        }
+
+                    } //grade
+                    
+                } else if(!empty($marks) && isset($_GET['edit_marks'])) { //if marks exists
+
+                    $cond_marks=array('user_id'=>$userid);
+                    $institution=str_replace("'","`",$this->request->data['PrimaryRegister']['degree_institute']);
+                    $institution=str_replace(",",".",$institution);
+
+                    if($this->request->data['mark_grade']=='M') {
+                        if($this->request->data['main_system']==1) {
+                            if($this->request->data['PrimaryRegister']['degree']!=2 && $this->request->data['PrimaryRegister']['degree']!=4 && $this->request->data['PrimaryRegister']['degree']!=5) { // Not B com, bba and bmmc
+                            $markSaveData=array(
+                                'user_id'=>"'".$this->Session->read('User.userid')."'",
+                                'university_id'=>"'".$this->request->data['PrimaryRegister']['University']."'",
+                                'degree_id'=>"'".$this->request->data['PrimaryRegister']['degree']."'",
+                                'institution'=>"'".$institution."'",
+                                'mark_grade'=>"'".$this->request->data['mark_grade']."'",
+                                'main'=>"'".$this->request->data['main_system']."'",
+                                'main1_sub'=>"'".$this->request->data['PrimaryRegister']['singleMainSubject1']."'",
+                                'main1_mark'=>"'".$this->request->data['core_marks']."'",
+                                'main1_max'=>"'".$this->request->data['core_max']."'",
+                                'comp1_sub'=>"'".$this->request->data['PrimaryRegister']['singleCompSubject1']."'",
+                                'comp1_mark'=>"'".$this->request->data['comp1_marks']."'",
+                                'comp1_max'=>"'".$this->request->data['comp1_max']."'",
+                                'comp2_sub'=>"'".$this->request->data['PrimaryRegister']['singleCompSubject2']."'",
+                                'comp2_mark'=>"'".$this->request->data['comp2_marks']."'",
+                                'comp2_max'=>"'".$this->request->data['comp2_max']."'",
+                                'part1_sub'=>"'".$this->request->data['PrimaryRegister']['part_one_subject']."'",
+                                'part1_mark'=>"'".$this->request->data['part_one_marks']."'",
+                                'part1_max'=>"'".$this->request->data['part_one_max']."'",
+                                'part2_sub'=>"'".$this->request->data['PrimaryRegister']['part_two_subject']."'",
+                                'part2_mark'=>"'".$this->request->data['part_two_marks']."'",
+                                'part2_max'=>"'".$this->request->data['part_two_max']."'",
+
+                                );
+                        
+                    } else if($this->request->data['PrimaryRegister']['degree']==2 || $this->request->data['PrimaryRegister']['degree']==4 || $this->request->data['PrimaryRegister']['degree']==5) { // B com or bba or bmmc
+                        $core='Core';
+                        $comp='Complementary';
+                        $markSaveData=array(
+                                'user_id'=>"'".$this->Session->read('User.userid')."'",
+                                'university_id'=>"'".$this->request->data['PrimaryRegister']['University']."'",
+                                'degree_id'=>"'".$this->request->data['PrimaryRegister']['degree']."'",
+                                'institution'=>"'".$institution."'",
+                                'mark_grade'=>"'".$this->request->data['mark_grade']."'",
+                                'main'=>"'".$this->request->data['main_system']."'",
+                                'main1_sub'=>"'".$core."'",
+                                'main1_mark'=>"'".$this->request->data['core_marks']."'",
+                                'main1_max'=>"'".$this->request->data['core_max']."'",
+                                'comp1_sub'=>"'".$comp."'",
+                                'comp1_mark'=>"'".$this->request->data['comp1_marks']."'",
+                                'comp1_max'=>"'".$this->request->data['comp1_max']."'",
+                                'part1_sub'=>"'".$this->request->data['PrimaryRegister']['part_one_subject']."'",
+                                'part1_mark'=>"'".$this->request->data['part_one_marks']."'",
+                                'part1_max'=>"'".$this->request->data['part_one_max']."'",
+                                'part2_sub'=>"'".$this->request->data['PrimaryRegister']['part_two_subject']."'",
+                                'part2_mark'=>"'".$this->request->data['part_two_marks']."'",
+                                'part2_max'=>"'".$this->request->data['part_two_max']."'",
+
+                                );
+                    }
+                        $marksaved=$this->Mark->updateAll($markSaveData,$cond_marks);
+
+                        } else if($this->request->data['main_system']==2) {
+                            $markSaveData=array(
+                                'user_id'=>"'".$this->Session->read('User.userid')."'",
+                                'university_id'=>"'".$this->request->data['PrimaryRegister']['University']."'",
+                                'degree_id'=>"'".$this->request->data['PrimaryRegister']['degree']."'",
+                                'institution'=>"'".$institution."'",
+                                'mark_grade'=>"'".$this->request->data['mark_grade']."'",
+                                'main'=>"'".$this->request->data['main_system']."'",
+                                'main1_sub'=>"'".$this->request->data['PrimaryRegister']['doubleMainSubject1']."'",
+                                'main1_mark'=>"'".$this->request->data['core1_marks']."'",
+                                'main1_max'=>"'".$this->request->data['core1_max']."'",
+                                'main2_sub'=>"'".$this->request->data['PrimaryRegister']['doubleMainSubject2']."'",
+                                'main2_mark'=>"'".$this->request->data['core2_marks']."'",
+                                'main2_max'=>"'".$this->request->data['core2_max']."'",
+                                'comp1_sub'=>"'".$this->request->data['PrimaryRegister']['doubleCompSubject1']."'",
+                                'comp1_mark'=>"'".$this->request->data['comp1_marks']."'",
+                                'comp1_max'=>"'".$this->request->data['comp1_max']."'",
+                                'part1_sub'=>"'".$this->request->data['PrimaryRegister']['part_one_subject']."'",
+                                'part1_mark'=>"'".$this->request->data['part_one_marks']."'",
+                                'part1_max'=>"'".$this->request->data['part_one_max']."'",
+                                'part2_sub'=>"'".$this->request->data['PrimaryRegister']['part_two_subject']."'",
+                                'part2_mark'=>"'".$this->request->data['part_two_marks']."'",
+                                'part2_max'=>"'".$this->request->data['part_two_max']."'",
+
+                                );
+                            $marksaved=$this->Mark->updateAll($markSaveData,$cond_marks);
+                            
+                        } else if($this->request->data['main_system']==3) {
+                            $markSaveData=array(
+                                'user_id'=>"'".$this->Session->read('User.userid')."'",
+                                'university_id'=>"'".$this->request->data['PrimaryRegister']['University']."'",
+                                'degree_id'=>"'".$this->request->data['PrimaryRegister']['degree']."'",
+                                'institution'=>"'".$institution."'",
+                                'mark_grade'=>"'".$this->request->data['mark_grade']."'",
+                                'main'=>"'".$this->request->data['main_system']."'",
+                                'main1_sub'=>"'".$this->request->data['PrimaryRegister']['tripleMainSubject1']."'",
+                                'main1_mark'=>"'".$this->request->data['core1_marks']."'",
+                                'main1_max'=>"'".$this->request->data['core1_max']."'",
+                                'main2_sub'=>"'".$this->request->data['PrimaryRegister']['tripleMainSubject2']."'",
+                                'main2_mark'=>"'".$this->request->data['core2_marks']."'",
+                                'main2_max'=>"'".$this->request->data['core2_max']."'",
+                                'main3_sub'=>"'".$this->request->data['PrimaryRegister']['tripleMainSubject3']."'",
+                                'main3_mark'=>"'".$this->request->data['core3_marks']."'",
+                                'main3_max'=>"'".$this->request->data['core3_max']."'",
+                                'part1_sub'=>"'".$this->request->data['PrimaryRegister']['part_one_subject']."'",
+                                'part1_mark'=>"'".$this->request->data['part_one_marks']."'",
+                                'part1_max'=>"'".$this->request->data['part_one_max']."'",
+                                'part2_sub'=>"'".$this->request->data['PrimaryRegister']['part_two_subject']."'",
+                                'part2_mark'=>"'".$this->request->data['part_two_marks']."'",
+                                'part2_max'=>"'".$this->request->data['part_two_max']."'",
+
+                                );
+                            $marksaved=$this->Mark->updateAll($markSaveData,$cond_marks);
+                            
+                        }
+                    } else if($this->request->data['mark_grade']=='G') {
+                        if($this->request->data['main_system']==1) {
+                            $core='Core';
+                            $comp='Complementary';
+                            $markSaveData=array();
+                                $markSaveData['user_id']="'".$this->Session->read('User.userid')."'";
+                                $markSaveData['university_id']="'".$this->request->data['PrimaryRegister']['University']."'";
+                                $markSaveData['degree_id']="'".$this->request->data['PrimaryRegister']['degree']."'";
+                                $markSaveData['institution']="'".$institution."'";
+                                $markSaveData['mark_grade']="'".$this->request->data['mark_grade']."'";
+                                $markSaveData['main']="'".$this->request->data['main_system']."'";
+                                if($this->request->data['PrimaryRegister']['degree']!=2 && $this->request->data['PrimaryRegister']['degree']!=4 && $this->request->data['PrimaryRegister']['degree']!=5 && $this->request->data['PrimaryRegister']['degree']!=6) { // Not B com, bba and bmmc
+                                    if($this->request->data['PrimaryRegister']['University']!=4) {
+                                        $markSaveData['main1_sub']="'".$this->request->data['PrimaryRegister']['singleMainSubject1']."'";
+                                        $markSaveData['main1_credit']="'".$this->request->data['core_credit']."'";
+                                        $markSaveData['main1_cgpa']="'".$this->request->data['core_cgpa']."'";
+                                        $markSaveData['comp1_sub']="'".$this->request->data['PrimaryRegister']['singleCompSubject1']."'";
+                                        $markSaveData['comp1_credit']="'".$this->request->data['comp1_credit']."'";
+                                        $markSaveData['comp1_cgpa']="'".$this->request->data['comp1_cgpa']."'";
+                                        $markSaveData['comp2_sub']="'".$this->request->data['PrimaryRegister']['singleCompSubject2']."'";
+                                        $markSaveData['comp2_credit']="'".$this->request->data['comp2_credit']."'";
+                                        $markSaveData['comp2_cgpa']="'".$this->request->data['comp2_cgpa']."'";
+                                        if($this->request->data['PrimaryRegister']['University']!=5) {
+                                            $markSaveData['open_sub']="'".$this->request->data['PrimaryRegister']['open_course']."'";
+                                            $markSaveData['open_credit']="'".$this->request->data['open_course_credit']."'";
+                                            $markSaveData['open_cgpa']="'".$this->request->data['open_course_cgpa']."'";
+                                        }
+
+                                        $markSaveData['common_sub']="'".$this->request->data['PrimaryRegister']['common_course']."'";
+                                        $markSaveData['common_credit']="'".$this->request->data['common_course_credit']."'";
+                                        $markSaveData['common_cgpa']="'".$this->request->data['common_course_cgpa']."'";
+                                        $markSaveData['com_other_sub']="'".$this->request->data['PrimaryRegister']['common_course_other']."'";
+                                        $markSaveData['com_other_credit']="'".$this->request->data['common_course_other_credit']."'";
+                                        $markSaveData['com_other_cgpa']="'".$this->request->data['common_course_other_cgpa']."'";
+                                        $markSaveData['add_common_course_sub']="'".$this->request->data['PrimaryRegister']['additional_common_course']."'";
+                                        $markSaveData['add_common_course_credit']="'".$this->request->data['add_common_course_credit']."'";
+                                        $markSaveData['add_common_course_cgpa']="'".$this->request->data['add_common_course_cgpa']."'";
+                                        $markSaveData['overall_credit']="'".$this->request->data['overall_credit']."'";
+                                        $markSaveData['overall_cgpa']="'".$this->request->data['overall_cgpa']."'";
+                                    } else {
+                                        $markSaveData['main1_sub']="'".$this->request->data['PrimaryRegister']['part_three_main']."'";
+                                        $markSaveData['main1_credit']="'".$this->request->data['core_credit']."'";
+                                        $markSaveData['main1_cgpa']="'".$this->request->data['core_cgpa']."'";
+                                        $markSaveData['comp1_sub']="'".$this->request->data['PrimaryRegister']['part_three_sub1']."'";
+                                        $markSaveData['comp1_credit']="'".$this->request->data['comp1_credit']."'";
+                                        $markSaveData['comp1_cgpa']="'".$this->request->data['comp1_cgpa']."'";
+                                        $markSaveData['comp2_sub']="'".$this->request->data['PrimaryRegister']['part_three_sub2']."'";
+                                        $markSaveData['comp2_credit']="'".$this->request->data['comp2_credit']."'";
+                                        $markSaveData['comp2_cgpa']="'".$this->request->data['comp2_cgpa']."'";
+
+                                        $markSaveData['common_sub']="'".$this->request->data['PrimaryRegister']['part_one_english']."'";
+                                        $markSaveData['common_credit']="'".$this->request->data['part_one_credit']."'";
+                                        $markSaveData['common_cgpa']="'".$this->request->data['part_one_cgpa']."'";
+                                        $markSaveData['com_other_sub']="'".$this->request->data['PrimaryRegister']['part_two_lang']."'";
+                                        $markSaveData['com_other_credit']="'".$this->request->data['part_two_lang_credit']."'";
+                                        $markSaveData['com_other_cgpa']="'".$this->request->data['part_two_lang_cgpa']."'";
+                                        $markSaveData['add_common_course_sub']="'".$this->request->data['PrimaryRegister']['part_two_other']."'";
+                                        $markSaveData['add_common_course_credit']="'".$this->request->data['part_two_other_credit']."'";
+                                        $markSaveData['add_common_course_cgpa']="'".$this->request->data['part_two_other_cgpa']."'";
+                                        $markSaveData['overall_credit']="'".$this->request->data['overall_credit']."'";
+                                        $markSaveData['overall_cgpa']="'".$this->request->data['overall_cgpa']."'";
+                                    }
+                                    
+                                    
+                                } else if($this->request->data['PrimaryRegister']['degree']==2 || $this->request->data['PrimaryRegister']['degree']==4 || $this->request->data['PrimaryRegister']['degree']==5 || $this->request->data['PrimaryRegister']['degree']==6) { // B com or bba or bmmc or bca
+                                    if($this->request->data['PrimaryRegister']['University']!=4) {
+                                        $markSaveData['main1_sub']="'".$core."'";
+                                        $markSaveData['main1_credit']="'".$this->request->data['core_credit']."'";
+                                        $markSaveData['main1_cgpa']="'".$this->request->data['core_cgpa']."'";
+                                        $markSaveData['comp1_sub']="'".$comp."'";
+                                        $markSaveData['comp1_credit']="'".$this->request->data['comp1_credit']."'";
+                                        $markSaveData['comp1_cgpa']="'".$this->request->data['comp1_cgpa']."'";
+                                        if($this->request->data['PrimaryRegister']['University']!=5) {
+                                            $markSaveData['open_sub']="'".$this->request->data['PrimaryRegister']['open_course']."'";
+                                            $markSaveData['open_credit']="'".$this->request->data['open_course_credit']."'";
+                                            $markSaveData['open_cgpa']="'".$this->request->data['open_course_cgpa']."'";
+                                        }
+
+                                        $markSaveData['common_sub']="'".$this->request->data['PrimaryRegister']['common_course']."'";
+                                        $markSaveData['common_credit']="'".$this->request->data['common_course_credit']."'";
+                                        $markSaveData['common_cgpa']="'".$this->request->data['common_course_cgpa']."'";
+                                        $markSaveData['com_other_sub']="'".$this->request->data['PrimaryRegister']['common_course_other']."'";
+                                        $markSaveData['com_other_credit']="'".$this->request->data['common_course_other_credit']."'";
+                                        $markSaveData['com_other_cgpa']="'".$this->request->data['common_course_other_cgpa']."'";
+                                        $markSaveData['add_common_course_sub']="'".$this->request->data['PrimaryRegister']['additional_common_course']."'";
+                                        $markSaveData['add_common_course_credit']="'".$this->request->data['add_common_course_credit']."'";
+                                        $markSaveData['add_common_course_cgpa']="'".$this->request->data['add_common_course_cgpa']."'";
+                                        $markSaveData['overall_credit']="'".$this->request->data['overall_credit']."'";
+                                        $markSaveData['overall_cgpa']="'".$this->request->data['overall_cgpa']."'";
+                                    } else {
+                                        $markSaveData['main1_sub']="'".$this->request->data['PrimaryRegister']['com_part_three_main']."'";
+                                        $markSaveData['main1_credit']="'".$this->request->data['core_credit']."'";
+                                        $markSaveData['main1_cgpa']="'".$this->request->data['core_cgpa']."'";
+                                        $markSaveData['comp1_sub']="'".$this->request->data['PrimaryRegister']['com_part_three_sub1']."'";
+                                        $markSaveData['comp1_credit']="'".$this->request->data['comp1_credit']."'";
+                                        $markSaveData['comp1_cgpa']="'".$this->request->data['comp1_cgpa']."'";
+                                        $markSaveData['comp2_sub']="'".$this->request->data['PrimaryRegister']['com_part_three_sub2']."'";
+                                        $markSaveData['comp2_credit']="'".$this->request->data['comp2_credit']."'";
+                                        $markSaveData['comp2_cgpa']="'".$this->request->data['comp2_cgpa']."'";
+
+                                        $markSaveData['common_sub']="'".$this->request->data['PrimaryRegister']['part_one_english']."'";
+                                        $markSaveData['common_credit']="'".$this->request->data['part_one_credit']."'";
+                                        $markSaveData['common_cgpa']="'".$this->request->data['part_one_cgpa']."'";
+                                        $markSaveData['com_other_sub']="'".$this->request->data['PrimaryRegister']['part_two_lang']."'";
+                                        $markSaveData['com_other_credit']="'".$this->request->data['part_two_lang_credit']."'";
+                                        $markSaveData['com_other_cgpa']="'".$this->request->data['part_two_lang_cgpa']."'";
+                                        $markSaveData['add_common_course_sub']="'".$this->request->data['PrimaryRegister']['part_two_other']."'";
+                                        $markSaveData['add_common_course_credit']="'".$this->request->data['part_two_other_credit']."'";
+                                        $markSaveData['add_common_course_cgpa']="'".$this->request->data['part_two_other_cgpa']."'";
+                                        $markSaveData['overall_credit']="'".$this->request->data['overall_credit']."'";
+                                        $markSaveData['overall_cgpa']="'".$this->request->data['overall_cgpa']."'";
+                                    }
+                                    // common
+                                    
+                                    
+                                }
+                                
+                        
+                            $marksaved=$this->Mark->updateAll($markSaveData,$cond_marks);
+
+                        } else if($this->request->data['main_system']==2) {
+                            $markSaveData=array();
+
+                                $markSaveData['user_id']="'".$this->Session->read('User.userid')."'";
+                                $markSaveData['university_id']="'".$this->request->data['PrimaryRegister']['University']."'";
+                                $markSaveData['degree_id']="'".$this->request->data['PrimaryRegister']['degree']."'";
+                                $markSaveData['institution']="'".$institution."'";
+                                $markSaveData['mark_grade']="'".$this->request->data['mark_grade']."'";
+                                $markSaveData['main']="'".$this->request->data['main_system']."'";
+                                $markSaveData['main1_sub']="'".$this->request->data['PrimaryRegister']['doubleMainSubject1']."'";
+                                $markSaveData['main1_credit']="'".$this->request->data['core1_credit']."'";
+                                $markSaveData['main1_cgpa']="'".$this->request->data['core1_cgpa']."'";
+                                $markSaveData['main2_sub']="'".$this->request->data['PrimaryRegister']['doubleMainSubject2']."'";
+                                $markSaveData['main2_credit']="'".$this->request->data['core2_credit']."'";
+                                $markSaveData['main2_cgpa']="'".$this->request->data['core2_cgpa']."'";
+                                $markSaveData['comp1_sub']="'".$this->request->data['PrimaryRegister']['doubleCompSubject1']."'";
+                                $markSaveData['comp1_credit']="'".$this->request->data['comp1_credit']."'";
+                                $markSaveData['comp1_cgpa']="'".$this->request->data['comp1_cgpa']."'";
+                                $markSaveData['common_sub']="'".$this->request->data['PrimaryRegister']['common_course']."'";
+                                $markSaveData['common_credit']="'".$this->request->data['common_course_credit']."'";
+                                $markSaveData['common_cgpa']="'".$this->request->data['common_course_cgpa']."'";
+                                $markSaveData['com_other_sub']="'".$this->request->data['PrimaryRegister']['common_course_other']."'";
+                                $markSaveData['com_other_credit']="'".$this->request->data['common_course_other_credit']."'";
+                                $markSaveData['com_other_cgpa']="'".$this->request->data['common_course_other_cgpa']."'";
+                                $markSaveData['add_common_course_sub']="'".$this->request->data['PrimaryRegister']['additional_common_course']."'";
+                                $markSaveData['add_common_course_credit']="'".$this->request->data['add_common_course_credit']."'";
+                                $markSaveData['add_common_course_cgpa']="'".$this->request->data['add_common_course_cgpa']."'";
+                                if($this->request->data['PrimaryRegister']['University']!=5) {
+                                    $markSaveData['open_sub']="'".$this->request->data['PrimaryRegister']['open_course']."'";
+                                    $markSaveData['open_credit']="'".$this->request->data['open_course_credit']."'";
+                                    $markSaveData['open_cgpa']="'".$this->request->data['open_course_cgpa']."'";
+                                }
+                                $markSaveData['overall_credit']="'".$this->request->data['overall_credit']."'";
+                                $markSaveData['overall_cgpa']="'".$this->request->data['overall_cgpa']."'";
+
+                            $marksaved=$this->Mark->updateAll($markSaveData,$cond_marks);
+
+                        } else if($this->request->data['main_system']==3) {
+                            $markSaveData=array();
+                                $markSaveData['user_id']="'".$this->Session->read('User.userid')."'";
+                                $markSaveData['university_id']="'".$this->request->data['PrimaryRegister']['University']."'";
+                                $markSaveData['degree_id']="'".$this->request->data['PrimaryRegister']['degree']."'";
+                                $markSaveData['institution']="'".$institution."'";
+                                $markSaveData['mark_grade']="'".$this->request->data['mark_grade']."'";
+                                $markSaveData['main']="'".$this->request->data['main_system']."'";
+                                $markSaveData['main1_sub']="'".$this->request->data['PrimaryRegister']['tripleMainSubject1']."'";
+                                $markSaveData['main1_credit']="'".$this->request->data['core1_credit']."'";
+                                $markSaveData['main1_cgpa']="'".$this->request->data['core1_cgpa']."'";
+                                $markSaveData['main2_sub']="'".$this->request->data['PrimaryRegister']['tripleMainSubject2']."'";
+                                $markSaveData['main2_credit']="'".$this->request->data['core2_credit']."'";
+                                $markSaveData['main2_cgpa']="'".$this->request->data['core2_cgpa']."'";
+                                $markSaveData['main3_sub']="'".$this->request->data['PrimaryRegister']['tripleMainSubject3']."'";
+                                $markSaveData['main3_credit']="'".$this->request->data['core3_credit']."'";
+                                $markSaveData['main3_cgpa']="'".$this->request->data['core3_cgpa']."'";
+                                $markSaveData['common_sub']="'".$this->request->data['PrimaryRegister']['common_course']."'";
+                                $markSaveData['common_credit']="'".$this->request->data['common_course_credit']."'";
+                                $markSaveData['common_cgpa']="'".$this->request->data['common_course_cgpa']."'";
+                                $markSaveData['com_other_sub']="'".$this->request->data['PrimaryRegister']['common_course_other']."'";
+                                $markSaveData['com_other_credit']="'".$this->request->data['common_course_other_credit']."'";
+                                $markSaveData['com_other_cgpa']="'".$this->request->data['common_course_other_cgpa']."'";
+                                $markSaveData['add_common_course_sub']="'".$this->request->data['PrimaryRegister']['additional_common_course']."'";
+                                $markSaveData['add_common_course_credit']="'".$this->request->data['add_common_course_credit']."'";
+                                $markSaveData['add_common_course_cgpa']="'".$this->request->data['add_common_course_cgpa']."'";
+                                $markSaveData['open_sub']="'".$this->request->data['PrimaryRegister']['open_course']."'";
+                                $markSaveData['open_credit']="'".$this->request->data['open_course_credit']."'";
+                                $markSaveData['open_cgpa']="'".$this->request->data['open_course_cgpa']."'";
+                                $markSaveData['overall_credit']="'".$this->request->data['overall_credit']."'";
+                                $markSaveData['overall_cgpa']="'".$this->request->data['overall_cgpa']."'";
+                                
+
+                            $marksaved=$this->Mark->updateAll($markSaveData,$cond_marks);
+                        }
+
+                    } //grade
+                }
+                $IndexObject = new IndexesController;
+                // Call a method from
+                $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+                $choice_str=$choice[0]['Choice']['choices'];
+                $choice_arr=explode(',',$choice_str);
+                
+                if(isset($_GET['edit_marks']) || empty($marks)) {
+                    if($usersaved && $applicantsaved && $marksaved) {
+                        if($IndexObject->indexing($userid) && $IndexObject->ranking($choice_arr)){
+                            $this->Session->setFlash(__('Data have been saved successfully, Now you can enter your Additional Information'));
+                            return $this->redirect(array('action' => 'reservations',$userid));
+                        }
+                        } else {
+                            $this->Session->setFlash(__('Could not Save entered Details'));
+                            return $this->redirect(array('action' => 'edit_applicant',$userid));
+                                
+                    }
+                } else {
+                    if($usersaved && $applicantsaved) {
+                            $this->Session->setFlash(__('Data have been saved successfully, Now you can enter your Additional Information'));
+                            return $this->redirect(array('action' => 'reservations',$userid));
+                        
+                        } else {
+                            $this->Session->setFlash(__('Could not Save entered Details'));
+                            return $this->redirect(array('action' => 'edit_applicant',$userid));
+                                
+                    }
+                }
+                
+                
+                
+                
+
+            } //post
+            if (!$this->request->data) {
+                $this->request->data = $appenddata;
+            }
+        } //if user exists
+
+        $setarry = array(
+            'countries' => $countries,
+            'religions' => $religions,
+            'qualifications' => $qualifications,
+            'occupations' => $occupations,
+            'communities' => $communities,
+            'states' => $states,
+            'districts' => $districts,
+            'reservations' => $reservations,
+            //'ambitions' => $ambitions,
+            'streams' => $streams,
+            'boards' => $boards,
+        );
+        $this->set('universities',$universities);
+        $this->set('degrees',$degrees);
+        $this->set('userid',$userid);
+        
+        $this->set($setarry);
+    }
+
+    public function reservations($userid=null) {
+        
+        //$userid=$this->Session->read('User.userid');
+        if (!isset($userid)) {
+            $this->Session->setFlash(__('Please Login!.'));
+            return $this->redirect(array('action' => 'login'));
+        } else {
+            $reservations = $this->Reservation->find('first', array(
+                'conditions' => array(
+                    'frkUserID' => $userid
+                )
+                    ));
+        
+        if(!empty($reservations)){
+            $appenddata['SecondaryRegister']['HandiCapped'] = $reservations['Reservation']['frkHandiCapped'];
+            $appenddata['SecondaryRegister']['NCC/NSS'] = $reservations['Reservation']['frkNcc/Nss'];
+            $appenddata['SecondaryRegister']['Ex-ServiceMan'] = $reservations['Reservation']['frkEx-ServiceMan'];
+            
+            $appenddata['SecondaryRegister']['NCC_Certificate_A'] = $reservations['Reservation']['NCC_Certificate_A'];
+            $appenddata['SecondaryRegister']['NCC_Certificate_B'] = $reservations['Reservation']['NCC_Certificate_B'];
+            $appenddata['SecondaryRegister']['NCC_Certificate_C'] = $reservations['Reservation']['NCC_Certificate_C'];
+            
+            
+            $appenddata['SecondaryRegister']['None'] = $reservations['Reservation']['None'];
+            $appenddata['SecondaryRegister']['Illiteracy'] = $reservations['Reservation']['Illiteracy'];
+            
+            $appenddata['SecondaryRegister']['Sports1'] = $reservations['Reservation']['sportDis1'];
+            $appenddata['SecondaryRegister']['SportsLevel1'] = $reservations['Reservation']['sportlevel1'];
+            $appenddata['SecondaryRegister']['Sports2'] = $reservations['Reservation']['sportDis2'];
+            $appenddata['SecondaryRegister']['SportsLevel2'] = $reservations['Reservation']['sportlevel2'];
+            $appenddata['SecondaryRegister']['Sports3'] = $reservations['Reservation']['sportDis3'];
+            $appenddata['SecondaryRegister']['SportsLevel3'] = $reservations['Reservation']['sportlevel3'];
+            
+            
+            $appenddata['SecondaryRegister']['Arts1'] = $reservations['Reservation']['Arts1'];
+            $appenddata['SecondaryRegister']['ArtsLevel1'] = $reservations['Reservation']['ArtsLevel1'];
+            $appenddata['SecondaryRegister']['Arts2'] = $reservations['Reservation']['Arts2'];
+            $appenddata['SecondaryRegister']['ArtsLevel2'] = $reservations['Reservation']['ArtsLevel2'];
+            $appenddata['SecondaryRegister']['Arts3'] = $reservations['Reservation']['Arts3'];
+            $appenddata['SecondaryRegister']['ArtsLevel3'] = $reservations['Reservation']['ArtsLevel3'];
+            
+            $appenddata['SecondaryRegister']['extra_course'] = $reservations['Reservation']['frkExtra_course'];
+            $appenddata['SecondaryRegister']['FeeConcession'] = $reservations['Reservation']['frkFeeConcession'];
+            
+            }
+        
+        if($this->request->is('post')) {
+            if(!empty($this->request->data['SecondaryRegister'])){
+                if (!empty($reservations)) {
+                    $extraCourse=str_replace("'","",$this->request->data['SecondaryRegister']['extra_course']);
+                    $Sports1=str_replace("'","",$this->request->data['SecondaryRegister']['Sports1']);
+                    $Sports2=str_replace("'","",$this->request->data['SecondaryRegister']['Sports2']);
+                    $Sports3=str_replace("'","",$this->request->data['SecondaryRegister']['Sports3']);
+                    $Arts1=str_replace("'","",$this->request->data['SecondaryRegister']['Arts1']);
+                    $Arts2=str_replace("'","",$this->request->data['SecondaryRegister']['Arts2']);
+                    $Arts3=str_replace("'","",$this->request->data['SecondaryRegister']['Arts3']);
+
+                    $ReservationTableData = array(
+                     'frkHandiCapped' => "'" .$this->request->data['SecondaryRegister']['HandiCapped']."'" ,
+                   
+                    'frkNcc/Nss' => "'" .$this->request->data['SecondaryRegister']['NCC/NSS']."'",
+                    'frkEx-ServiceMan' => "'" .$this->request->data['SecondaryRegister']['Ex-ServiceMan']."'",
+                    'NCC_Certificate_A' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_A']."'",
+                    'NCC_Certificate_B' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_B']."'",
+                    'NCC_Certificate_C' => "'" .$this->request->data['SecondaryRegister']['NCC_Certificate_C']."'",
+                    'None' => "'" .$this->request->data['SecondaryRegister']['None']."'",
+                    'Illiteracy' => "'" .$this->request->data['SecondaryRegister']['Illiteracy']."'",
+                    'frkExtra_course' => "'" .$extraCourse."'",
+                    'frkFeeConcession' => "'" .$this->request->data['SecondaryRegister']['FeeConcession']."'",
+
+                    'sportDis1' => "'" .$Sports1."'",
+                    'sportlevel1' => "'" .$this->request->data['SecondaryRegister']['SportsLevel1']."'",
+                    'sportDis2' => "'" .$Sports2."'",
+                    'sportlevel2' => "'" .$this->request->data['SecondaryRegister']['SportsLevel2']."'",
+                    'sportDis3' => "'" .$Sports3."'",
+                    'sportlevel3' => "'" .$this->request->data['SecondaryRegister']['SportsLevel3']."'",
+                    'Arts1' => "'" .$Arts1."'",
+                    'ArtsLevel1' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel1']."'",
+                    'Arts2' => "'" .$Arts2."'",
+                    'ArtsLevel2' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel2']."'",
+                    'Arts3' => "'" .$Arts3."'",
+                    'ArtsLevel3' => "'" .$this->request->data['SecondaryRegister']['ArtsLevel3']."'"
+
+                    );
+                    $cnd3 = array(
+                        'Reservation.frkUserID' => $userid,
+                    );
+                    $IndexObject = new IndexesController;
+                    $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+                    $choice_str=$choice[0]['Choice']['choices'];
+                    $choice_arr=explode(',',$choice_str);
+
+                    if (!$this->Reservation->updateAll($ReservationTableData, $cnd3)) {
+                        $this->Session->setFlash(__('Could not Save Application Data'));
+                        return $this->redirect(array('action' => 'reservations',$userid));
+                    } else {
+                        if($IndexObject->indexing($userid) && $IndexObject->ranking($choice_arr)) {
+                            $this->Session->setFlash(__('Additional Information have been saved'));
+                            return $this->redirect(array('action' => 'indexdetails'));
+                        }
+                        
+                    }
+                } else{
+
+                    $extraCourse=str_replace("'","",$this->request->data['SecondaryRegister']['extra_course']);
+                    $Sports1=str_replace("'","",$this->request->data['SecondaryRegister']['Sports1']);
+                    $Sports2=str_replace("'","",$this->request->data['SecondaryRegister']['Sports2']);
+                    $Sports3=str_replace("'","",$this->request->data['SecondaryRegister']['Sports3']);
+                    $Arts1=str_replace("'","",$this->request->data['SecondaryRegister']['Arts1']);
+                    $Arts2=str_replace("'","",$this->request->data['SecondaryRegister']['Arts2']);
+                    $Arts3=str_replace("'","",$this->request->data['SecondaryRegister']['Arts3']);
+
+                $reservations1 = array(
+                    'frkHandiCapped' => $this->request->data['SecondaryRegister']['HandiCapped'],
+                    'frkUserID' => $userid,
+                    'frkNcc/Nss' => $this->request->data['SecondaryRegister']['NCC/NSS'],
+                    'frkEx-ServiceMan' => $this->request->data['SecondaryRegister']['Ex-ServiceMan'],
+                    'NCC_Certificate_A' => $this->request->data['SecondaryRegister']['NCC_Certificate_A'],
+                    'NCC_Certificate_B' => $this->request->data['SecondaryRegister']['NCC_Certificate_B'],
+                    'NCC_Certificate_C' => $this->request->data['SecondaryRegister']['NCC_Certificate_C'],
+                    'None' => $this->request->data['SecondaryRegister']['None'],
+                    'Illiteracy' => $this->request->data['SecondaryRegister']['Illiteracy'],
+                    'frkExtra_course' => $extraCourse,
+                    'frkFeeConcession' => $this->request->data['SecondaryRegister']['FeeConcession'],
+
+                    'sportDis1' => $Sports1,
+                    'sportlevel1' => $this->request->data['SecondaryRegister']['SportsLevel1'],
+                    'sportDis2' => $Sports2,
+                    'sportlevel2' => $this->request->data['SecondaryRegister']['SportsLevel2'],
+                    'sportDis3' => $Sports3,
+                    'sportlevel3' => $this->request->data['SecondaryRegister']['SportsLevel3'],
+                    'Arts1' => $Arts1,
+                    'ArtsLevel1' => $this->request->data['SecondaryRegister']['ArtsLevel1'],
+                    'Arts2' => $Arts2,
+                    'ArtsLevel2' => $this->request->data['SecondaryRegister']['ArtsLevel2'],
+                    'Arts3' => $Arts3,
+                    'ArtsLevel3' => $this->request->data['SecondaryRegister']['ArtsLevel3']
+                ); 
+                $IndexObject = new IndexesController;
+                $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+                $choice_str=$choice[0]['Choice']['choices'];
+                $choice_arr=explode(',',$choice_str);
+                
+                $this->Reservation->create();
+                if ($this->Reservation->save($reservations1)) { 
+                     if($IndexObject->indexing($userid) && $IndexObject->ranking($choice_arr)) {            
+                        $this->Session->setFlash(__('Your Application has been successfully saved!'));
+                        return $this->redirect(array('action' => 'indexdetails','controller'=>'admins'));
+                    }
+                    
+                } else {
+                    $this->Session->setFlash(__('Your Additional Information could not be saved. Please, try again.'));
+                     return $this->redirect(array('action' => 'reservations',$userid));
+                }
+                }
+                }
+        }
+        if(!empty($reservations)) {
+            if (!$this->request->data) {
+                $this->request->data = $appenddata;
+            }
+        }
+    }
+        
+    } 
 
     public function dashboard() {
         if ($this->Session->read('User.admin') == 1) {
             $no_of_applications = $this->User->find('count');
-            $no_of_pending = $this->Payment->find('count', array('conditions' => array('status' => 'P')));
-            $no_of_confirmed = $this->Payment->find('count', array('conditions' => array('status' => 'C')));
-            $no_of_rejected = $this->Payment->find('count', array('conditions' => array('status' => 'R')));
-            $this->set('no_of_rejected', $no_of_rejected);
+            $no_of_pending = $this->Undetectedpayment->find('count');
+            $no_of_confirmed = $this->Completedpayment->find('count');
+           
+           
             $this->set('no_of_confirmed', $no_of_confirmed);
             $this->set('no_of_pending', $no_of_pending);
             $this->set('no_of_applications', $no_of_applications);
@@ -108,47 +1457,531 @@ class AdminsController extends AppController {
             return $this->redirect(array('action' => 'adminlogin', 'controller' => 'admins'));
         }
     }
+public function viewpaymentdetails(){
+    
+}
+public function generatepdf()  {
+    
+    $segments = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+$numSegments = count($segments); 
+ $currentSegment = $segments[$numSegments - 2];
+ $currentSegment1=$segments[$numSegments - 1];
 
-    public function viewpaymentdetails() {
+    
+  
+        $this->layout = 'generatepdf';
+    // $this->autoRender= false;
+        //$userid = $this->Session->read('User.userid');
+        $userid = $currentSegment;
+        $choiceid=$currentSegment1;
+        $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+        $User=$this->User->find('first',array('conditions'=>array('frkUserID'=>$userid),'fields'=>array('frkParentOccupation')));
+        if(!is_numeric($User['User']['frkParentOccupation']))
+        {
+             $choice_result=$this->Choice->find('all',array(
+            'conditions'=>array('Choice.user_id'=>$userid),
+            'joins'=>array(array(
+                'table'=>'users',
+                'alias'=>'User',
+                'type'=>'INNER',
+                'conditions'=>array('User.frkUserID=Choice.user_id')
+                ),
+
+                array(
+                    'table'=>'final_communities',
+                    'alias'=>'Community',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Community.id=User.frkUserCommunity')
+                    ),
+               array(
+                    'table'=>'religions',
+                    'alias'=>'Religion',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Religion.id=User.frkUserReligion')
+                    ),
+               array(
+                    'table'=>'countries',
+                    'alias'=>'Countrie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Countrie.id=User.frkUserNationality_ID')
+                    ),
+                array(
+                    'table'=>'states',
+                    'alias'=>'State',
+                    'type'=>'LEFT',
+                    'conditions'=>array('State.id=User.frkUserState')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'District',
+                    'type'=>'LEFT',
+                    'conditions'=>array('District.id=User.frkUserDistrict')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'DistrictComm',
+                    'type'=>'LEFT',
+                    'conditions'=>array('DistrictComm.id=User.frkUserCommDistrict')
+                    ),
+                 array(
+                    'table'=>'final_communities',
+                    'alias'=>'Final_communitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Final_communitie.id=User.frkUserCommunity')
+                    ),
+                   array(
+                    'table'=>'castes',
+                    'alias'=>'Caste',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Caste.id=User.frkUserCasteID')
+                    ),
+                   array(
+                    'table'=>'reservations',
+                    'alias'=>'Reservation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Reservation.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'applicants',
+                    'alias'=>'Applicant',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Applicant.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'boards',
+                    'alias'=>'Board',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Board.id=Applicant.plusTwoBoard')
+                    ),
+                   array(
+                    'table'=>'streams',
+                    'alias'=>'Stream',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Stream.id=Applicant.plusTwoStream')
+                    ),
+                   array(
+                    'table'=>'marks',
+                    'alias'=>'Mark',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Mark.user_id=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'universities',
+                    'alias'=>'Universitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Universitie.id=Mark.university_id')
+                    ),
+                   array(
+                    'table'=>'degrees',
+                    'alias'=>'Degree',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Degree.id=Mark.degree_id')
+                    ),
+                    array(
+                    'table'=>'courses',
+                    'alias'=>'Cours',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Cours.frkCourseID=Choice.choices')
+                    ),
+                   array(
+                    'table'=>'indexes',
+                    'alias'=>'Index',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Index.user_id=User.frkUserID','Index.course_id'=>$choiceid),
+//                    'conditions'=>array()
+                    )
+
+            ),
+            'fields'=>array('Choice.*',
+                            // 'Academicdetail.*',
+                            'Universitie.*',
+                            'Degree.*',
+                            'Mark.*',
+                            'Stream.*',
+                            'Applicant.*',
+                            'Board.*',
+                            'Community.*',
+                            'Religion.*',
+                            'User.*',
+                            'Countrie.*',
+                            'State.*',
+                            'District.*',
+                            'DistrictComm.*',
+                            'Final_communitie.*',
+                            'Caste.*',
+                            'Reservation.*',
+                            'Index.*',
+                            'Cours.*'
+                            )
+            ));
+        
+        }else{
+        if(!empty($choice)) {
+            $choice_result=$this->Choice->find('all',array(
+            'conditions'=>array('Choice.user_id'=>$userid),
+            'joins'=>array(array(
+                'table'=>'users',
+                'alias'=>'User',
+                'type'=>'INNER',
+                'conditions'=>array('User.frkUserID=Choice.user_id')
+                ),
+
+                array(
+                    'table'=>'final_communities',
+                    'alias'=>'Community',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Community.id=User.frkUserCommunity')
+                    ),
+               array(
+                    'table'=>'religions',
+                    'alias'=>'Religion',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Religion.id=User.frkUserReligion')
+                    ),
+               array(
+                    'table'=>'countries',
+                    'alias'=>'Countrie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Countrie.id=User.frkUserNationality_ID')
+                    ),
+                array(
+                    'table'=>'states',
+                    'alias'=>'State',
+                    'type'=>'LEFT',
+                    'conditions'=>array('State.id=User.frkUserState')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'District',
+                    'type'=>'LEFT',
+                    'conditions'=>array('District.id=User.frkUserDistrict')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'DistrictComm',
+                    'type'=>'LEFT',
+                    'conditions'=>array('DistrictComm.id=User.frkUserCommDistrict')
+                    ),
+                 array(
+                    'table'=>'final_communities',
+                    'alias'=>'Final_communitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Final_communitie.id=User.frkUserCommunity')
+                    ),
+                   array(
+                    'table'=>'castes',
+                    'alias'=>'Caste',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Caste.id=User.frkUserCasteID')
+                    ),
+                   array(
+                    'table'=>'occupations',
+                    'alias'=>'Occupation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Occupation.id=User.frkParentOccupation')
+                    ),
+                   array(
+                    'table'=>'reservations',
+                    'alias'=>'Reservation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Reservation.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'applicants',
+                    'alias'=>'Applicant',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Applicant.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'boards',
+                    'alias'=>'Board',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Board.id=Applicant.plusTwoBoard')
+                    ),
+                   array(
+                    'table'=>'streams',
+                    'alias'=>'Stream',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Stream.id=Applicant.plusTwoStream')
+                    ),
+                   array(
+                    'table'=>'marks',
+                    'alias'=>'Mark',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Mark.user_id=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'universities',
+                    'alias'=>'Universitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Universitie.id=Mark.university_id')
+                    ),
+                   array(
+                    'table'=>'degrees',
+                    'alias'=>'Degree',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Degree.id=Mark.degree_id')
+                    ),
+                    array(
+                    'table'=>'courses',
+                    'alias'=>'Cours',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Cours.frkCourseID=Choice.choices')
+                    ),
+                   array(
+                    'table'=>'indexes',
+                    'alias'=>'Index',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Index.user_id=User.frkUserID','Index.course_id'=>$choiceid),
+//                    'conditions'=>array()
+                    )
+
+            ),
+            'fields'=>array('Choice.*',
+                            // 'Academicdetail.*',
+                            'Universitie.*',
+                            'Degree.*',
+                            'Mark.*',
+                            'Stream.*',
+                            'Applicant.*',
+                            'Board.*',
+                            'Community.*',
+                            'Religion.*',
+                            'User.*',
+                            'Countrie.*',
+                            'State.*',
+                            'District.*',
+                            'DistrictComm.*',
+                            'Final_communitie.*',
+                            'Caste.*',
+                            'Occupation.*',
+                            'Reservation.*',
+                            'Index.*',
+                            'Cours.*'
+                            )
+            ));
+            
+            }
+        }
+  $from = new DateTime($choice_result[0]['User']['frkUserDOB']);
+        $to   = new DateTime('today');
+        $age  = $from->diff($to)->y;
+       
+
+$choice_result['age']=$age;
+     if(!isset($choice_result[0]['Occupation']['name'])){
+             $choice_result[0]['Occupation']['id']=16;
+             $choice_result[0]['Occupation']['name']=$choice_result[0]['User']['frkParentOccupation'];
+         
+             
+         }
+//        echo $choice_result[0]['Index']['index']; exit;
+        //pr($choice_result[0]); exit;
+            $this->set('All_result',$choice_result);
+
+   }
+public function generatepdf1()  {
+    
+    $segments = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+$numSegments = count($segments); 
+ $currentSegment = $segments[$numSegments - 2];
+ $currentSegment1=$segments[$numSegments - 1];
+
+    
+  
+        $this->layout = 'generatepdf';
+    // $this->autoRender= false;
+        //$userid = $this->Session->read('User.userid');
+        $userid = $currentSegment;
+        $choiceid=$currentSegment1;
+        $choice=$this->Choice->find('all',array('conditions'=>array('user_id'=>$userid)));
+      
+        if(!empty($choice)) {
+            $choice_result=$this->Choice->find('all',array(
+            'conditions'=>array('Choice.user_id'=>$userid),
+            'joins'=>array(array(
+                'table'=>'users',
+                'alias'=>'User',
+                'type'=>'INNER',
+                'conditions'=>array('User.frkUserID=Choice.user_id')
+                ),
+
+                array(
+                    'table'=>'final_communities',
+                    'alias'=>'Community',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Community.id=User.frkUserCommunity')
+                    ),
+               array(
+                    'table'=>'religions',
+                    'alias'=>'Religion',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Religion.id=User.frkUserReligion')
+                    ),
+               array(
+                    'table'=>'countries',
+                    'alias'=>'Countrie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Countrie.id=User.frkUserNationality_ID')
+                    ),
+                array(
+                    'table'=>'states',
+                    'alias'=>'State',
+                    'type'=>'LEFT',
+                    'conditions'=>array('State.id=User.frkUserState')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'District',
+                    'type'=>'LEFT',
+                    'conditions'=>array('District.id=User.frkUserDistrict')
+                    ),
+                 array(
+                    'table'=>'districts',
+                    'alias'=>'DistrictComm',
+                    'type'=>'LEFT',
+                    'conditions'=>array('DistrictComm.id=User.frkUserCommDistrict')
+                    ),
+                 array(
+                    'table'=>'final_communities',
+                    'alias'=>'Final_communitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Final_communitie.id=User.frkUserCommunity')
+                    ),
+                   array(
+                    'table'=>'castes',
+                    'alias'=>'Caste',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Caste.id=User.frkUserCasteID')
+                    ),
+                   array(
+                    'table'=>'occupations',
+                    'alias'=>'Occupation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Occupation.id=User.frkParentOccupation')
+                    ),
+                   array(
+                    'table'=>'reservations',
+                    'alias'=>'Reservation',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Reservation.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'applicants',
+                    'alias'=>'Applicant',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Applicant.frkUserID=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'boards',
+                    'alias'=>'Board',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Board.id=Applicant.plusTwoBoard')
+                    ),
+                   array(
+                    'table'=>'streams',
+                    'alias'=>'Stream',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Stream.id=Applicant.plusTwoStream')
+                    ),
+                   array(
+                    'table'=>'marks',
+                    'alias'=>'Mark',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Mark.user_id=User.frkUserID')
+                    ),
+                   array(
+                    'table'=>'universities',
+                    'alias'=>'Universitie',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Universitie.id=Mark.university_id')
+                    ),
+                   array(
+                    'table'=>'degrees',
+                    'alias'=>'Degree',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Degree.id=Mark.degree_id')
+                    ),
+                    array(
+                    'table'=>'courses',
+                    'alias'=>'Cours',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Cours.frkCourseID=Choice.choices')
+                    ),
+                   array(
+                    'table'=>'indexes',
+                    'alias'=>'Index',
+                    'type'=>'LEFT',
+                    'conditions'=>array('Index.user_id=User.frkUserID','Index.course_id'=>$choiceid),
+//                    'conditions'=>array()
+                    )
+
+            ),
+            'fields'=>array('Choice.*',
+                            // 'Academicdetail.*',
+                            'Universitie.*',
+                            'Degree.*',
+                            'Mark.*',
+                            'Stream.*',
+                            'Applicant.*',
+                            'Board.*',
+                            'Community.*',
+                            'Religion.*',
+                            'User.*',
+                            'Countrie.*',
+                            'State.*',
+                            'District.*',
+                            'DistrictComm.*',
+                            'Final_communitie.*',
+                            'Caste.*',
+                            'Occupation.*',
+                            'Reservation.*',
+                            'Index.*',
+                            'Cours.*'
+                            )
+            ));
+  $from = new DateTime($choice_result[0]['User']['frkUserDOB']);
+        $to   = new DateTime('today');
+        $age  = $from->diff($to)->y;
+       
+
+$choice_result['age']=$age;
+        }
+//        echo $choice_result[0]['Index']['index']; exit;
+//         pr($choice_result[0]); exit;
+            $this->set('All_result',$choice_result);
+
+   }
+
+    public function indexdetails() {
 
         if ($this->Session->read('User.admin') == 1) {
 
-            $Choices = $this->User->find('all', array(
-                //'limit' => 10,
-                'fields' => array('Choices.*, User.frkName,Communities.name,Religions.name,Payments.id ,Payments.transaction_id,Payments.date,Payments.status'),
-                'joins' => array(
-                    array(
-                        'alias' => 'Communities',
-                        'table' => 'communities',
-                        'conditions' => 'Communities.`id` = `User`.`frkUserCommunity`'
-                    ),
-                    array(
-                        'alias' => 'Choices',
-                        'table' => 'choices',
-                        'conditions' => 'Choices.`user_id` = `User`.`frkUserID`'
-                    ), array(
-                        'alias' => 'Religions',
-                        'table' => 'religions',
-                        'conditions' => 'Religions.`id` = `User`.`frkUserReligion`'
-                    ),
-                    array(
-                        'alias' => 'Payments',
-                        'table' => 'payments',
-                        'type' => 'left',
-                        'conditions' => 'Payments.`u_id` = `User`.`frkUserID`'
-                    )
-                )
-                    ));
-
-
-            $this->set('Choices', $Choices);
-
+            $sql = 'select indexes.id,indexes.course_id,choices.application_no,courses.frkCourseID,users.frkUserID,users.frkUserName,users.frkUserMobile,users.frkUserEmail,courses.frkCourseName as coursename,indexes.* from indexes   LEFT JOIN users ON(users.frkUserID=indexes.user_id) LEFT JOIN courses ON(courses.frkCourseID=indexes.course_id) LEFT JOIN choices ON(choices.user_id=indexes.user_id) ';
+            $indexes = $this->User->query($sql);  
+            $this->set('indexes', $indexes);
+            $options = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
+            $this->set('options', $options);
             $this->render('viewpaymentdetails', 'admin');
         } else {
             return $this->redirect(array('action' => 'adminlogin', 'controller' => 'admins'));
         }
+        
+        
     }
-
+     public function ajax_view() {
+        $id = $this->request->data["id"];
+        $this->layout = "ajax";
+        $sql = "select indexes.id,choices.application_no,courses.frkCourseID,users.frkUserID,users.frkUserName,users.frkUserMobile,users.frkUserEmail,courses.frkCourseName as coursename,indexes.* from indexes LEFT JOIN users ON(users.frkUserID=indexes.user_id) LEFT JOIN courses ON(courses.frkCourseID=indexes.course_id) LEFT JOIN choices ON(choices.user_id=indexes.user_id)where indexes.course_id='".$id."' ";
+        $indexes = $this->User->query($sql);  
+        $this->set('indexes', $indexes);
+        
+        $options = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
+        $this->set('options', $options);
+        
+        echo $this->render('ajax_view', 'ajax');
+        exit;
+    }
      public function uploadexcel() {
         $this->render('uploadexcel', 'admin');
 
@@ -278,6 +2111,9 @@ if (!empty($_FILES['file'])) {
 }
 }
     public function adminlogin() {
+        if($this->Session->read('User.admin')) {
+            return $this->redirect(array('action' => 'dashboard', 'controller' => 'admins'));
+        }
         if ($this->request->is('post')) {
 
             $encryptpassword = base64_encode($this->request->data['UserLogin']['password']);
@@ -286,6 +2122,7 @@ if (!empty($_FILES['file'])) {
                     'User.frkUserName' => $this->request->data['UserLogin']['username'],
                     'User.frkUserPassword' => $encryptpassword,
                     'User.frkUserStatus' => 1,
+                    'User.frkUserRole' => 'A',
                 )
                     ));
             if (count($usersDetails) == 0) {
@@ -338,431 +2175,7 @@ if (!empty($_FILES['file'])) {
         }
     }
 
-    public function primary_registration() {
-        $userid = $this->Session->read('User.userid');
-        if (!isset($userid)) {
-            $this->Session->setFlash(__('Please Login!.'));
-            return $this->redirect(array('action' => 'login'));
-        } else {
-            $users = $this->User->find('first', array(
-                'conditions' => array(
-                    'frkUserID' => $userid
-                )
-                    ));
-            $applicant = $this->Applicant->find('first', array(
-                'conditions' => array(
-                    'frkUserID' => $userid
-                )
-                    ));
-
-            @$entranceData = array(
-                'med' => $applicant['Applicant']['frkApplicantEntranceMedical'],
-                'eng' => $applicant['Applicant']['frkApplicantEntranceEngineering'],
-                'iit' => $applicant['Applicant']['frkApplicantEntranceIIT'],
-                'jee' => $applicant['Applicant']['frkApplicantEntranceJEE'],
-                'aitmt' => $applicant['Applicant']['frkAITMT'],
-                'aiims' => $applicant['Applicant']['frkAILMS'],
-                'jitmer' => $applicant['Applicant']['frkJITMER'],
-                'ali' => $applicant['Applicant']['frkALIGARH'],
-                'wardhah' => $applicant['Applicant']['frkWARDHAH'],
-                'amrita' => $applicant['Applicant']['frkAMRITA'],
-                'manipal' => $applicant['Applicant']['frkMANIPAL'],
-                'vellore' => $applicant['Applicant']['frkVELLORE'],
-                'other' => $applicant['Applicant']['frkOTHER'],
-            );
-            $appenddata = array();
-            $appenddata['PrimaryRegister']['name'] = $users['User']['frkName'];
-            $appenddata['PrimaryRegister']['email'] = $users['User']['frkUserEmail'];
-            $appenddata['PrimaryRegister']['adhaar'] = $users['User']['frkUserAdhaarNo'];
-            $appenddata['PrimaryRegister']['blood'] = $users['User']['frkUserBloodGroup'];
-            $appenddata['PrimaryRegister']['religion'] = $users['User']['frkUserReligion'];
-            $appenddata['PrimaryRegister']['religion-other'] = $users['User']['frkUserReligion'];
-            if ($users['User']['frkUserDOB'] != '0000-00-00') {
-                $appenddata['PrimaryRegister']['dob'] = date("d/m/Y", strtotime($users['User']['frkUserDOB']));
-            }
-            $appenddata['PrimaryRegister']['father-name'] = $users['User']['frkFatherName'];
-            $appenddata['PrimaryRegister']['father-qualification'] = $users['User']['frkFatherQualification'];
-            $appenddata['PrimaryRegister']['father-qualification-other'] = $users['User']['frkFatherQualification'];
-            $appenddata['PrimaryRegister']['father-occupation'] = $users['User']['frkFatherOccupation'];
-            $appenddata['PrimaryRegister']['father-occupation-other'] = $users['User']['frkFatherOccupation'];
-            $appenddata['PrimaryRegister']['gender'] = $users['User']['frkUserGender'];
-            $appenddata['PrimaryRegister']['mobile'] = $users['User']['frkUserMobile'];
-            $appenddata['PrimaryRegister']['nationality'] = $users['User']['frkUserNationality_ID'];
-            $appenddata['PrimaryRegister']['community'] = $users['User']['frkUserCommunity'];
-            $appenddata['PrimaryRegister']['community-other'] = $users['User']['frkUserCommunity'];
-            $appenddata['PrimaryRegister']['placeofbirth'] = $users['User']['frkUserPOB'];
-            $appenddata['PrimaryRegister']['mother-name'] = $users['User']['frkMotherName'];
-            $appenddata['PrimaryRegister']['mother-qualification'] = $users['User']['frkMotherQualification'];
-            $appenddata['PrimaryRegister']['mother-qualification-other'] = $users['User']['frkMotherQualification'];
-            $appenddata['PrimaryRegister']['mother-occupation'] = $users['User']['frkMotherOccupation'];
-            $appenddata['PrimaryRegister']['mother-occupation-other'] = $users['User']['frkMotherOccupation'];
-            $appenddata['PrimaryRegister']['perma-addline1'] = $users['User']['frkUserAddressline1'];
-            $appenddata['PrimaryRegister']['perma-addline2'] = $users['User']['frkUserAddressline2'];
-            $appenddata['PrimaryRegister']['perma-postoffice'] = $users['User']['frkUserTaluk'];
-            $appenddata['PrimaryRegister']['perma-pincode'] = $users['User']['frkUserPincode'];
-            $appenddata['PrimaryRegister']['perma-city'] = $users['User']['frkUserDistrict'];
-            $appenddata['PrimaryRegister']['perma-city-other'] = $users['User']['frkUserDistrict'];
-            $appenddata['PrimaryRegister']['perma-state'] = $users['User']['frkUserState'];
-            $appenddata['PrimaryRegister']['perma-state-other'] = $users['User']['frkUserState'];
-            $appenddata['PrimaryRegister']['perma-country'] = $users['User']['frkUserCountry_ID'];
-            $appenddata['PrimaryRegister']['comm-addline1'] = $users['User']['frkUserCommAddressline1'];
-            $appenddata['PrimaryRegister']['comm-addline2'] = $users['User']['frkUserCommAddressline2'];
-            $appenddata['PrimaryRegister']['comm-postoffice'] = $users['User']['frkUserCommTaluk'];
-            $appenddata['PrimaryRegister']['comm-pincode'] = $users['User']['frkUserCommPincode'];
-            $appenddata['PrimaryRegister']['comm-city'] = $users['User']['frkUserCommDistrict'];
-            $appenddata['PrimaryRegister']['comm-city-other'] = $users['User']['frkUserCommDistrict'];
-            $appenddata['PrimaryRegister']['comm-state'] = $users['User']['frkUserCommState'];
-            $appenddata['PrimaryRegister']['comm-state-other'] = $users['User']['frkUserCommState'];
-            $appenddata['PrimaryRegister']['comm-country'] = $users['User']['frkUserCommCountryID'];
-            $appenddata['PrimaryRegister']['phonestd'] = $users['User']['frkPhoneStd'];
-            $appenddata['PrimaryRegister']['phonenumber'] = $users['User']['frkPhoneNumber'];
-            if ($applicant != null) {
-                $appenddata['PrimaryRegister']['qualifyingexam'] = $applicant['Applicant']['frkTenth'];
-                $appenddata['PrimaryRegister']['otherqualifyingexam'] = $applicant['Applicant']['frkTenth'];
-                $appenddata['PrimaryRegister']['ten-school'] = $applicant['Applicant']['frkTenthSchool'];
-                $appenddata['PrimaryRegister']['tenyearofstudy'] = $applicant['Applicant']['frkTenthYOS'];
-                $appenddata['PrimaryRegister']['TenYearofPassing'] = $applicant['Applicant']['frlTenthYOP'];
-                $appenddata['PrimaryRegister']['tenthRegno'] = $applicant['Applicant']['frkTenthRegno'];
-                $appenddata['PrimaryRegister']['carrer-ambition'] = $applicant['Applicant']['frkApplicantAmbition'];
-                $appenddata['PrimaryRegister']['other-carrer-ambition'] = $applicant['Applicant']['frkApplicantAmbition'];
-            }
-            $countries = $this->Country->find('list', array('fields' => array('id', 'country_name')));
-            $religions = $this->Religion->find('list', array('fields' => array('id', 'name')));
-            $qualifications = $this->Qualification->find('list', array('fields' => array('id', 'name')));
-            $occupations = $this->Occupation->find('list', array('fields' => array('id', 'name')));
-            $communities = $this->Community->find('list', array('fields' => array('id', 'name')));
-            $states = $this->State->find('list', array('fields' => array('id', 'name')));
-            $districts = $this->District->find('list', array('fields' => array('id', 'name')));
-            $ambitions = $this->Ambition->find('list', array('fields' => array('id', 'name')));
-
-
-            $communities['other'] = 'Other';
-            $religions['other'] = 'Other';
-            $qualifications['other'] = 'Other';
-            $occupations['other'] = 'Other';
-            $states['other'] = 'Other';
-            $districts['other'] = 'Other';
-            $ambitions['other'] = 'Other';
-            if ($this->request->is('post')) {
-                if ($this->request->data['PrimaryRegister']['religion'] != 'other') {
-                    $userRelegion = $this->request->data['PrimaryRegister']['religion'];
-                } else {
-                    $userRelegion = $this->request->data['PrimaryRegister']['religion-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['father-qualification'] != 'other') {
-                    $userFatherQualification = $this->request->data['PrimaryRegister']['father-qualification'];
-                } else {
-                    $userFatherQualification = $this->request->data['PrimaryRegister']['father-qualification-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['father-occupation'] != 'other') {
-                    $userFatherOccupation = $this->request->data['PrimaryRegister']['father-occupation'];
-                } else {
-                    $userFatherOccupation = $this->request->data['PrimaryRegister']['father-occupation-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['community'] != 'other') {
-                    $userCommunity = $this->request->data['PrimaryRegister']['community'];
-                } else {
-                    $userCommunity = $this->request->data['PrimaryRegister']['community-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['mother-qualification'] != 'other') {
-                    $userMotherQualification = $this->request->data['PrimaryRegister']['mother-qualification'];
-                } else {
-                    $userMotherQualification = $this->request->data['PrimaryRegister']['mother-qualification-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['mother-occupation'] != 'other') {
-                    $userMotherOccupation = $this->request->data['PrimaryRegister']['mother-occupation'];
-                } else {
-                    $userMotherOccupation = $this->request->data['PrimaryRegister']['mother-occupation-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['perma-state'] != 'other') {
-                    $PermaState = $this->request->data['PrimaryRegister']['perma-state'];
-                } else {
-                    $PermaState = $this->request->data['PrimaryRegister']['perma-state-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['comm-state'] != 'other') {
-                    $CommState = $this->request->data['PrimaryRegister']['comm-state'];
-                } else {
-                    $CommState = $this->request->data['PrimaryRegister']['comm-state-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['comm-city'] != 'other') {
-                    $CommCity = $this->request->data['PrimaryRegister']['comm-city'];
-                } else {
-                    $CommCity = $this->request->data['PrimaryRegister']['comm-city-other'];
-                }
-                if ($this->request->data['PrimaryRegister']['perma-city'] != 'other') {
-                    $PermaCity = $this->request->data['PrimaryRegister']['perma-city'];
-                } else {
-                    $PermaCity = $this->request->data['PrimaryRegister']['perma-city-other'];
-                }
-                $dob = $this->request->data['PrimaryRegister']['dob'];
-                $date = str_replace('/', '-', $dob);
-                $newdob = date('Y-m-d', strtotime($date));
-                $userTabaleSaveData = array(
-                    'frkName' => "'" . $this->request->data['PrimaryRegister']['name'] . "'",
-                    'frkUserEmail' => "'" . $this->request->data['PrimaryRegister']['email'] . "'",
-                    'frkUserAdhaarNo' => "'" . $this->request->data['PrimaryRegister']['adhaar'] . "'",
-                    'frkUserBloodGroup' => "'" . $this->request->data['PrimaryRegister']['blood'] . "'",
-                    'frkUserReligion' => "'" . $userRelegion . "'",
-                    'frkUserDOB' => "'" . $newdob . "'",
-                    'frkFatherName' => "'" . $this->request->data['PrimaryRegister']['father-name'] . "'",
-                    'frkFatherQualification' => "'" . $userFatherQualification . "'",
-                    'frkFatherOccupation' => "'" . $userFatherOccupation . "'",
-                    'frkUserGender' => "'" . $this->request->data['PrimaryRegister']['gender'] . "'",
-                    'frkUserMobile' => "'" . $this->request->data['PrimaryRegister']['mobile'] . "'",
-                    'frkUserNationality_ID' => $this->request->data['PrimaryRegister']['nationality'],
-                    'frkUserCommunity' => "'" . $userCommunity . "'",
-                    'frkUserPOB' => "'" . $this->request->data['PrimaryRegister']['placeofbirth'] . "'",
-                    'frkMotherName' => "'" . $this->request->data['PrimaryRegister']['mother-name'] . "'",
-                    'frkMotherQualification' => "'" . $userMotherQualification . "'",
-                    'frkMotherOccupation' => "'" . $userMotherOccupation . "'",
-                    'frkUserAddressline1' => "'" . $this->request->data['PrimaryRegister']['perma-addline1'] . "'",
-                    'frkUserAddressline2' => "'" . $this->request->data['PrimaryRegister']['perma-addline2'] . "'",
-                    'frkUserTaluk' => "'" . $this->request->data['PrimaryRegister']['perma-postoffice'] . "'",
-                    'frkUserDistrict' => "'" . $PermaCity . "'",
-                    'frkUserState' => "'" . $PermaState . "'",
-                    'frkUserPincode' => "'" . $this->request->data['PrimaryRegister']['perma-pincode'] . "'",
-                    'frkUserCountry_ID' => $this->request->data['PrimaryRegister']['perma-country'],
-                    'frkUserCommAddressline1' => "'" . $this->request->data['PrimaryRegister']['comm-addline1'] . "'",
-                    'frkUserCommAddressline2' => "'" . $this->request->data['PrimaryRegister']['comm-addline2'] . "'",
-                    'frkUserCommTaluk' => "'" . $this->request->data['PrimaryRegister']['comm-postoffice'] . "'",
-                    'frkUserCommDistrict' => "'" . $CommCity . "'",
-                    'frkUserCommState' => "'" . $CommState . "'",
-                    'frkUserCommPincode' => "'" . $this->request->data['PrimaryRegister']['comm-pincode'] . "'",
-                    'frkUserCommCountryID' => $this->request->data['PrimaryRegister']['comm-country'],
-                    'frkPhoneStd' => "'" . $this->request->data['PrimaryRegister']['phonestd'] . "'",
-                    'frkPhoneNumber' => "'" . $this->request->data['PrimaryRegister']['phonenumber'] . "'",
-                );
-                if ($this->request->data['PrimaryRegister']['carrer-ambition'] != 'other') {
-                    $careerAmbition = $this->request->data['PrimaryRegister']['carrer-ambition'];
-                } else {
-                    $careerAmbition = $this->request->data['PrimaryRegister']['other-carrer-ambition'];
-                }
-                if ($this->request->data['PrimaryRegister']['qualifyingexam'] != 'other') {
-                    $QualiExamTenth = $this->request->data['PrimaryRegister']['qualifyingexam'];
-                } else {
-                    $QualiExamTenth = $this->request->data['PrimaryRegister']['otherqualifyingexam'];
-                }
-                $applicantdetails = $this->Applicant->find('first', array(
-                    'conditions' => array(
-                        'Applicant.frkUserID' => $userid
-                    )
-                        ));
-                $numbergen = $this->Generatenumber->find('first', array(
-                    'conditions' => array(
-                        'Generatenumber.typecode' => 1
-                    )
-                        ));
-                $tempAppNumber = $numbergen['Generatenumber']['currvalue'] + 1;
-                $remindigits = 6 - strlen($tempAppNumber);
-                if ($remindigits == 5) {
-                    $ApplicationNumber = 'FKUG00000' . $tempAppNumber;
-                } elseif ($remindigits == 4) {
-                    $ApplicationNumber = 'FKUG0000' . $tempAppNumber;
-                } elseif ($remindigits == 3) {
-                    $ApplicationNumber = 'FKUG000' . $tempAppNumber;
-                } elseif ($remindigits == 2) {
-                    $ApplicationNumber = 'FKUG00' . $tempAppNumber;
-                } elseif ($remindigits == 1) {
-                    $ApplicationNumber = 'FKUG0' . $tempAppNumber;
-                } else {
-                    $ApplicationNumber = 'FKUG' . $tempAppNumber;
-                }
-                $cnd3 = array(
-                    'Generatenumber.typecode' => 1,
-                );
-                $fld3 = array(
-                    'currvalue' => $tempAppNumber,
-                );
-                if (!$this->Generatenumber->updateAll($fld3, $cnd3)) {
-                    $this->Session->setFlash(__('Application Number Not Generated'));
-                    return $this->redirect(array('action' => 'primary_registration'));
-                }
-
-                $cnd = array(
-                    'User.frkUserID' => $userid,
-                );
-                $cnd2 = array(
-                    'Applicant.frkUserID' => $userid,
-                );
-                if (!$this->User->updateAll($userTabaleSaveData, $cnd)) {
-                    $this->Session->setFlash(__('Could not Save Application Data'));
-                    return $this->redirect(array('action' => 'primary_registration'));
-                }
-
-
-
-
-
-
-
-
-                if (isset($this->request->data['PrimaryRegister']['keralmedical'][0])) {
-                    $keralamedical = 'Yes';
-                } else {
-                    $keralamedical = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['keralengg'][0])) {
-                    $keralaengg = 'Yes';
-                } else {
-                    $keralaengg = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['iit'][0])) {
-                    $iit = 'Yes';
-                } else {
-                    $iit = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['jee'][0])) {
-                    $jee = 'Yes';
-                } else {
-                    $jee = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['aitmt'][0])) {
-                    $aitmt = 'Yes';
-                } else {
-                    $aitmt = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['aiims'][0])) {
-                    $aiims = 'Yes';
-                } else {
-                    $aiims = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['jitmer'][0])) {
-                    $jitmer = 'Yes';
-                } else {
-                    $jitmer = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['ali'][0])) {
-                    $ali = 'Yes';
-                } else {
-                    $ali = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['wardhah'][0])) {
-                    $wardhah = 'Yes';
-                } else {
-                    $wardhah = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['amrita'][0])) {
-                    $amrita = 'Yes';
-                } else {
-                    $amrita = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['manipal'][0])) {
-                    $manipal = 'Yes';
-                } else {
-                    $manipal = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['vellore'][0])) {
-                    $vellore = 'Yes';
-                } else {
-                    $vellore = 'No';
-                }
-                if (isset($this->request->data['PrimaryRegister']['other'][0])) {
-                    $other = 'Yes#' . $this->request->data['PrimaryRegister']['entrance-other'];
-                } else {
-                    $other = 'No';
-                }
-
-
-
-
-
-
-
-
-
-
-
-                if (count($applicantdetails) > 0) {
-                    $ApplicantTableData = array(
-                        'frkApplicantAmbition' => "'" . $careerAmbition . "'",
-                        'frkTenthSchool' => "'" . $this->request->data['PrimaryRegister']['ten-school'] . "'",
-                        'frkTenthRegno' => "'" . $this->request->data['PrimaryRegister']['tenthRegno'] . "'",
-                        'frkTenthYOS' => "'" . $this->request->data['PrimaryRegister']['tenyearofstudy'] . "'",
-                        'frlTenthYOP' => "'" . $this->request->data['PrimaryRegister']['TenYearofPassing'] . "'",
-                        'frkTenth' => "'" . $QualiExamTenth . "'",
-                        'frkApplicantEntranceMedical' => "'" . $keralamedical . "'",
-                        'frkApplicantEntranceEngineering' => "'" . $keralaengg . "'",
-                        'frkApplicantEntranceIIT' => "'" . $iit . "'",
-                        'frkApplicantEntranceJEE' => "'" . $jee . "'",
-                        'frkAITMT' => "'" . $aitmt . "'",
-                        'frkAILMS' => "'" . $aiims . "'",
-                        'frkJITMER' => "'" . $jitmer . "'",
-                        'frkALIGARH' => "'" . $ali . "'",
-                        'frkWARDHAH' => "'" . $wardhah . "'",
-                        'frkAMRITA' => "'" . $amrita . "'",
-                        'frkMANIPAL' => "'" . $manipal . "'",
-                        'frkVELLORE' => "'" . $vellore . "'",
-                        'frkOTHER' => "'" . $other . "'",
-                    );
-                    if (!$this->Applicant->updateAll($ApplicantTableData, $cnd2)) {
-                        $this->Session->setFlash(__('Could not Save Application Data'));
-                        return $this->redirect(array('action' => 'primary_registration'));
-                    }
-                } else {
-                    $ApplicantTableData = array(
-                        'frkUserID' => $userid,
-                        'frkApplicantAmbition' => $careerAmbition,
-                        'frkApplicationNumber' => $ApplicationNumber,
-                        'frkTenthSchool' => $this->request->data['PrimaryRegister']['ten-school'],
-                        'frkTenthRegno' => $this->request->data['PrimaryRegister']['tenthRegno'],
-                        'frkTenthYOS' => $this->request->data['PrimaryRegister']['tenyearofstudy'],
-                        'frlTenthYOP' => $this->request->data['PrimaryRegister']['TenYearofPassing'],
-                        'frkTenth' => $QualiExamTenth,
-                        'frkApplicantEntranceMedical' => $keralamedical,
-                        'frkApplicantEntranceEngineering' => $keralaengg,
-                        'frkApplicantEntranceIIT' => $iit,
-                        'frkApplicantEntranceJEE' => $jee,
-                        'frkAITMT' => $aitmt,
-                        'frkAILMS' => $aiims,
-                        'frkJITMER' => $jitmer,
-                        'frkALIGARH' => $ali,
-                        'frkWARDHAH' => $wardhah,
-                        'frkAMRITA' => $amrita,
-                        'frkMANIPAL' => $manipal,
-                        'frkVELLORE' => $vellore,
-                        'frkOTHER' => $other,
-                    );
-                    $this->Applicant->create();
-                    if (!$this->Applicant->save($ApplicantTableData)) {
-                        $this->Session->setFlash(__('Could not Save Application Data'));
-                        return $this->redirect(array('action' => 'primary_registration'));
-                    }
-                }
-                $applicantdetails2 = $this->Applicant->find('first', array(
-                    'conditions' => array(
-                        'Applicant.frkUserID' => $userid
-                    )
-                        ));
-                $AppNum = $applicantdetails2['Applicant']['frkApplicationNumber'];
-                $subject = 'Application has been Entered';
-                $message = 'Hello, ' . $this->request->data['PrimaryRegister']['name'] . ' . Thank you for completing Step 1 and Step 2. Please login again for the completion of Step 3, Step 4 and to submit final application the page will be open when Kerala HSE results are declared. Your Application Number is ' . $AppNum;
-                $to = $this->request->data['PrimaryRegister']['email'];
-                $headers = 'From: info@farookadmission.in' . "\r\n" .
-                        'Name: Farook College UG Admission' . "\r\n" .
-                        'Reply-To: info@farookadmission.in' . "\r\n" .
-                        'X-Mailer: PHP/' . phpversion();
-                mail($to, $subject, $message, $headers);
-                $this->Session->setFlash(__('Thankyou for completing Step 1 and Step 2. Please login again for the completion of Step 3, Step 4 and to submit final application the page will be open when Kerala HSE results are declared.!'));
-                return $this->redirect(array('action' => 'applicantinfo'));
-            }
-            if (!$this->request->data) {
-                $this->request->data = $appenddata;
-            }
-        }
-
-        $setarry = array(
-            'countries' => $countries,
-            'religions' => $religions,
-            'qualifications' => $qualifications,
-            'occupations' => $occupations,
-            'communities' => $communities,
-            'states' => $states,
-            'districts' => $districts,
-            'entranceData' => $entranceData,
-            'ambitions' => $ambitions,
-        );
-        $this->set($setarry);
-    }
+    
 
     public function test() {
         $randnum = rand(1, 5);
@@ -819,9 +2232,9 @@ if (!empty($_FILES['file'])) {
             } elseif ($userdata['User']['frkUserBloodGroup'] == 'ABneg') {
                 $applicantdata['blood'] = 'AB-';
             }
-            $getcommunity = $this->Community->find('first', array(
+            $getcommunity = $this->Final_community->find('first', array(
                 'conditions' => array(
-                    'Community.id' => $userdata['User']['frkUserCommunity']
+                    'Final_community.id' => $userdata['User']['frkUserCommunity']
                 )
                     ));
             if ($getcommunity == null) {
@@ -1459,179 +2872,7 @@ if (!empty($_FILES['file'])) {
         exit;
     }
 
-    public function ajax_view() {
-        $id = $this->request->data["id"];
-        $this->layout = "ajax";
-        $grades = $this->Grade->find('list', array('fields' => array('frkGradeID', 'frkGrade')));
+    
 
-
-        $structure = $this->Board->find('first', array('fields' => array('subject_structure'), 'conditions' => array('id' => $id)));
-
-        $setarray = array('grades' => $grades, 'subject_structure' => $structure['Board']['subject_structure']);
-        $this->set('setarray', $setarray);
-        echo $this->render('ajax_view', 'ajax');
-        exit;
-    }
-
-    public function befor_payment() {
-        $userid = $this->Session->read('User.userid');
-        if (!isset($userid)) {
-            $this->Session->setFlash(__('Please Login!.'));
-            return $this->redirect(array('action' => 'login'));
-        } else {
-            $this->loadModel('User');
-            $userdata = $this->User->find('all', array(
-                'joins' => array(
-                    array('table' => 'choices',
-                        'alias' => 'Choices',
-                        'type' => 'INNER',
-                        'foreignKey' => false,
-                        'conditions' => array('Choices.user_id = User.frkUserID')
-                    ),
-                    array('table' => 'communities',
-                        'alias' => 'Communities',
-                        'type' => 'INNER',
-                        'foreignKey' => false,
-                        'conditions' => array('Choices.community = Communities.id')
-                    )
-                ),
-                'fields' => array(
-                    'Choices.application_no',
-                    'Choices.name',
-                    'User.frkUserEmail',
-                    'User.frkUserDOB',
-                    'User.frkUserMobile',
-                    'Communities.*'
-                    )));
-
-            // pr($userdata);
-            // exit;
-
-
-
-
-
-            $this->set('userdata', $userdata);
-            pr($userdata);
-            exit;
-        }
-
-
-        $communities = $this->Community->find('list', array('fields' => array('id', 'name')));
-        $religions = $this->Religion->find('list', array('fields' => array('id', 'name')));
-        $courses = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
-        $this->set('communities', $communities);
-        $this->set('religions', $religions);
-        $this->set('courses', $courses);
-    }
-
-    public function choice_select() {
-        if ($this->request->is('post')) {
-            //pr($this->request->data); exit;
-            $course_count = $this->Course->find('count');
-            $choices = '';
-            //echo $course_count; exit;
-            for ($i = 0; $i < $course_count; $i++) {
-                if (isset($this->request->data['course'][$i])) {
-                    $choices = $choices . ',' . $this->request->data['course'][$i];
-                }
-            }
-            $choices = ltrim($choices, ',');
-            $choices = rtrim($choices, ',');
-            $choices = preg_replace('/,+/', ',', $choices);
-
-            $numbergen = $this->Generatenumber->find('first', array(
-                'conditions' => array(
-                    'Generatenumber.typecode' => 1
-                )
-                    ));
-            $tempAppNumber = $numbergen['Generatenumber']['currvalue'] + 1;
-            $remindigits = 6 - strlen($tempAppNumber);
-            if ($remindigits == 5) {
-                $ApplicationNumber = 'FKPG00000' . $tempAppNumber;
-            } elseif ($remindigits == 4) {
-                $ApplicationNumber = 'FKPG0000' . $tempAppNumber;
-            } elseif ($remindigits == 3) {
-                $ApplicationNumber = 'FKPG000' . $tempAppNumber;
-            } elseif ($remindigits == 2) {
-                $ApplicationNumber = 'FKPG00' . $tempAppNumber;
-            } elseif ($remindigits == 1) {
-                $ApplicationNumber = 'FKPG0' . $tempAppNumber;
-            } else {
-                $ApplicationNumber = 'FKPG' . $tempAppNumber;
-            }
-            $cnd3 = array(
-                'Generatenumber.typecode' => 1,
-            );
-            $fld3 = array(
-                'currvalue' => $tempAppNumber,
-            );
-            if (!$this->Generatenumber->updateAll($fld3, $cnd3)) {
-                $this->Session->setFlash(__('Application Number Not Generated'));
-                return $this->redirect(array('action' => 'choice_select'));
-            }
-
-            $savedata = array(
-                'user_id' => $this->Session->read('User.userid'),
-                'name' => $this->request->data['choice']['name'],
-                'application_no' => $ApplicationNumber,
-                'gender' => $this->request->data['choice']['gender'],
-                'community' => $this->request->data['choice']['community'],
-                'religion' => $this->request->data['choice']['religion'],
-                'choices' => $choices,
-                'date' => date('Y-m-d')
-            );
-            $this->Choice->set($savedata);
-            if ($this->Choice->validates()) {
-                $this->Choice->create();
-                if (!$this->Choice->save($savedata)) {
-                    $this->Session->setFlash('An error occured, please try again');
-                } else {
-                    return $this->redirect(array('controller' => 'pages', 'action' => 'payment'));
-                }
-            }
-        }
-
-        $communities = $this->Community->find('list', array('fields' => array('id', 'name')));
-        $religions = $this->Religion->find('list', array('fields' => array('id', 'name')));
-        $courses = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
-        $this->set('communities', $communities);
-        $this->set('religions', $religions);
-        $this->set('courses', $courses);
-    }
-
-    public function update_list() {
-        $course_id = $this->data['course_id'];
-        $courses = $this->Course->find('list', array('fields' => array('frkCourseID', 'frkCourseName')));
-        unset($courses[$course_id]);
-        pr($courses);
-        exit;
-    }
-
-    public function after_payment() {
-
-        $userid = $this->Session->read('User.userid');
-        pr($userid);
-        exit;
-        if (!isset($userid)) {
-            $this->Session->setFlash(__('Please Login!.'));
-            return $this->redirect(array('action' => 'login'));
-        } else {
-            $userdata = $this->User->find('first', array(
-                'conditions' => array(
-                    'User.frkUserID' => $userid
-                )
-                    ));
-        }
-    }
-
-    public function after_payment_verify() {
-        $this->autoRender = false;
-        if ($this->request->is('post')) {
-            echo $ApplicationNumber = $this->request->data['ApplicationNumber'];
-            echo $transaction_id = $this->request->data['transaction_id'];
-            echo $transactionDate = date('Y/m/d', strtotime($this->request->data['transactionDate']));
-        }
-    }
 
 }

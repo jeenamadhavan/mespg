@@ -24,27 +24,27 @@
     <div class="row">
         
         
-          <!--<div class="panel panel-default panel-fk">
-              <div class="panel-heading">
-                    <h3 class="panel-title">INSTRUCTIONS FOR REGISTERED CANDIDATES</h3>
-                </div>
-              <div class="panel-body">
-                  <ul class="instructions">
-                      
-                        
-                       
-                            <li class="fontcolor">The last date of registration for PG Admission 2015 has been extended to 08/07/2015.</li>
-                        <li class="fontcolor">The other dates will be shortly announced.</li>
-                    <li class="fontcolor">The second phase will be open by 2nd July 2015 for payment confirmed candidates.</li>
-                    <li class="fontcolor">Please download  the consolidated grade sheet from the university website before login for 2nd phase.</li>
-                  <li class="fontcolor">Candidates whose payments are not confirmed, please make sure that they have entered the  transaction id (SB Collect Reference No.) in the portal through "Confirm Payment " button.</li>
-                  <li class="fontcolor">Candidates who have confirmed their payment at the admission portal and have no payment confirmation within 48 hours of successful payment, please contact us with the details  (admission@farookcollege.ac.in)</li>
-                  </ul>
-              </div>
-          </div>-->
           
-          <b><center><font color="red">Application form entry will be open for registered candidates by 1:30pm on 21st July 2015</font></center></b>
-          <div class="panel panel-default panel-fk">
+          <ul><br>
+            <li><b><font color="red">The provisional rank list has been published.</font></b></li>
+            <li><b><font color="red">Rank list for M.Sc. Food Science will be published after the entrance test.</font></b></li>
+            <li><b><font color="red">Final rank list will be published on 3rd August 2015.</font></b></li>
+            <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am.</font></b></li>
+            <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
+            <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
+          </ul>
+          <div class="row" style="padding: 25px;">
+          <h3>Provisional Rank List</h3>
+            <div><b>Note:</b><font color="red">This list is provisional and liable to change when the final list is prepared.   Please contact us at (admission@mesmampadadmission.com) for any queries   or grievances if any.   The candidates who received mail for  correct credit  / CGPA entry,  please correct today and save as per directions provided.  Please make sure that all entries in the form are correct.</font></div><br>
+              <?php echo $this->Html->link(__('Provisional List for M.Sc. Chemistry'), "/pages/downloadproranklistchemistry", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('Provisional List for M.Sc. Mathematics'), "/pages/downloadproranklistmaths", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('Provisional List for M.Sc. Zoology'), "/pages/downloadproranklistzoology", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('Provisional List for M.A. Economics'), "/pages/downloadproranklisteconomics", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('Provisional List for M.A. Arabic'), "/pages/downloadproranklistarabic", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('Provisional List for M.Com.'), "/pages/downloadproranklistmcom", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+          </div>
+          
+          <!--<div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
                 </div>
@@ -73,22 +73,22 @@
                             <li>Candidate must make sure that all entried filled in the application form are correct. Invalid/wrong entries cannot be considered for admission process.</li>
                             <!--<li>After filling application form, candidate can submit the form and wait for rank lists.</li>-->
 
-                        </ul>
-                    </li>
+                        <!--</ul>
+                    </li>-->
                     <!--<li>
                         <strong>STEP 3 ( Payment Confirmation):-</strong>
                         <ul>
                             <li>On successful payment, the candidate will get an e-receipt with a Transaction ID(SBT Collect Reference Number). Candidate must enter Transaction ID in appropriate format and other required information in order to process further towards submission of application.</li>
                             <li>Candidate’s payment will be confirmed by the system within 48 hrs and a confirmation mail will be sent to your registered e-mail ID. After receiving Payment Confirmation mail, candidate may proceed further for filling application in detail, and then submission of final application for admission process.</li>                           
                         </ul>
-                    </li>-->
+                    </li>
                     
                     
                 </ul>
 
 
                 </div>
-        </div>
+        </div>-->
 
             
 			<div class="text-center">
