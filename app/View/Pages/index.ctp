@@ -24,26 +24,47 @@
     <div class="row">
         
         
+          <!--<div class="panel panel-default panel-fk">
+              <div class="panel-heading">
+                    <h3 class="panel-title">INSTRUCTIONS FOR REGISTERED CANDIDATES</h3>
+                </div>
+              <div class="panel-body">
+                  <ul class="instructions">
+                      
+                        
+                       
+                            <li class="fontcolor">The last date of registration for PG Admission 2015 has been extended to 08/07/2015.</li>
+                        <li class="fontcolor">The other dates will be shortly announced.</li>
+                    <li class="fontcolor">The second phase will be open by 2nd July 2015 for payment confirmed candidates.</li>
+                    <li class="fontcolor">Please download  the consolidated grade sheet from the university website before login for 2nd phase.</li>
+                  <li class="fontcolor">Candidates whose payments are not confirmed, please make sure that they have entered the  transaction id (SB Collect Reference No.) in the portal through "Confirm Payment " button.</li>
+                  <li class="fontcolor">Candidates who have confirmed their payment at the admission portal and have no payment confirmation within 48 hours of successful payment, please contact us with the details  (admission@farookcollege.ac.in)</li>
+                  </ul>
+              </div>
+          </div>-->
           
           <ul><br>
             <li><b><font color="red">The provisional rank list has been published.</font></b></li>
+            <li><b><font color="red">Please contact us  at admission@mesmampadadmission.com  before  3rd August 12 noon for your queries or grievances if any.</font></b></li>
+            <li><b><font color="red">The candidates who received mail for  correct credit  / CGPA entry,  please correct  and save today  as per directions in the mail.</font></b></li>
+            <li><b><font color="red">Edit link will be closed by 3rd August 12 Noon.</font></b></li>
             <li><b><font color="red">Rank list for M.Sc. Food Science will be published after the entrance test.</font></b></li>
+            <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am. </font></b></li>
+            <li><b><font color="red">Candidates who applied for MSc Food Science and Technology, please download the hall ticket from the portal. Please bring hall ticket, a photo id and a passport size photo while coming for the entrance test.</font></b></li>
             <li><b><font color="red">Final rank list will be published on 3rd August 2015.</font></b></li>
-            <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am.</font></b></li>
             <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
             <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
           </ul>
           <div class="row" style="padding: 25px;">
           <h3>Provisional Rank List</h3>
-            <div><b>Note:</b><font color="red">This list is provisional and liable to change when the final list is prepared.   Please contact us at (admission@mesmampadadmission.com) for any queries   or grievances if any.   The candidates who received mail for  correct credit  / CGPA entry,  please correct today and save as per directions provided.  Please make sure that all entries in the form are correct.</font></div><br>
-              <?php echo $this->Html->link(__('Provisional List for M.Sc. Chemistry'), "/pages/downloadproranklistchemistry", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
-              <?php echo $this->Html->link(__('Provisional List for M.Sc. Mathematics'), "/pages/downloadproranklistmaths", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
-              <?php echo $this->Html->link(__('Provisional List for M.Sc. Zoology'), "/pages/downloadproranklistzoology", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
-              <?php echo $this->Html->link(__('Provisional List for M.A. Economics'), "/pages/downloadproranklisteconomics", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
-              <?php echo $this->Html->link(__('Provisional List for M.A. Arabic'), "/pages/downloadproranklistarabic", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
-              <?php echo $this->Html->link(__('Provisional List for M.Com.'), "/pages/downloadproranklistmcom", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
-          </div>
-          
+            
+              <?php echo $this->Html->link(__('M.Sc. Chemistry'), "/pages/downloadproranklistchemistry", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('M.Sc. Mathematics'), "/pages/downloadproranklistmaths", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('M.Sc. Zoology'), "/pages/downloadproranklistzoology", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('M.A. Economics'), "/pages/downloadproranklisteconomics", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('M.A. Arabic'), "/pages/downloadproranklistarabic", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('M.Com.'), "/pages/downloadproranklistmcom", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+          </div><hr style="border-top: 1px solid #93C54B;">
           <!--<div class="panel panel-default panel-fk">
                 <div class="panel-heading">
                     <h3 class="panel-title">INSTRUCTIONS FOR PG ADMISSION 2015</h3>
