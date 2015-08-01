@@ -24,27 +24,10 @@
     <div class="row">
         
         
-          <!--<div class="panel panel-default panel-fk">
-              <div class="panel-heading">
-                    <h3 class="panel-title">INSTRUCTIONS FOR REGISTERED CANDIDATES</h3>
-                </div>
-              <div class="panel-body">
-                  <ul class="instructions">
-                      
-                        
-                       
-                            <li class="fontcolor">The last date of registration for PG Admission 2015 has been extended to 08/07/2015.</li>
-                        <li class="fontcolor">The other dates will be shortly announced.</li>
-                    <li class="fontcolor">The second phase will be open by 2nd July 2015 for payment confirmed candidates.</li>
-                    <li class="fontcolor">Please download  the consolidated grade sheet from the university website before login for 2nd phase.</li>
-                  <li class="fontcolor">Candidates whose payments are not confirmed, please make sure that they have entered the  transaction id (SB Collect Reference No.) in the portal through "Confirm Payment " button.</li>
-                  <li class="fontcolor">Candidates who have confirmed their payment at the admission portal and have no payment confirmation within 48 hours of successful payment, please contact us with the details  (admission@farookcollege.ac.in)</li>
-                  </ul>
-              </div>
-          </div>-->
+          
           <ul><br>
-            <li><b><font color="red">Last date for accepting application fee is extended to 30th July 2015.</font></b></li>
-            <li><b><font color="red">Preliminary rank list will be published on 1st August 2015.</font></b></li>
+            <li><b><font color="red">The provisional rank list will be published at 11:30am Today (1st August 2015).</font></b></li>
+            <li><b><font color="red">Rank list for M.Sc. Food Science will be published after the entrance test.</font></b></li>
             <li><b><font color="red">Final rank list will be published on 3rd August 2015.</font></b></li>
             <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am.</font></b></li>
             <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
