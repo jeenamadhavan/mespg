@@ -4523,32 +4523,32 @@ $choice_result['age']=$age;
                public function downloadproranklistchemistry() {
     $this->autoRender=false;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
-        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Chemistry.pdf', array('download' => true, 'name' => 'Provisional List M.Sc. Chemistry.pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Chemistry.pdf', array('download' => true, 'name' => 'Final List M.Sc. Chemistry.pdf'));
     }
     public function downloadproranklistmaths() {
         $this->autoRender=false;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
-        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Mathematics.pdf', array('download' => true, 'name' => 'Provisional List M.Sc. Mathematics.pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Mathematics.pdf', array('download' => true, 'name' => 'Final List M.Sc. Mathematics.pdf'));
     }
     public function downloadproranklistzoology() {
         $this->autoRender=false;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
-        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Zoology.pdf', array('download' => true, 'name' => 'Provisional List M.Sc. Zoology.pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Zoology.pdf', array('download' => true, 'name' => 'Final List M.Sc. Zoology.pdf'));
     }
     public function downloadproranklisteconomics() {
         $this->autoRender=false;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
-        $this->response->file(WWW_ROOT . 'rank_lists/M.A.Economics.pdf', array('download' => true, 'name' => 'Provisional List M.A. Economics.pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.A.Economics.pdf', array('download' => true, 'name' => 'Final List M.A. Economics.pdf'));
     }
     public function downloadproranklistarabic() {
         $this->autoRender=false;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
-        $this->response->file(WWW_ROOT . 'rank_lists/M.A.Arabic.pdf', array('download' => true, 'name' => 'Provisional List M.A. Arabic.pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.A.Arabic.pdf', array('download' => true, 'name' => 'Final List M.A. Arabic.pdf'));
     }
     public function downloadproranklistmcom() {
         $this->autoRender=false;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
-        $this->response->file(WWW_ROOT . 'rank_lists/M.Com.pdf', array('download' => true, 'name' => 'Provisional List M.Com..pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.Com.pdf', array('download' => true, 'name' => 'Final List M.Com..pdf'));
     }
 
     
