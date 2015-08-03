@@ -44,19 +44,15 @@
           </div>-->
           
           <ul><br>
-            <li><b><font color="red">The provisional rank list has been published.</font></b></li>
-            <li><b><font color="red">Please contact us  at admission@mesmampadadmission.com  before  3rd August 12 noon for your queries or grievances if any.</font></b></li>
-            <li><b><font color="red">The candidates who received mail for  correct credit  / CGPA entry,  please correct  and save today  as per directions in the mail.</font></b></li>
-            <li><b><font color="red">Edit link will be closed by 3rd August 12 Noon.</font></b></li>
+            <li><b><font color="red">The Final rank list has been published.</font></b></li>
             <li><b><font color="red">Rank list for M.Sc. Food Science will be published after the entrance test.</font></b></li>
             <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am. </font></b></li>
             <li><b><font color="red">Candidates who applied for MSc Food Science and Technology, please download the hall ticket from the portal. Please bring hall ticket, a photo id and a passport size photo while coming for the entrance test.</font></b></li>
-            <li><b><font color="red">Final rank list will be published on 3rd August 2015.</font></b></li>
             <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
             <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
           </ul>
           <div class="row" style="padding: 25px;">
-          <h3>Provisional Rank List</h3>
+          <h3>Final Rank List</h3>
             
               <?php echo $this->Html->link(__('M.Sc. Chemistry'), "/pages/downloadproranklistchemistry", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
               <?php echo $this->Html->link(__('M.Sc. Mathematics'), "/pages/downloadproranklistmaths", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
