@@ -30,9 +30,21 @@
 				<th>Choices :</th>
 				<td>
 					<?php $count=1; ?>
+					<table class="table table-bordered">
+						<tr>
+							<th>Choice No.</th>
+							<th>Course Name</th>
+							<th>Index</th>
+						</tr>
 					<?php foreach($choices_name as $choice) { ?>
-						<?php echo $count; ?>. <?php echo $choice; ?><br>
-					<?php $count++; } ?>
+						<tr>
+							<td><?php echo $count; ?>.</td>
+							<td><?php echo $choice['name']; ?></td>
+							<td><?php if(isset($choice['index'])) { echo $choice['index']; } else { echo '0'; } ?></td>
+						</tr>
+					
+						<?php $count++; } ?>
+					</table>
 				</td>
 			</tr>
 			<tr>
@@ -65,7 +77,7 @@
 				<th>Download Application Form (PDF):</th>
 				<td>
 					<?php foreach($choices_name as $choice_id=>$choice) {
-						echo $this->Html->link($choice,array('controller'=>'pages','action'=>'generatepdfapplication/'.$choice_id),array('class'=>'btn btn-success pull-left','style'=>'margin-right: 5px;'));
+						echo $this->Html->link($choice['name'],array('controller'=>'pages','action'=>'generatepdfapplication/'.$choice_id),array('class'=>'btn btn-success pull-left','style'=>'margin-right: 5px;'));
 						} ?>
 				</td>
 			</tr>
@@ -75,9 +87,9 @@
                 <?php if(!isset($cannot_fill)) { ?>
                 	<?php if(isset($edit_form)) { ?>
                 		
-                		<?php echo $this->Html->link('Edit Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
+                		<?php echo $this->Html->link('Edit Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right','disabled'=>'disabled')); ?>
                 	<?php } else { ?>
-                	<?php echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right')); ?>
+                	<?php echo $this->Html->link('Fill Application',array('controller'=>'pages','action'=>'primary_registration'),array('class'=>'btn btn-success pull-right','disabled'=>'disabled')); ?>
                 <?php } } ?>
                 <?php echo $this->Html->link('Edit Choice',array('controller'=>'pages','action'=>'choice_edit'),array('class'=>'btn btn-success pull-right','style'=>'margin-right: 5px;','disabled'=>(isset($reference_entered) ? 'disabled' : ''))); ?>
                 <?php if(isset($food_science)) { ?>

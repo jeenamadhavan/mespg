@@ -74,7 +74,8 @@ class PagesController extends AppController {
         'Mark',
         'Completedpayment',
         'Final_community',
-        'Undetectedpayment'
+        'Undetectedpayment',
+        'Indexes'
     );
     var $name = 'Pages';
     public $helpers = array('Html', 'Form', 'Session');
@@ -316,6 +317,8 @@ class PagesController extends AppController {
         }
     }
 	public function primary_registration() {
+		$this->Session->setFlash(__('You cannot Fill/Edit Application further.'));
+        	return $this->redirect(array('action' => 'choice_select'));
        // if ($this->request->is('post')) {pr($this->request->data);}
         
         $userid = $this->Session->read('User.userid');
@@ -3499,11 +3502,19 @@ class PagesController extends AppController {
         $choice_count=count($choice_arr);
 
         $this->Session->write('choice_array',$choice_arr);
-
+        
+        $indexes=$this->Indexes->find('all',array('conditions'=>array('user_id'=>$userid)));
+	
         $choices_name=array();
         for($i=0;$i<$choice_count;$i++) {
             $result=$this->Course->find('first',array('conditions'=>array('frkCourseID'=>$choice_arr[$i])));
-            $choices_name[$result['Course']['frkCourseID']]=$result['Course']['frkCourseName'];
+            $choices_name[$result['Course']['frkCourseID']]['name']=$result['Course']['frkCourseName'];
+            foreach($indexes as $index) {
+                if($index['Indexes']['course_id']==$result['Course']['frkCourseID']) {
+                    $choices_name[$result['Course']['frkCourseID']]['index']=$index['Indexes']['index'];
+                }
+            }
+             
         }
         $payment=$this->Payment->find('first',array(
             'conditions'=>array('user_id'=>$this->Session->read('User.userid')),

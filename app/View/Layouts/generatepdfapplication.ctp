@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?php echo $this->Html->charset(); ?>
         <title>
-            M E S Mampad College PG Admission | <?php echo $title_for_layout; ?>
+            M E S College PG Admission | <?php echo $title_for_layout; ?>
         </title>
         <script type="text/javascript">
             var BASEURL = "<?php echo $this->base; ?>";
@@ -231,7 +231,10 @@ doc.text(90, 227, '<?php echo $All_result[0]['Reservation']['frkHandiCapped']; ?
 doc.line(10, 231, 200,231); // horizontal line
 
 doc.text(13, 235, '14');
-doc.text(20, 234, 'Are youe eligible for grace marks for admission');
+doc.text(20, 234, 'Are you eligible for grace marks for admission :  ');
+doc.text(95, 235, '<?php if($All_result[0]['Reservation']['frkNcc/Nss']==1){echo "Yes"; } else { echo "No"; } ?>');
+
+
 doc.setFontType("italic");
 doc.setFontSize(8);
 doc.text(20, 238, '(Please Attach the copy of certificate)');
