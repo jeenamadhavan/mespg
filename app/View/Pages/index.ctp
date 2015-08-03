@@ -52,7 +52,7 @@
             <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
           </ul>
           <div class="row" style="padding: 25px;">
-          <h3>Provisional Rank List</h3>
+          <h3>Final Rank List</h3>
             
               <?php echo $this->Html->link(__('M.Sc. Chemistry'), "/pages/downloadproranklistchemistry", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
               <?php echo $this->Html->link(__('M.Sc. Mathematics'), "/pages/downloadproranklistmaths", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
