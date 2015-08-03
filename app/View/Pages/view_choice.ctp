@@ -40,7 +40,7 @@
 						<tr>
 							<td><?php echo $count; ?>.</td>
 							<td><?php echo $choice['name']; ?></td>
-							<td><?php echo $choice['index']; ?></td>
+							<td><?php (isset($choice['index']) ? echo $choice['index']; : echo '0';) ?></td>
 						</tr>
 					
 						<?php $count++; } ?>
