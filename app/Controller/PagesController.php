@@ -317,6 +317,8 @@ class PagesController extends AppController {
         }
     }
 	public function primary_registration() {
+		$this->Session->setFlash(__('You cannot Fill/Edit Application further.'));
+        	return $this->redirect(array('action' => 'choice_select'));
        // if ($this->request->is('post')) {pr($this->request->data);}
         
         $userid = $this->Session->read('User.userid');
