@@ -49,6 +49,7 @@
             <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am. </font></b></li>
             <li><b><font color="red">Candidates who applied for MSc Food Science and Technology, please download the hall ticket from the portal. Please bring hall ticket, a photo id and a passport size photo while coming for the entrance test.</font></b></li>
             <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
+            <li><b><font color="red"><u>All candidates in the list</u> are requested to be in the college at 10am on 6th August 2015.</font></b></li>
             <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
           </ul>
           <div class="row" style="padding: 25px;">
