@@ -164,13 +164,19 @@ class IndexesController extends AppController {
 				  $reservation_sql="select * from reservations where frkUserID=".$row2['user_id'];
 				  
 				 $reservations = mysqli_query($db,$reservation_sql);
-				 while($row3=mysqli_fetch_array($reservations)) {
-					 $ncc=$row3['frkNcc/Nss'];
-					 $nccA=$row3['NCC_Certificate_A'];
-					 $nccB=$row3['NCC_Certificate_B'];
-					 $nccC=$row3['NCC_Certificate_C'];
-					 
-					 $weightage=($ncc*5) + min(10,(($nccA*3)+($nccB*5)+($nccC*10)));
+				 if(mysqli_num_rows($reservations)==0) {
+				 	$weightage=0;
+				 } else {
+					 while($row3=mysqli_fetch_array($reservations)) {
+						 $ncc=$row3['frkNcc/Nss'];
+						 $nccA=$row3['NCC_Certificate_A'];
+						 $nccB=$row3['NCC_Certificate_B'];
+						 $nccC=$row3['NCC_Certificate_C'];
+						 
+						 $weightage=($ncc*5) + min(10,(($nccA*3)+($nccB*5)+($nccC*10)));
+					 }
+				 }
+				 
 					 
 				 
 				  if($mark['mark_grade']=='G') {
@@ -1307,7 +1313,7 @@ class IndexesController extends AppController {
 					  }*/
 				  } // if mark
 				  
-				  }
+				  //} reservation while.. deleted
 				  
 				  //$inerst_sql="insert into indexes values ('','".$row2['user_id']."','".$course_id."','".$index."')";
 				  //mysqli_query($db,$inerst_sql);
