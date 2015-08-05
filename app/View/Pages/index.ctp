@@ -44,6 +44,7 @@
           </div>-->
           
           <ul><br>
+            <li><b><font color="red">M.Sc(Food Science & technology) ranklist will be published today and interview will be held on 7th August 2015 at 10 AM</font></b></li>
             <li><b><font color="red">The Final rank list has been published.</font></b></li>
             <li><b><font color="red">Rank list for M.Sc. Food Science will be published after the entrance test.</font></b></li>
             <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am. </font></b></li>
