@@ -44,13 +44,10 @@
           </div>-->
           
           <ul><br>
-            <li><b><font color="red">M.Sc(Food Science & technology) ranklist will be published today and interview will be held on 7th August 2015 at 10 AM</font></b></li>
             <li><b><font color="red">The Final rank list has been published.</font></b></li>
-            <li><b><font color="red">Rank list for M.Sc. Food Science will be published after the entrance test.</font></b></li>
-            <li><b><font color="red">Entrance test for MSc Food Science and Technology will be on 3rd August 2015 at 10:30 am. </font></b></li>
-            <li><b><font color="red">Candidates who applied for MSc Food Science and Technology, please download the hall ticket from the portal. Please bring hall ticket, a photo id and a passport size photo while coming for the entrance test.</font></b></li>
-            <li><b><font color="red">Admission date is 6th August 2015.</font></b></li>
-            <li><b><font color="red"><u>All candidates in the list</u> are requested to be in the college at 10am on 6th August 2015.</font></b></li>
+            <li><b><font color="red">Admission date is 6th / 7th August 2015.</font></b></li>
+            <li><b><font color="red">All candidates in the list  (except M.Sc. (Food Science & Technology)) are requested to be in the college at 10am on 6th August 2015.</font></b></li>
+            <li><b><font color="red">All candidates in the rank list of M.Sc. (Food Technology) are requested to be in the college at 10 am on 7th August 2015.</font></b></li>
             <li><b><font color="red">The classes will be starting on 10th August 2015.</font></b></li>
           </ul>
           <div class="row" style="padding: 25px;">
@@ -62,6 +59,7 @@
               <?php echo $this->Html->link(__('M.A. Economics'), "/pages/downloadproranklisteconomics", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
               <?php echo $this->Html->link(__('M.A. Arabic'), "/pages/downloadproranklistarabic", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
               <?php echo $this->Html->link(__('M.Com.'), "/pages/downloadproranklistmcom", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
+              <?php echo $this->Html->link(__('M.Sc. Food Technology'), "/pages/downloadproranklistfood", array('escape' => false,'class'=>'btn btn-success btn-lg','style'=>'margin-left:5px;margin-top:5px;')) ?>
           </div><hr style="border-top: 1px solid #93C54B;">
           <!--<div class="panel panel-default panel-fk">
                 <div class="panel-heading">

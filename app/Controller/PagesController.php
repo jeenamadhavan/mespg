@@ -4550,9 +4550,9 @@ $choice_result['age']=$age;
         //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
         $this->response->file(WWW_ROOT . 'rank_lists/M.Com.pdf', array('download' => true, 'name' => 'Final List M.Com..pdf'));
     }
-
-    
-
-    
-    
+    public function downloadproranklistfood() {
+        $this->autoRender=false;
+        //$this->response->file(WWW_ROOT . 'files/MA-Economics.pdf', array('download' => true, 'name' => 'Provisional Rank List Ma.Economics.pdf'));
+        $this->response->file(WWW_ROOT . 'rank_lists/M.Sc.Food.pdf', array('download' => true, 'name' => 'Final List M.Sc. Food Technology.pdf'));
+    }  
 }
